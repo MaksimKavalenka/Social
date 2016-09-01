@@ -1,0 +1,39 @@
+<html ng-app="app.social">
+	<head>
+		<title>Social</title>
+		<link rel="shortcut icon" type="image/x-icon" href="/social/img/icon.png"/>
+		<link rel="stylesheet" type="text/css" href="/social/css/autocomplete.css"/>
+		<link rel="stylesheet" type="text/css" href="/social/css/button.css"/>
+		<link rel="stylesheet" type="text/css" href="/social/css/common.css"/>
+		<link rel="stylesheet" type="text/css" href="/social/css/flash.css"/>
+		<link rel="stylesheet" type="text/css" href="/social/css/form.css"/>
+		<link rel="stylesheet" type="text/css" href="/social/css/navbar.css"/>
+		<link rel="stylesheet" type="text/css" href="/social/css/pagination.css"/>
+		<script type="text/javascript" src="/social/webjars/jquery/3.0.0/jquery.js"></script>
+		<script type="text/javascript" src="/social/webjars/angularjs/1.5.7/angular.js"></script>
+		<script type="text/javascript" src="/social/webjars/angularjs/1.5.7/angular-cookies.js"></script>
+		<script type="text/javascript" src="/social/webjars/angularjs/1.5.7/angular-sanitize.js"></script>
+		<script type="text/javascript" src="/social/webjars/angular-ui-router/0.3.1/release/angular-ui-router.js"></script>
+		<script type="text/javascript" src="/social/js/autocomplete.js"></script>
+		<script type="text/javascript" src="/social/js/angular/app.js"></script>
+		<script type="text/javascript" src="/social/js/angular/controller/user.edit.controller.js"></script>
+		<script type="text/javascript" src="/social/js/angular/factory/user.factory.js"></script>
+		<script type="text/javascript" src="/social/js/angular/other/config.js"></script>
+		<script type="text/javascript" src="/social/js/angular/other/constants.js"></script>
+		<script type="text/javascript" src="/social/js/angular/other/directive.js"></script>
+		<script type="text/javascript" src="/social/js/angular/other/run.js"></script>
+		<script type="text/javascript" src="/social/js/angular/service/cookie.service.js"></script>
+		<script type="text/javascript" src="/social/js/angular/service/file.service.js"></script>
+		<script type="text/javascript" src="/social/js/angular/service/flash.service.js"></script>
+		<script type="text/javascript" src="/social/js/angular/service/pagination.service.js"></script>
+		<base href="/">
+	</head>
+	<body>
+		<div class="indent" ui-view="header"></div>
+		<div class="indent" ng-class="{'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error'}" ng-bind="flash.message"></div>
+		<div class="indent" ui-view="tool"></div>
+		<div class="indent" ui-view="content"></div>
+		<div class="flex"></div>
+		<div class="indent" ui-view="footer"></div>
+	</body>
+</html>

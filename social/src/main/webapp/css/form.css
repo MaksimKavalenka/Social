@@ -1,0 +1,59 @@
+.form-search {
+	margin: 0 16px;
+}
+.form-search * {
+	display: inline;
+}
+.form-search .input-search {
+	padding: 9px;
+	width: 500px;
+}
+.form-submit {
+	text-align: center;
+}
+.form-submit * {
+	text-align: left;
+}
+.form-submit fieldset {
+	border-width: 0px;
+	display: inline-block;
+	font-family: sans-serif;
+}
+.form-submit fieldset legend {
+	font-size: 2em;
+}
+.form-submit .field {
+	margin: 24px 0;
+}
+.form-submit .field > * {
+	display: block;
+}
+.form-submit .field  label {
+	font-size: 0.9em;
+	font-weight: 600;
+	margin: 7px 0;
+}
+.form-submit .field input,
+.form-submit .field select {
+	border: 1px solid #aaaaaa;
+	margin: 5px 0;
+	padding: 7px;
+	width: 400px;
+}
+.form-submit .field span {
+	color: #ff0000;
+	font-size: 0.9em;
+}
+.form-validation label.required:after {
+	color: #ff0000;
+	content: " *";
+}
+.form-validation input.ng-invalid.ng-touched {
+	border-color: #ff0000;
+}
+.form-validation input.ng-invalid.ng-touched:focus {
+	outline: #ffff00;
+}
+.form-validation input.ng-valid {
+	border-color: none;
+}

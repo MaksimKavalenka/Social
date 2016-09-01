@@ -1,0 +1,19 @@
+<form method="POST" class="form-submit form-validation" name="form" ng-submit="ctrl.login()">
+	<fieldset>
+		<legend>Login</legend>
+		<div class="field">
+			<label class="required" for="login">Login</label>
+			<input type="text" id="login" name="login" maxlength="255" ng-model="ctrl.user.login" required/>
+		</div>
+		<div class="field">
+			<label class="required" for="password">Password</label>
+			<input type="password" id="password" name="password" maxlength="255" ng-model="ctrl.user.password" ng-minlength="3" required/>
+			<span ng-show="form.password.$error.required || form.password.$error.minlength">Minimal count of symbols is 3</span>
+		</div>
+		<div>
+			<button type="submit" class="btn btn-primary" ng-disabled="form.$invalid || ctrl.dataLoading">Login</button>
+			<button class="btn btn-primary" ui-sref="register">Register</button>
+			<img ng-if="ctrl.dataLoading" src="/social/img/load.gif"/>
+		</div>
+	</fieldset>
+</form>

@@ -1,0 +1,29 @@
+body {
+	display: flex;
+	flex-flow: column;
+	height: 100%;
+	margin: 0;
+	width: 100%;
+}
+hr {
+	color: #575757;
+}
+.container {
+	height: 100%;
+	margin: auto;
+	width: 1000px;
+}
+.flex {
+	flex: 1;
+}
+.footer {
+	margin-bottom: 20px;
+	text-align: center;
+}
+.indent {
+	margin: 15px;
+}
+.justify {
+	display: flex;
+	justify-content: space-between;
+}
