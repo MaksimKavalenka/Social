@@ -6,17 +6,11 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -24,55 +18,37 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "post")
 public class PostModel extends Model {
 
-    private static final long  serialVersionUID = 7372820574885171442L;
-
-    @Column(name = "name", nullable = false, length = 255)
-    private String             name;
-
-    @Column(name = "logo", nullable = false, length = 255)
-    private String             logo;
+    private static final long       serialVersionUID = 7372820574885171442L;
 
     @Column(name = "text", nullable = false, columnDefinition = "TEXT")
-    private String             text;
+    private String                  text;
 
     @Column(name = "created", nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date               date;
+    private Date                    date;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH,
-            CascadeType.PERSIST}, targetEntity = UserModel.class, optional = false)
-    private UserModel          creator;
+    @ManyToOne(targetEntity = UserModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
+            CascadeType.REFRESH, CascadeType.PERSIST}, optional = false)
+    private UserModel               creator;
+
+    @ManyToOne(targetEntity = TopicModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
+            CascadeType.REFRESH, CascadeType.PERSIST}, optional = false)
+    private TopicModel              topic;
+
+    @ManyToOne(targetEntity = PostModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
+            CascadeType.REFRESH, CascadeType.PERSIST})
+    private PostModel               parentPost;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "post")
-    private List<CommentModel> comments;
+    @OneToMany(mappedBy = "parentPost")
+    private List<PostModel>         posts;
 
     @JsonIgnore
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH,
-            CascadeType.PERSIST}, targetEntity = PostModel.class)
-    @JoinTable(name = "post_user", joinColumns = @JoinColumn(name = "id_post", nullable = false, updatable = false), inverseJoinColumns = @JoinColumn(name = "id_user", nullable = false, updatable = false))
-    private List<UserModel>    users;
+    @OneToMany(mappedBy = "topic")
+    private List<NotificationModel> notifications;
 
     public PostModel() {
         super();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public String getLogo() {
-        return logo;
-    }
-
-    public void setLogo(final String logo) {
-        this.logo = logo;
     }
 
     public String getText() {
@@ -99,26 +75,42 @@ public class PostModel extends Model {
         this.creator = creator;
     }
 
-    public List<CommentModel> getComments() {
-        return comments;
+    public TopicModel getTopic() {
+        return topic;
     }
 
-    public void setComments(final List<CommentModel> comments) {
-        this.comments = comments;
+    public void setTopic(final TopicModel topic) {
+        this.topic = topic;
     }
 
-    public List<UserModel> getUsers() {
-        return users;
+    public PostModel getParentPost() {
+        return parentPost;
     }
 
-    public void setUsers(final List<UserModel> users) {
-        this.users = users;
+    public void setParentPost(final PostModel parentPost) {
+        this.parentPost = parentPost;
+    }
+
+    public List<PostModel> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(final List<PostModel> posts) {
+        this.posts = posts;
+    }
+
+    public List<NotificationModel> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(final List<NotificationModel> notifications) {
+        this.notifications = notifications;
     }
 
     @Override
     public String toString() {
-        return "Post [id=" + super.getId() + ", name=" + name + ", logo=" + logo + ", text=" + text
-                + ", created=" + date + ", creator=" + creator + "]";
+        return "Post [id=" + super.getId() + ", text=" + text + ", created=" + date + ", creator="
+                + creator + ", parentPost=" + parentPost + "]";
     }
 
 }

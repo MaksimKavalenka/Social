@@ -17,9 +17,10 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
     <property name="annotatedClasses">
       <list>
-        <value>by.training.model.CommentModel</value>
+        <value>by.training.model.NotificationModel</value>
         <value>by.training.model.PostModel</value>
         <value>by.training.model.RoleModel</value>
+        <value>by.training.model.TopicModel</value>
         <value>by.training.model.UserModel</value>
       </list>
     </property>

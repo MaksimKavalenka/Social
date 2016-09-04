@@ -29,11 +29,11 @@
 		<base href="/">
 	</head>
 	<body>
-		<div class="indent" ui-view="header"></div>
-		<div class="indent" ng-class="{'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error'}" ng-bind="flash.message"></div>
-		<div class="indent" ui-view="tool"></div>
-		<div class="indent" ui-view="content"></div>
+		<div ui-view="header"></div>
+		<div class="container" ng-class="{'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error'}" ng-bind="flash.message"></div>
+		<div class="container" ui-view="tool"></div>
+		<div class="container" ui-view="content"></div>
 		<div class="flex"></div>
-		<div class="indent" ui-view="footer"></div>
+		<div ui-view="footer"></div>
 	</body>
 </html>

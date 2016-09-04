@@ -41,18 +41,27 @@ app.constant('REST', (function() {
 	}
 })());
 app.constant('STATE', (function() {
+	var topic = 'topic';
+	var topics = 'topics';
+	var addOperation = '/add';
 	return {
 		LOGIN: 'login',
 		REGISTER: 'register',
-		FEED: 'feed'
+		FEED: 'feed',
+		TOPIC_ADD: topic + addOperation
 	}
 })());
 app.constant('URL', (function() {
 	var url = '/social';
+	var feedUrl = '/feed';
+	var addOperation = '/add';
+	var pageOperation = '/page';
+	var idPattern = '/{id:[0-9]{1,}}';
+	var pagePattern = '/{page:[0-9]{1,}}';
 	return {
-		HOME_PAGE: url + '/feed',
+		HOME_PAGE: url + feedUrl + pageOperation + '/1',
 		LOGIN: url + '/login',
 		REGISTER: url + '/register',
-		FEED: url + '/feed'
+		FEED: url + feedUrl + pageOperation + pagePattern
 	}
 })());

@@ -4,6 +4,8 @@ import static by.training.constants.ExceptionConstants.AUTHORIZATION_ERROR;
 import static by.training.constants.ExceptionConstants.TAKEN_LOGIN_ERROR;
 import static by.training.constants.ModelStructureConstants.UserFields;
 
+import java.security.NoSuchAlgorithmException;
+
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
@@ -14,6 +16,7 @@ import by.training.database.dao.UserDAO;
 import by.training.exception.ValidationException;
 import by.training.model.RoleModel;
 import by.training.model.UserModel;
+import by.training.utility.SecureData;
 
 public class UserDatabaseEditor extends DatabaseEditor implements UserDAO {
 
@@ -26,32 +29,40 @@ public class UserDatabaseEditor extends DatabaseEditor implements UserDAO {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = ValidationException.class)
     public void createUser(final String login, final String password, final RoleModel role)
             throws ValidationException {
-        UserModel checkUser;
-        UserModel user = new UserModel();
-        user.setLogin(login);
-        user.setPassword(password);
-        user.setRole(role);
+        try {
+            UserModel checkUser;
+            UserModel user = new UserModel();
+            user.setLogin(login);
+            user.setPassword(SecureData.secureSha1(password));
+            user.setRole(role);
 
-        checkUser = getUserByCriteria(Restrictions.eq(UserFields.LOGIN, user.getLogin()));
-        if (checkUser == null) {
-            sessionFactory.getCurrentSession().save(user);
-        } else {
-            throw new ValidationException(TAKEN_LOGIN_ERROR);
+            checkUser = getUserByCriteria(Restrictions.eq(UserFields.LOGIN, user.getLogin()));
+            if (checkUser == null) {
+                sessionFactory.getCurrentSession().save(user);
+            } else {
+                throw new ValidationException(TAKEN_LOGIN_ERROR);
+            }
+        } catch (NoSuchAlgorithmException e) {
+            throw new ValidationException(e.getMessage());
         }
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = ValidationException.class)
     public UserModel getUser(final String login, final String password) throws ValidationException {
-        UserModel user = getUserByCriteria(Restrictions.eq(UserFields.LOGIN, login),
-                Restrictions.eq(UserFields.PASSWORD, password));
-        if (user != null) {
-            return user;
-        } else {
-            throw new ValidationException(AUTHORIZATION_ERROR);
+        try {
+            UserModel user = getUserByCriteria(Restrictions.eq(UserFields.LOGIN, login),
+                    Restrictions.eq(UserFields.PASSWORD, SecureData.secureSha1(password)));
+            if (user != null) {
+                return user;
+            } else {
+                throw new ValidationException(AUTHORIZATION_ERROR);
+            }
+        } catch (NoSuchAlgorithmException e) {
+            throw new ValidationException(e.getMessage());
         }
     }
 

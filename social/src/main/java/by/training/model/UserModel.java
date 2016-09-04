@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -12,43 +13,38 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "user")
 public class UserModel extends Model {
 
-    private static final long  serialVersionUID = 7372820574885171442L;
+    private static final long       serialVersionUID = 7372820574885171442L;
 
     @Column(name = "login", unique = true, nullable = false, length = 255)
-    private String             login;
+    private String                  login;
 
     @JsonIgnore
     @Column(name = "password", nullable = false, length = 255)
-    private String             password;
+    private String                  password;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH,
-            CascadeType.PERSIST}, targetEntity = RoleModel.class, optional = false)
-    private RoleModel          role;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "creator")
-    private List<PostModel>    createdPosts;
-
-    @JsonIgnore
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH,
-            CascadeType.PERSIST}, targetEntity = PostModel.class)
-    @JoinTable(name = "post_user", joinColumns = @JoinColumn(name = "id_user", nullable = false, updatable = false), inverseJoinColumns = @JoinColumn(name = "id_post", nullable = false, updatable = false))
-    private List<PostModel>    posts;
+    @ManyToOne(targetEntity = RoleModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
+            CascadeType.REFRESH, CascadeType.PERSIST}, optional = false)
+    private RoleModel               role;
 
     @JsonIgnore
     @OneToMany(mappedBy = "creator")
-    private List<CommentModel> comments;
+    private List<PostModel>         posts;
+
+    @JsonIgnore
+    @ManyToMany(targetEntity = TopicModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
+            CascadeType.REFRESH, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @JoinTable(name = "topic_user", joinColumns = @JoinColumn(name = "id_user", nullable = false, updatable = false), inverseJoinColumns = @JoinColumn(name = "id_topic", nullable = false, updatable = false))
+    private List<TopicModel>        topics;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "topic")
+    private List<NotificationModel> notifications;
 
     public UserModel() {
         super();
@@ -78,14 +74,6 @@ public class UserModel extends Model {
         this.role = role;
     }
 
-    public List<PostModel> getCreatedPosts() {
-        return createdPosts;
-    }
-
-    public void setCreatedPosts(final List<PostModel> createdPosts) {
-        this.createdPosts = createdPosts;
-    }
-
     public List<PostModel> getPosts() {
         return posts;
     }
@@ -94,12 +82,20 @@ public class UserModel extends Model {
         this.posts = posts;
     }
 
-    public List<CommentModel> getComments() {
-        return comments;
+    public List<TopicModel> getTopics() {
+        return topics;
     }
 
-    public void setComments(final List<CommentModel> comments) {
-        this.comments = comments;
+    public void setTopics(final List<TopicModel> topics) {
+        this.topics = topics;
+    }
+
+    public List<NotificationModel> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(final List<NotificationModel> notifications) {
+        this.notifications = notifications;
     }
 
     @Override

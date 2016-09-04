@@ -5,7 +5,7 @@
   <groupId>by.gsu</groupId>
   <artifactId>social</artifactId>
   <packaging>war</packaging>
-  <version>0.2</version>
+  <version>0.3</version>
 
   <name>Muschart Maven Webapp</name>
   <url>http://maven.apache.org</url>
@@ -61,6 +61,18 @@
     </dependency>
 
     <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.9</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20160212</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.webjars</groupId>
       <artifactId>jquery</artifactId>
       <version>3.0.0</version>
@@ -76,12 +88,6 @@
       <groupId>org.webjars.bower</groupId>
       <artifactId>angular-ui-router</artifactId>
       <version>0.3.1</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.json</groupId>
-      <artifactId>json</artifactId>
-      <version>20160212</version>
     </dependency>
   </dependencies>
 

@@ -1,101 +1,62 @@
 .navbar {
-	padding: 16px 0 0;
-}
-.navbar > * {
-	margin: 0;
+	background: #ffffff;
 }
 .navigation {
+	margin: 0;
 	padding: 0;
 }
 .navigation > li {
-	border: 3px solid #000000;
 	display: inline-block;
 	font-family: "Berlin Sans FB";
-	margin: 0 8px;
 }
 .navigation > li > a,
 .navigation > li > button.link {
-	background: none;
-	border-width: 0;
 	display: inline-block;
 	font-family: "Berlin Sans FB";
-	padding: 11px 16px;
+	font-size: 20px;
+	padding: 15px 20px;
 	text-decoration: none;
 	white-space: nowrap;
 }
-.navbar-default > .navigation > li {
-	border-color: #222222;
+.navigation > li.main > a,
+.navigation > li.main > button.link {
+	padding: 5px 25px;
 }
-.navbar-default > .navigation > li:hover {
-	background: #575757;
+.navbar-menu > li.main:hover {
+	background: transparent;
 }
-.navbar-default > .navigation > li:active {
-	background: #000000;
+.navbar-menu > li.main:active {
+	background: transparent;
 }
-.navbar-default > .navigation > li > a,
-.navbar-default > .navigation > li > button.link {
-	color: #222222;
+.navbar-menu > li:hover {
+	background: #eb0606;
 }
-.navbar-default > .navigation > li:hover > a,
-.navbar-default > .navigation > li:active > a,
-.navbar-default > .navigation > li:hover > button.link,
-.navbar-default > .navigation > li:active > button.link {
+.navbar-menu > li:active {
+	background: #eb0606;
+}
+.navbar-menu > li > a,
+.navbar-menu > li > button.link {
+	color: #eb0606;
+}
+.navbar-menu > li:hover > a,
+.navbar-menu > li:active > a,
+.navbar-menu > li:hover > button.link,
+.navbar-menu >  li:active > button.link {
 	color: #ffffff;
 }
-.navbar-primary > .navigation > li {
-	border-color: #2780e3;
+.navbar-user > li:hover {
+	background: #292929;
 }
-.navbar-primary > .navigation > li:hover {
-	background: #0fa3ff;
+.navbar-user > li:active {
+	background: #292929;
 }
-.navbar-primary > .navigation > li:active {
-	background: #1967be;
+.navbar-user > li > a,
+.navbar-user > li > button.link {
+	color: #292929;
 }
-.navbar-primary > .navigation > li > a,
-.navbar-primary > .navigation > li > button.link {
-	color: #2780e3;
-}
-.navbar-primary > .navigation > li:hover > a,
-.navbar-primary > .navigation > li:active > a,
-.navbar-primary > .navigation > li:hover > button.link,
-.navbar-primary > .navigation > li:active > button.link {
-	color: #ffffff;
-}
-.navbar-success > .navigation > li {
-	border-color: #3fb618;
-}
-.navbar-success > .navigation > li:hover {
-	background: #5bda3b;
-}
-.navbar-success > .navigation > li:active {
-	background: #2f8912;
-}
-.navbar-success > .navigation > li > a,
-.navbar-success > .navigation > li > button.link {
-	color: #3fb618;
-}
-.navbar-success > .navigation > li:hover > a,
-.navbar-success > .navigation > li:active > a,
-.navbar-success > .navigation > li:hover > button.link,
-.navbar-success > .navigation > li:active > button.link {
-	color: #ffffff;
-}
-.navbar-danger > .navigation > li {
-	border-color: #cc002e;
-}
-.navbar-danger > .navigation > li:hover {
-	background: #f50029;
-}
-.navbar-danger > .navigation > li:active {
-	background: #80001c;
-}
-.navbar-danger > .navigation > li > a,
-.navbar-danger > .navigation > li > button.link {
-	color: #cc002e;
-}
-.navbar-danger > .navigation > li:hover > a,
-.navbar-danger > .navigation > li:active > a,
-.navbar-danger > .navigation > li:hover > button.link,
-.navbar-danger > .navigation > li:active > button.link {
+.navbar-user > li:hover > a,
+.navbar-user > li:active > a,
+.navbar-user > li:hover > button.link,
+.navbar-user > li:active > button.link {
 	color: #ffffff;
 }

@@ -18,7 +18,7 @@ app.controller('UserEditController', ['$location', '$state', 'URL', 'UserFactory
 
 	self.logout = function() {
 		CookieService.clearCredentials();
-		$state.reload();
+		$location.path(URL.LOGIN);
 	};
 
 	self.register = function() {

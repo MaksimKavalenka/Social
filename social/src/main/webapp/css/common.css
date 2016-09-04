@@ -5,12 +5,22 @@ body {
 	margin: 0;
 	width: 100%;
 }
-hr {
-	color: #575757;
+hr.footer {
+	background-color: #575757;
+	border: none;
+	height: 1px;
+}
+hr.header {
+	background-color: #eb0606;
+	border: none;
+	height: 5px;
+	margin: 0;
+}
+img.logo {
+	height: 70px;
 }
 .container {
-	height: 100%;
-	margin: auto;
+	margin: 0 auto;
 	width: 1000px;
 }
 .flex {
@@ -19,9 +29,6 @@ hr {
 .footer {
 	margin-bottom: 20px;
 	text-align: center;
-}
-.indent {
-	margin: 15px;
 }
 .justify {
 	display: flex;
