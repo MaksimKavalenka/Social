@@ -1,11 +1,11 @@
-<form method="POST" class="form-submit form-validation" name="form" ng-submit="ctrl.register()">
+<form method="POST" class="form-submit form-validation" name="form">
 	<fieldset>
 		<legend>Register</legend>
 		<div class="field">
 			<label class="required" for="login">Login</label>
-			<input type="text" id="login" name="login" maxlength="255" ng-model="ctrl.user.login" ng-user-exist required/>
-			<span ng-show="form.login.$pending.ngUserExist">Checking if this login is available...</span>
-			<span ng-show="form.login.$error.ngUserExist">This login is already taken</span>
+			<input type="text" id="login" name="login" maxlength="255" ng-model="ctrl.user.login" ng-login-exist required/>
+			<span ng-show="form.login.$pending.ngLoginExist">Checking if this login is available...</span>
+			<span ng-show="form.login.$error.ngLoginExist">This login is already taken</span>
 		</div>
 		<div class="field">
 			<label class="required" for="password">Password</label>
@@ -19,7 +19,7 @@
 			<span ng-show="form.confirm_password.$error.ngMatch && !form.confirm_password.$error.required && !form.confirm_password.$error.minlength">Passwords do not match</span>
 		</div>
 		<div>
-			<button type="submit" class="btn btn-primary" ng-disabled="form.$invalid || ctrl.dataLoading">Register</button>
+			<button class="btn btn-primary" ng-click="ctrl.register()" ng-disabled="form.$invalid || ctrl.dataLoading">Register</button>
 			<button class="btn btn-primary" ui-sref="login">Login</button>
 			<img ng-if="ctrl.dataLoading" src="/social/img/load.gif"/>
 		</div>

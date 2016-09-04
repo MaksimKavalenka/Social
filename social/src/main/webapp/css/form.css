@@ -20,7 +20,7 @@
 	font-family: sans-serif;
 }
 .form-submit fieldset legend {
-	font-size: 2em;
+	font-size: 30px;
 }
 .form-submit .field {
 	margin: 24px 0;
@@ -29,7 +29,7 @@
 	display: block;
 }
 .form-submit .field  label {
-	font-size: 0.9em;
+	font-size: 14px;
 	font-weight: 600;
 	margin: 7px 0;
 }
@@ -42,11 +42,12 @@
 }
 .form-submit .field span {
 	color: #ff0000;
-	font-size: 0.9em;
+	font-size: 13px;
 }
 .form-validation label.required:after {
 	color: #ff0000;
 	content: " *";
+	font-size: 18px;
 }
 .form-validation input.ng-invalid.ng-touched {
 	border-color: #ff0000;

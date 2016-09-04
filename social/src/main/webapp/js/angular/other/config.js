@@ -15,6 +15,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'CONTROLLER', 'PATH', 'STATE
 	.state(STATE.LOGIN, {
 		url: URL.LOGIN,
 		views: {
+			header: header,
 			content: {
 				controller: CONTROLLER.USER_EDIT_CONTROLLER,
 				controllerAs: CONTROLLER.CTRL,
@@ -26,6 +27,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'CONTROLLER', 'PATH', 'STATE
 	.state(STATE.REGISTER, {
 		url: URL.REGISTER,
 		views: {
+			header: header,
 			content: {
 				controller: CONTROLLER.USER_EDIT_CONTROLLER,
 				controllerAs: CONTROLLER.CTRL,
@@ -39,12 +41,60 @@ app.config(['$stateProvider', '$urlRouterProvider', 'CONTROLLER', 'PATH', 'STATE
 		views: {
 			header: header,
 			tool: {
-				controller: CONTROLLER.TRACK_CONTROLLER,
+				controller: CONTROLLER.POST_CONTROLLER,
 				controllerAs: CONTROLLER.CTRL,
 				templateUrl: PATH.PAGINATION_TOOL
 			},
 			content: {
-				templateUrl: PATH.FEED_CONTENT
+				controller: CONTROLLER.POST_CONTROLLER,
+				controllerAs: CONTROLLER.CTRL,
+				templateUrl: PATH.POST_CONTENT
+			},
+			footer: footer
+		}
+	})
+	.state(STATE.TOPIC, {
+		url: URL.TOPIC,
+		views: {
+			header: header,
+			tool: {
+				controller: CONTROLLER.POST_CONTROLLER,
+				controllerAs: CONTROLLER.CTRL,
+				templateUrl: PATH.PAGINATION_TOOL
+			},
+			content: {
+				controller: CONTROLLER.POST_CONTROLLER,
+				controllerAs: CONTROLLER.CTRL,
+				templateUrl: PATH.POST_CONTENT
+			},
+			footer: footer
+		}
+	})
+	.state(STATE.TOPICS, {
+		url: URL.TOPICS,
+		views: {
+			header: header,
+			tool: {
+				controller: CONTROLLER.TOPIC_CONTROLLER,
+				controllerAs: CONTROLLER.CTRL,
+				templateUrl: PATH.PAGINATION_TOOL
+			},
+			content: {
+				controller: CONTROLLER.TOPIC_CONTROLLER,
+				controllerAs: CONTROLLER.CTRL,
+				templateUrl: PATH.TOPIC_CONTENT
+			},
+			footer: footer
+		}
+	})
+	.state(STATE.TOPIC_ADD, {
+		url: URL.TOPIC_ADD,
+		views: {
+			header: header,
+			content: {
+				controller: CONTROLLER.TOPIC_EDIT_CONTROLLER,
+				controllerAs: CONTROLLER.CTRL,
+				templateUrl: PATH.TOPIC_EDIT_FORM
 			},
 			footer: footer
 		}

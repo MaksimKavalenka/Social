@@ -8,13 +8,13 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE,
 			callback(response);
 		})
 		.error(function(response) {
-			response = {success: false, message: MESSAGE.ADDING_USER_ERROR};
+			response = {success: false, message: MESSAGE.CREATING_USER_ERROR};
 			callback(response);
 		});
 	}
 
-	function getUser(login, password, callback) {
-		$http.post(REST.USERS + '/' + login + '/' + password + REST.JSON_EXT)
+	function authentication(login, password, callback) {
+		$http.post(REST.USERS + '/auth/' + login + '/' + password + REST.JSON_EXT)
 		.success(function(response) {
 			var data = {success: true, data: response};
 			callback(data);
@@ -25,10 +25,10 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE,
 		});
 	}
 
-	function getUserByLogin(login, callback) {
-		$http.post(REST.USERS + '/' + login + REST.JSON_EXT)
+	function checkLogin(login, callback) {
+		$http.post(REST.USERS + '/checkLogin/' + login + REST.JSON_EXT)
 		.success(function(response) {
-			if (response != '') {
+			if (response) {
 				response = {success: true};
 			} else {
 				response = {success: false, message: MESSAGE.TAKEN_LOGIN_ERROR};
@@ -43,7 +43,7 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE,
 
 	return {
 		createUser: createUser,
-		getUser: getUser,
-		getUserByLogin: getUserByLogin
+		authentication: authentication,
+		checkLogin: checkLogin
 	};
 }]);

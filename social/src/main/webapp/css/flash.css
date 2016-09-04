@@ -93,7 +93,7 @@ div.close {
 	background: transparent;
 	border: 0;
 	cursor: pointer;
-	font-size: 1.7em;
+	font-size: 16px;
 	padding: 0;
 	-webkit-appearance: none;
 }

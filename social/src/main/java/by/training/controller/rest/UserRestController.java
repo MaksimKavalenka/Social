@@ -27,22 +27,22 @@ public class UserRestController {
 
     @RequestMapping(value = USERS_PATH + "/create/{login}/{password}"
             + JSON_EXT, method = RequestMethod.POST)
-    public ResponseEntity<Void> createUser(@PathVariable("login") final String login,
+    public ResponseEntity<UserModel> createUser(@PathVariable("login") final String login,
             @PathVariable("password") final String password) {
         try {
-            userDAO.createUser(login, password, roleDAO.getRoleById(1));
-            return new ResponseEntity<Void>(HttpStatus.CREATED);
+            UserModel user = userDAO.createUser(login, password, roleDAO.getRoleById(1));
+            return new ResponseEntity<UserModel>(user, HttpStatus.CREATED);
         } catch (ValidationException e) {
-            return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+            return new ResponseEntity<UserModel>(HttpStatus.CONFLICT);
         }
     }
 
-    @RequestMapping(value = USERS_PATH + "/{login}/{password}"
+    @RequestMapping(value = USERS_PATH + "/auth/{login}/{password}"
             + JSON_EXT, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserModel> getUser(@PathVariable("login") final String login,
+    public ResponseEntity<UserModel> authentication(@PathVariable("login") final String login,
             @PathVariable("password") final String password) {
         try {
-            UserModel user = userDAO.getUser(login, password);
+            UserModel user = userDAO.authentication(login, password);
             if (user == null) {
                 return new ResponseEntity<UserModel>(HttpStatus.NO_CONTENT);
             }
@@ -52,14 +52,11 @@ public class UserRestController {
         }
     }
 
-    @RequestMapping(value = USERS_PATH + "/{login}"
+    @RequestMapping(value = USERS_PATH + "/checkLogin/{login}"
             + JSON_EXT, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserModel> getUserByLogin(@PathVariable("login") final String login) {
-        UserModel user = userDAO.getUserByLogin(login);
-        if (user == null) {
-            return new ResponseEntity<UserModel>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<UserModel>(user, HttpStatus.OK);
+    public ResponseEntity<Boolean> checkLogin(@PathVariable("login") final String login) {
+        boolean exists = userDAO.checkLogin(login);
+        return new ResponseEntity<Boolean>(exists, HttpStatus.OK);
     }
 
 }

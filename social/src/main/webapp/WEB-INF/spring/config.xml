@@ -29,7 +29,19 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
     <property name="sessionFactory" ref="sessionFactory"/>
   </bean>
 
+  <bean id="postDAO" class="by.training.database.editor.PostDatabaseEditor">
+    <constructor-arg>
+      <ref bean="sessionFactory"/>
+    </constructor-arg>
+  </bean>
+
   <bean id="roleDAO" class="by.training.database.editor.RoleDatabaseEditor">
+    <constructor-arg>
+      <ref bean="sessionFactory"/>
+    </constructor-arg>
+  </bean>
+
+  <bean id="topicDAO" class="by.training.database.editor.TopicDatabaseEditor">
     <constructor-arg>
       <ref bean="sessionFactory"/>
     </constructor-arg>
@@ -40,5 +52,4 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
       <ref bean="sessionFactory"/>
     </constructor-arg>
   </bean>
-
 </beans>

@@ -1,13 +1,15 @@
-<div class="navbar container justify">
-	<ul class="navigation navbar-menu">
-		<li class="main"><a ui-sref="feed"><img class="logo" ng-src="social/img/icon.png"></a>
-		<li><a ui-sref="topics">Topics</a>
-		<li><a ui-sref="notifications">Notifications</a>
-		<li><a ui-sref="search">Search</a>
-	</ul>
-	<ul class="navigation navbar-user">
-		<li><a ui-sref="profile">Edit profile</a>
-		<li><a ng-href="#" ng-controller="UserEditController as ctrl" ng-click="ctrl.logout()">Logout</a>
-	</ul>
+<div class="navbar">
+	<div class="container justify">
+		<ul class="navigation navbar-menu">
+			<li class="main"><a ui-sref="feed({page: 1})"><img class="logo" ng-src="social/img/icon.png"></a>
+			<li><a ui-sref="topics({page: 1})">Topics</a>
+			<li><a ui-sref="notifications">Notifications</a>
+			<li><a ui-sref="search">Search</a>
+		</ul>
+		<ul class="navigation navbar-user">
+			<li><a ui-sref="profile">Edit profile</a>
+			<li><a ng-href="#" ng-controller="UserEditController as ctrl" ng-click="ctrl.logout()">Logout</a>
+		</ul>
+	</div>
 </div>
 <hr class="header">

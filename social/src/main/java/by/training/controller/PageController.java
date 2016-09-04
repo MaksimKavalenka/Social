@@ -9,12 +9,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class PageController {
 
-    @RequestMapping(value = {"/"}, method = RequestMethod.GET)
-    public String tracksPage() {
-        return REDIRECT + FEED_URI;
+    @RequestMapping(value = {"/", FEED_URI}, method = RequestMethod.GET)
+    public String feedPage() {
+        return REDIRECT + FEED_DEFAULT_URI;
     }
 
-    @RequestMapping(value = {LOGIN_URI, REGISTRATION_URI, FEED_URI}, method = RequestMethod.GET)
+    @RequestMapping(value = {TOPICS_URI}, method = RequestMethod.GET)
+    public String topicsPage() {
+        return REDIRECT + TOPICS_DEFAULT_URI;
+    }
+
+    @RequestMapping(value = {LOGIN_URI, REGISTRATION_URI, FEED_FULL_URI, TOPICS_FULL_URI,
+            TOPIC_ADD_URI}, method = RequestMethod.GET)
     public String page() {
         return INDEX_PATH;
     }

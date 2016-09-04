@@ -20,7 +20,7 @@
 }
 .navigation > li.main > a,
 .navigation > li.main > button.link {
-	padding: 5px 25px;
+	padding: 5px 25px 5px 0;
 }
 .navbar-menu > li.main:hover {
 	background: transparent;
