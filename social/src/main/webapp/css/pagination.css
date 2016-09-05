@@ -1,6 +1,7 @@
 .pagination {
 	display: table;
 	margin: auto;
+	padding: 15px 0;
 }
 .pagination > li {
 	display: inline-block;

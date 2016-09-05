@@ -5,6 +5,7 @@
 .ct-header,
 .content li {
 	border: 3px solid #292929;
+	display: block;
 	margin: 15px 0;
 	padding: 15px;
 }

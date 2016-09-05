@@ -5,7 +5,6 @@ import static by.training.constants.RestConstants.TOPICS_PATH;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,19 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import by.training.database.dao.TopicDAO;
-import by.training.database.dao.UserDAO;
 import by.training.exception.ValidationException;
 import by.training.model.TopicModel;
 import by.training.model.UserModel;
 
 @RestController
-public class TopicRestController {
-
-    @Autowired
-    private TopicDAO topicDAO;
-    @Autowired
-    private UserDAO  userDAO;
+public class TopicRestController extends by.training.controller.rest.RestController {
 
     @RequestMapping(value = TOPICS_PATH
             + "/create/{name}/{urlName}/{description}/{access}/{creatorId}"

@@ -10,8 +10,14 @@ hr.footer {
 	border: none;
 	height: 1px;
 }
-hr.header {
+hr.header-menu {
 	background-color: #eb0606;
+	border: none;
+	height: 5px;
+	margin: 0;
+}
+hr.header-user {
+	background-color: #292929;
 	border: none;
 	height: 5px;
 	margin: 0;
@@ -33,4 +39,14 @@ img.logo {
 .justify {
 	display: flex;
 	justify-content: space-between;
+}
+.justify > * {
+	vertical-align: middle;
+}
+.welcome-title {
+	color: #eb0606;
+	font-size: 80px;
+	font-style: italic;
+	margin: 30px;
+	text-align: center;
 }

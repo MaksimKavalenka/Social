@@ -9,6 +9,7 @@
 	width: 500px;
 }
 .form-submit {
+	margin: 50px 0;
 	text-align: center;
 }
 .form-submit * {

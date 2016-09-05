@@ -40,8 +40,9 @@ app.constant('PATH', (function() {
 		LOGIN_FORM: formPath + '/login' + htmlExt,
 		REGISTER_FORM: formPath + '/register' + htmlExt,
 		TOPIC_EDIT_FORM: formPath + '/topic.edit' + htmlExt,
-		HEADER: titlePath + '/header' + htmlExt,
 		FOOTER: titlePath + '/footer' + htmlExt,
+		HEADER: titlePath + '/header' + htmlExt,
+		WELCOME_HEADER: titlePath + '/welcome.header' + htmlExt,
 		PAGINATION_TOOL: toolPath + '/pagination' + htmlExt
 	}
 })());

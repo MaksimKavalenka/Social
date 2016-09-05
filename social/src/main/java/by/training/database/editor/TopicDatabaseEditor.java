@@ -2,6 +2,7 @@ package by.training.database.editor;
 
 import static by.training.constants.ExceptionConstants.TAKEN_NAME_OR_URL_NAME_ERROR;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.hibernate.SessionFactory;
@@ -39,6 +40,7 @@ public class TopicDatabaseEditor extends DatabaseEditor implements TopicDAO {
             topic.setDescription(description);
             topic.setAccess(access);
             topic.setCreator(creator);
+            topic.setUsers(new LinkedList<UserModel>());
             topic.getUsers().add(creator);
             if (!"null".equals(urlName)) {
                 topic.setUrlName(urlName);

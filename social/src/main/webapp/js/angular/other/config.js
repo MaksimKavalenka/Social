@@ -5,17 +5,20 @@ app.config(['$cookiesProvider', '$locationProvider', function($cookiesProvider, 
 	$locationProvider.html5Mode(true);
 }]);
 app.config(['$stateProvider', '$urlRouterProvider', 'CONTROLLER', 'PATH', 'STATE', 'URL', function($stateProvider, $urlRouterProvider, CONTROLLER, PATH, STATE, URL) {
+	var footer = {
+			templateUrl: PATH.FOOTER
+		}
 	var header = {
 		templateUrl: PATH.HEADER
 	}
-	var footer = {
-		templateUrl: PATH.FOOTER
-	}
+	var welcomeHeader = {
+			templateUrl: PATH.WELCOME_HEADER
+		}
 	$stateProvider
 	.state(STATE.LOGIN, {
 		url: URL.LOGIN,
 		views: {
-			header: header,
+			header: welcomeHeader,
 			content: {
 				controller: CONTROLLER.USER_EDIT_CONTROLLER,
 				controllerAs: CONTROLLER.CTRL,
@@ -27,7 +30,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'CONTROLLER', 'PATH', 'STATE
 	.state(STATE.REGISTER, {
 		url: URL.REGISTER,
 		views: {
-			header: header,
+			header: welcomeHeader,
 			content: {
 				controller: CONTROLLER.USER_EDIT_CONTROLLER,
 				controllerAs: CONTROLLER.CTRL,

@@ -3,7 +3,6 @@ package by.training.controller.rest;
 import static by.training.constants.RestConstants.JSON_EXT;
 import static by.training.constants.RestConstants.USERS_PATH;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,18 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import by.training.database.dao.RoleDAO;
-import by.training.database.dao.UserDAO;
 import by.training.exception.ValidationException;
 import by.training.model.UserModel;
 
 @RestController
-public class UserRestController {
-
-    @Autowired
-    private UserDAO userDAO;
-    @Autowired
-    private RoleDAO roleDAO;
+public class UserRestController extends by.training.controller.rest.RestController {
 
     @RequestMapping(value = USERS_PATH + "/create/{login}/{password}"
             + JSON_EXT, method = RequestMethod.POST)
