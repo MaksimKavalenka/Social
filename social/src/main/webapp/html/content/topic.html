@@ -1,13 +1,9 @@
-<div class="ct-header">
-	<div>You are member in {{ctrl.topics.length}} topics</div>
-	<a ui-sref="topic/add">Create topic</a>
-</div>
 <ul class="content">
 	<li ng-repeat="topic in ctrl.topics">
 		<div class="ct-title">
-			<a ui-sref="topic({url: topic.url})">{{topic.name}}</a>
+			<a ui-sref="topic({path: topic.path, page: 1})">{{topic.name}}</a>
 			<div ng-show="!topic.access">Private topic</div>
 			<div>{{topic.description}}</div>
-			<div>Created by {{topic.creator.name}}</div>
+			<div>Created by {{topic.creator.login}}</div>
 		</div>
 </ul>

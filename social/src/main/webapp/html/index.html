@@ -1,6 +1,6 @@
 <html ng-app="app.social">
 	<head>
-		<title>Social</title>
+		<title ng-bind="$state.current.title">Social</title>
 		<link rel="shortcut icon" type="image/x-icon" href="/social/img/icon.png"/>
 		<link rel="stylesheet" type="text/css" href="/social/css/autocomplete.css"/>
 		<link rel="stylesheet" type="text/css" href="/social/css/button.css"/>
@@ -13,9 +13,7 @@
 		<script type="text/javascript" src="/social/webjars/jquery/3.0.0/jquery.js"></script>
 		<script type="text/javascript" src="/social/webjars/angularjs/1.5.7/angular.js"></script>
 		<script type="text/javascript" src="/social/webjars/angularjs/1.5.7/angular-cookies.js"></script>
-		<script type="text/javascript" src="/social/webjars/angularjs/1.5.7/angular-sanitize.js"></script>
 		<script type="text/javascript" src="/social/webjars/angular-ui-router/0.3.1/release/angular-ui-router.js"></script>
-		<script type="text/javascript" src="/social/js/autocomplete.js"></script>
 		<script type="text/javascript" src="/social/js/angular/app.js"></script>
 		<script type="text/javascript" src="/social/js/angular/controller/post/post.controller.js"></script>
 		<script type="text/javascript" src="/social/js/angular/controller/topic/topic.controller.js"></script>
@@ -37,7 +35,9 @@
 	<body>
 		<div ui-view="header"></div>
 		<div class="container" ng-class="{'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error'}" ng-bind="flash.message"></div>
-		<div class="container" ui-view="tool"></div>
+		<div class="container" ui-view="search"></div>
+		<div class="container" ui-view="pagination"></div>
+		<div class="container" ui-view="info"></div>
 		<div class="container" ui-view="content"></div>
 		<div class="flex"></div>
 		<div ui-view="footer"></div>

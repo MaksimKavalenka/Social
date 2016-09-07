@@ -50,9 +50,9 @@ public abstract class ModelStructureConstants {
 
         public static final String ID          = ModelFields.ID;
         public static final String NAME        = "name";
+        public static final String PATH        = "path";
         public static final String DESCRIPTION = "description";
         public static final String ACCESS      = "access";
-        public static final String URL_NAME    = "urlName";
         public static final String CREATOR     = "creator";
 
     }

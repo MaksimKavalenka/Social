@@ -4,8 +4,7 @@ var fileModel = 'fileModel';
 var ngMatch = 'ngMatch';
 var ngModel = 'ngModel';
 var ngLoginExist = 'ngLoginExist';
-var ngTopicNameExist = 'ngTopicNameExist';
-var ngTopicUrlNameExist = 'ngTopicUrlNameExist';
+var ngPathExist = 'ngPahtExist';
 
 app.directive(ngLoginExist, ['$timeout', '$q', 'UserFactory', function($timeout, $q, UserFactory) {
 	var timer;
@@ -30,39 +29,16 @@ app.directive(ngLoginExist, ['$timeout', '$q', 'UserFactory', function($timeout,
 	};
 }]);
 
-app.directive(ngTopicNameExist, ['$timeout', '$q', 'TopicFactory', function($timeout, $q, TopicFactory) {
+app.directive(ngPathExist, ['$timeout', '$q', 'TopicFactory', function($timeout, $q, TopicFactory) {
 	var timer;
 	return {
 		require: ngModel,
 		link: function(scope, element, attributes, controller) {
-			controller.$asyncValidators.ngTopicNameExist = function(modelValue, viewValue) {
+			controller.$asyncValidators.ngPathExist = function(modelValue, viewValue) {
 				var def = $q.defer();
 				$timeout.cancel(timer);
 				timer = $timeout(function() {
-					TopicFactory.checkName(modelValue, function(response) {
-						if (!response.success) {
-							def.resolve();
-						} else {
-							def.reject();
-						}
-					});
-				}, 1000);
-				return def.promise;
-			};
-		}
-	};
-}]);
-
-app.directive(ngTopicUrlNameExist, ['$timeout', '$q', 'TopicFactory', function($timeout, $q, TopicFactory) {
-	var timer;
-	return {
-		require: ngModel,
-		link: function(scope, element, attributes, controller) {
-			controller.$asyncValidators.ngTopicUrlNameExist = function(modelValue, viewValue) {
-				var def = $q.defer();
-				$timeout.cancel(timer);
-				timer = $timeout(function() {
-					TopicFactory.checkUrlName(modelValue, function(response) {
+					TopicFactory.checkPath(modelValue, function(response) {
 						if (!response.success) {
 							def.resolve();
 						} else {

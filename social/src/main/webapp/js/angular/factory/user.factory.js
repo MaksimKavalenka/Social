@@ -46,4 +46,5 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE,
 		authentication: authentication,
 		checkLogin: checkLogin
 	};
+
 }]);

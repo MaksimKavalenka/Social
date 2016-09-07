@@ -1,5 +1,6 @@
 'use strict';
-app.controller('UserEditController', ['$location', '$state', 'URL', 'UserFactory', 'CookieService', 'FlashService', function($location, $state, URL, UserFactory, CookieService, FlashService) {
+app.controller('UserEditController', ['$state', 'STATE', 'UserFactory', 'CookieService', 'FlashService', function($state, STATE, UserFactory, CookieService, FlashService) {
+
 	var self = this;
 
 	self.login = function() {
@@ -7,7 +8,7 @@ app.controller('UserEditController', ['$location', '$state', 'URL', 'UserFactory
 		UserFactory.authentication(self.user.login, self.user.password, function(response) {
 			if (response.success) {
 				CookieService.setCredentials(response.data);
-				$location.path(URL.HOME_PAGE);
+				$state.go(STATE.FEED, {page: 1});
 			} else {
 				FlashService.error(response.message);
 			}
@@ -17,7 +18,7 @@ app.controller('UserEditController', ['$location', '$state', 'URL', 'UserFactory
 
 	self.logout = function() {
 		CookieService.clearCredentials();
-		$location.path(URL.LOGIN);
+		$state.go(STATE.LOGIN);
 	};
 
 	self.register = function() {
@@ -25,7 +26,7 @@ app.controller('UserEditController', ['$location', '$state', 'URL', 'UserFactory
 		UserFactory.createUser(self.user.login, self.user.password, function(response) {
 			if (response.success) {
 				CookieService.setCredentials(response.data);
-				$location.path(URL.HOME_PAGE);
+				$state.go(STATE.FEED, {page: 1});
 			} else {
 				FlashService.error(response.message);
 			}

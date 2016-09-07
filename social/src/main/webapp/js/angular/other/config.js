@@ -4,18 +4,26 @@ app.config(['$cookiesProvider', '$locationProvider', function($cookiesProvider, 
 	$cookiesProvider.defaults.expires = new Date(new Date().getTime() + 604800000);
 	$locationProvider.html5Mode(true);
 }]);
-app.config(['$stateProvider', '$urlRouterProvider', 'CONTROLLER', 'PATH', 'STATE', 'URL', function($stateProvider, $urlRouterProvider, CONTROLLER, PATH, STATE, URL) {
+
+app.config(['$stateProvider', '$urlRouterProvider', 'CONTROLLER', 'PATH', 'STATE', 'TITLE', 'URL', function($stateProvider, $urlRouterProvider, CONTROLLER, PATH, STATE, TITLE, URL) {
 	var footer = {
-			templateUrl: PATH.FOOTER
-		}
+		templateUrl: PATH.FOOTER
+	}
 	var header = {
 		templateUrl: PATH.HEADER
 	}
 	var welcomeHeader = {
-			templateUrl: PATH.WELCOME_HEADER
-		}
+		templateUrl: PATH.WELCOME_HEADER
+	}
+	var search = {
+		controller: CONTROLLER.TOPIC_CONTROLLER,
+		controllerAs: CONTROLLER.CTRL,
+		templateUrl: PATH.SEARCH_TOOL
+	}
+
 	$stateProvider
 	.state(STATE.LOGIN, {
+		title: TITLE.LOGIN,
 		url: URL.LOGIN,
 		views: {
 			header: welcomeHeader,
@@ -28,6 +36,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'CONTROLLER', 'PATH', 'STATE
 		footer: footer
 	})
 	.state(STATE.REGISTER, {
+		title: TITLE.REGISTER,
 		url: URL.REGISTER,
 		views: {
 			header: welcomeHeader,
@@ -39,11 +48,34 @@ app.config(['$stateProvider', '$urlRouterProvider', 'CONTROLLER', 'PATH', 'STATE
 		},
 		footer: footer
 	})
-	.state(STATE.FEED, {
-		url: URL.FEED,
+	.state(STATE.SEARCH, {
+		title: TITLE.SEARCH,
+		url: URL.SEARCH,
 		views: {
 			header: header,
-			tool: {
+			search: search,
+			pagination: {
+				controller: CONTROLLER.TOPIC_CONTROLLER,
+				controllerAs: CONTROLLER.CTRL,
+				templateUrl: PATH.PAGINATION_TOOL
+			},
+			content: {
+				controller: CONTROLLER.TOPIC_CONTROLLER,
+				controllerAs: CONTROLLER.CTRL,
+				templateUrl: PATH.TOPIC_CONTENT
+			}
+		},
+		footer: footer
+	})
+	.state(STATE.FEED, {
+		title: TITLE.FEED,
+		url: URL.FEED,
+		params: {
+			page: '1'
+		},
+		views: {
+			header: header,
+			pagination: {
 				controller: CONTROLLER.POST_CONTROLLER,
 				controllerAs: CONTROLLER.CTRL,
 				templateUrl: PATH.PAGINATION_TOOL
@@ -57,13 +89,24 @@ app.config(['$stateProvider', '$urlRouterProvider', 'CONTROLLER', 'PATH', 'STATE
 		}
 	})
 	.state(STATE.TOPIC, {
+		title: function($state) {
+			return $state.params.path;
+		},
 		url: URL.TOPIC,
+		params: {
+			page: '1'
+		},
 		views: {
 			header: header,
-			tool: {
+			pagination: {
 				controller: CONTROLLER.POST_CONTROLLER,
 				controllerAs: CONTROLLER.CTRL,
 				templateUrl: PATH.PAGINATION_TOOL
+			},
+			info: {
+				controller: CONTROLLER.TOPIC_CONTROLLER,
+				controllerAs: CONTROLLER.CTRL,
+				templateUrl: PATH.TOPIC_INFO
 			},
 			content: {
 				controller: CONTROLLER.POST_CONTROLLER,
@@ -74,13 +117,22 @@ app.config(['$stateProvider', '$urlRouterProvider', 'CONTROLLER', 'PATH', 'STATE
 		}
 	})
 	.state(STATE.TOPICS, {
+		title: TITLE.TOPICS,
 		url: URL.TOPICS,
+		params: {
+			page: '1'
+		},
 		views: {
 			header: header,
-			tool: {
+			pagination: {
 				controller: CONTROLLER.TOPIC_CONTROLLER,
 				controllerAs: CONTROLLER.CTRL,
 				templateUrl: PATH.PAGINATION_TOOL
+			},
+			info: {
+				controller: CONTROLLER.TOPIC_CONTROLLER,
+				controllerAs: CONTROLLER.CTRL,
+				templateUrl: PATH.TOPICS_INFO
 			},
 			content: {
 				controller: CONTROLLER.TOPIC_CONTROLLER,
@@ -102,5 +154,6 @@ app.config(['$stateProvider', '$urlRouterProvider', 'CONTROLLER', 'PATH', 'STATE
 			footer: footer
 		}
 	})
-	$urlRouterProvider.otherwise(URL.HOME_PAGE);
+
+	$urlRouterProvider.otherwise(STATE.FEED, {page: 1});
 }]);

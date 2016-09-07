@@ -20,28 +20,29 @@ import by.training.model.UserModel;
 @RestController
 public class TopicRestController extends by.training.controller.rest.RestController {
 
-    @RequestMapping(value = TOPICS_PATH
-            + "/create/{name}/{urlName}/{description}/{access}/{creatorId}"
+    @RequestMapping(value = TOPICS_PATH + "/create/{name}/{path}/{description}/{access}/{creatorId}"
             + JSON_EXT, method = RequestMethod.POST)
     public ResponseEntity<TopicModel> createUser(@PathVariable("name") final String name,
-            @PathVariable("urlName") final String urlName,
+            @PathVariable("path") final String path,
             @PathVariable("description") final String description,
             @PathVariable("access") final boolean access,
             @PathVariable("creatorId") final long creatorId) {
         try {
             UserModel creator = userDAO.getUserById(creatorId);
-            TopicModel topic = topicDAO.createTopic(name, urlName, description, access, creator);
+            TopicModel topic = topicDAO.createTopic(name, path, description, access, creator);
             return new ResponseEntity<TopicModel>(topic, HttpStatus.CREATED);
         } catch (ValidationException e) {
             return new ResponseEntity<TopicModel>(HttpStatus.CONFLICT);
         }
     }
 
-    @RequestMapping(value = TOPICS_PATH + "/{urlName}"
+    @RequestMapping(value = TOPICS_PATH + "/{path}"
             + JSON_EXT, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TopicModel> getTopicByUrlName(
-            @PathVariable("urlName") final String urlName) {
-        TopicModel topic = topicDAO.getTopicByUrlName(urlName);
+    public ResponseEntity<TopicModel> getTopicByUrlName(@PathVariable("path") final String path) {
+        TopicModel topic = topicDAO.getTopicByPath(path);
+        if (topic == null) {
+            return new ResponseEntity<TopicModel>(HttpStatus.NO_CONTENT);
+        }
         return new ResponseEntity<TopicModel>(topic, HttpStatus.OK);
     }
 
@@ -56,17 +57,10 @@ public class TopicRestController extends by.training.controller.rest.RestControl
         return new ResponseEntity<List<TopicModel>>(topics, HttpStatus.OK);
     }
 
-    @RequestMapping(value = TOPICS_PATH + "/checkName/{name}"
+    @RequestMapping(value = TOPICS_PATH + "/check_path/{path}"
             + JSON_EXT, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Boolean> checkName(@PathVariable("name") final String name) {
-        boolean exists = topicDAO.checkName(name);
-        return new ResponseEntity<Boolean>(exists, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = TOPICS_PATH + "/checkUrlName/{urlName}"
-            + JSON_EXT, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Boolean> checkUrlName(@PathVariable("urlName") final String urlName) {
-        boolean exists = topicDAO.checkUrlName(urlName);
+    public ResponseEntity<Boolean> checkPath(@PathVariable("path") final String path) {
+        boolean exists = topicDAO.checkPath(path);
         return new ResponseEntity<Boolean>(exists, HttpStatus.OK);
     }
 

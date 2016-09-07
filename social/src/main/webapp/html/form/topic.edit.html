@@ -4,14 +4,12 @@
 		<div class="field">
 			<label class="required" for="name">Name</label>
 			<input type="text" id="name" name="name" maxlength="255" ng-model="ctrl.topic.name" ng-topic-name-exist required/>
-			<span ng-show="form.login.$pending.ngTopicNameExist">Checking if this name is available...</span>
-			<span ng-show="form.login.$error.ngTopicNameExist">This name is already taken</span>
 		</div>
 		<div class="field">
-			<label class="required" for="urlName">Url name</label>
-			<input type="text" id="urlName" name="urlName" maxlength="255" ng-model="ctrl.topic.urlName" ng-topic-url-name-exist required/>
-			<span ng-show="form.login.$pending.ngTopicUrlNameExist">Checking if this url name is available...</span>
-			<span ng-show="form.login.$error.ngTopicUrlNameExist">This url name is already taken</span>
+			<label class="required" for="urlName">Path</label>
+			<input type="text" id="path" name="path" maxlength="255" ng-model="ctrl.topic.path" ng-path-exist required/>
+			<span ng-show="form.login.$pending.ngPathExist">Checking if this path is available...</span>
+			<span ng-show="form.login.$error.ngPahtExist">This path is already taken</span>
 		</div>
 		<div class="field">
 			<label class="required" for="description">Description</label>

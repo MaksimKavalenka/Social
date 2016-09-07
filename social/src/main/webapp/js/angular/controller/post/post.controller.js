@@ -1,5 +1,6 @@
 'use strict';
 app.controller('PostController', ['$scope', '$state', 'STATE', 'PostFactory', 'FlashService', 'PaginationService', function($scope, $state, STATE, PostFactory, FlashService, PaginationService) {
+
 	var self = this;
 	self.posts = [];
 
@@ -8,7 +9,7 @@ app.controller('PostController', ['$scope', '$state', 'STATE', 'PostFactory', 'F
 			case STATE.FEED:
 				break;
 			case STATE.TOPIC:
-				self.getPostsByCriteria('topic', $scope.params.urlName, page);
+				self.getPostsByCriteria('topic', $state.params.path, page);
 				break;
 		}
 		PaginationService.getPages(page, state);
@@ -25,4 +26,5 @@ app.controller('PostController', ['$scope', '$state', 'STATE', 'PostFactory', 'F
 	};
 
 	self.init($state.current.name, $state.params.page);
+
 }]);

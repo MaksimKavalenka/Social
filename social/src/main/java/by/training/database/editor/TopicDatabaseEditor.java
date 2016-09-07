@@ -28,12 +28,12 @@ public class TopicDatabaseEditor extends DatabaseEditor implements TopicDAO {
 
     @Override
     @Transactional(rollbackFor = ValidationException.class)
-    public TopicModel createTopic(final String name, final String urlName, final String description,
+    public TopicModel createTopic(final String name, final String path, final String description,
             final boolean access, final UserModel creator) throws ValidationException {
         TopicModel checkTopicName = getUniqueResultByCriteria(TopicModel.class,
                 Restrictions.eq(TopicFields.NAME, name));
         TopicModel checkTopicUrlName = getUniqueResultByCriteria(TopicModel.class,
-                Restrictions.eq(TopicFields.URL_NAME, urlName));
+                Restrictions.eq(TopicFields.PATH, path));
         if ((checkTopicName == null) || (checkTopicUrlName == null)) {
             TopicModel topic = new TopicModel();
             topic.setName(name);
@@ -42,10 +42,10 @@ public class TopicDatabaseEditor extends DatabaseEditor implements TopicDAO {
             topic.setCreator(creator);
             topic.setUsers(new LinkedList<UserModel>());
             topic.getUsers().add(creator);
-            if (!"null".equals(urlName)) {
-                topic.setUrlName(urlName);
+            if (!"null".equals(path)) {
+                topic.setPath(path);
             } else {
-                topic.setUrlName(String.valueOf(topic.getId()));
+                topic.setPath(String.valueOf(topic.getId()));
             }
             sessionFactory.getCurrentSession().save(topic);
             return topic;
@@ -56,9 +56,8 @@ public class TopicDatabaseEditor extends DatabaseEditor implements TopicDAO {
 
     @Override
     @Transactional
-    public TopicModel getTopicByUrlName(final String urlName) {
-        return getUniqueResultByCriteria(TopicModel.class,
-                Restrictions.eq(TopicFields.URL_NAME, urlName));
+    public TopicModel getTopicByPath(final String path) {
+        return getUniqueResultByCriteria(TopicModel.class, Restrictions.eq(TopicFields.PATH, path));
     }
 
     @Override
@@ -70,16 +69,9 @@ public class TopicDatabaseEditor extends DatabaseEditor implements TopicDAO {
 
     @Override
     @Transactional
-    public boolean checkName(final String name) {
+    public boolean checkPath(final String path) {
         return getUniqueResultByCriteria(TopicModel.class,
-                Restrictions.eq(TopicFields.NAME, name)) != null;
-    }
-
-    @Override
-    @Transactional
-    public boolean checkUrlName(final String urlName) {
-        return getUniqueResultByCriteria(TopicModel.class,
-                Restrictions.eq(TopicFields.URL_NAME, urlName)) != null;
+                Restrictions.eq(TopicFields.PATH, path)) != null;
     }
 
 }

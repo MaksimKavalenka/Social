@@ -21,11 +21,11 @@ public class TopicModel extends Model {
 
     private static final long       serialVersionUID = 8849827068678797244L;
 
-    @Column(name = "name", unique = true, nullable = false, length = 255)
+    @Column(name = "name", nullable = false, length = 255)
     private String                  name;
 
-    @Column(name = "urlName", unique = true, nullable = false, length = 255)
-    private String                  urlName;
+    @Column(name = "path", unique = true, nullable = false, length = 255)
+    private String                  path;
 
     @Column(name = "description", nullable = false, length = 255)
     private String                  description;
@@ -63,12 +63,12 @@ public class TopicModel extends Model {
         this.name = name;
     }
 
-    public String getUrlName() {
-        return urlName;
+    public String getPath() {
+        return path;
     }
 
-    public void setUrlName(final String urlName) {
-        this.urlName = urlName;
+    public void setPath(final String path) {
+        this.path = path;
     }
 
     public String getDescription() {
@@ -121,9 +121,8 @@ public class TopicModel extends Model {
 
     @Override
     public String toString() {
-        return "Topic [id=" + super.getId() + ", name=" + name + ", urlName=" + urlName
-                + ", description=" + description + ", access=" + access + ", creator=" + creator
-                + "]";
+        return "Topic [id=" + super.getId() + ", name=" + name + ", path=" + path + ", description="
+                + description + ", access=" + access + ", creator=" + creator + "]";
     }
 
 }

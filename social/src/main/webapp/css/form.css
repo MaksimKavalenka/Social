@@ -1,12 +1,12 @@
 .form-search {
-	margin: 0 16px;
+	margin: 10px 0;
 }
 .form-search * {
 	display: inline;
 }
 .form-search .input-search {
 	padding: 9px;
-	width: 500px;
+	width: 914px;
 }
 .form-submit {
 	margin: 50px 0;

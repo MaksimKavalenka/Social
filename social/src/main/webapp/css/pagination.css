@@ -26,7 +26,7 @@
 	background: #000000;
 }
 .pagination > .page-active {
-	background: #ebbd81;
+	background: #eb0606;
 }
 .pagination > .page-default:active > a,
 .pagination > .page-default:hover > a,

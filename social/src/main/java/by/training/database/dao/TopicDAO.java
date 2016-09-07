@@ -8,15 +8,13 @@ import by.training.model.UserModel;
 
 public interface TopicDAO {
 
-    TopicModel createTopic(String name, String urlName, String description, boolean access,
+    TopicModel createTopic(String name, String path, String description, boolean access,
             UserModel creator) throws ValidationException;
 
-    TopicModel getTopicByUrlName(String urlName);
+    TopicModel getTopicByPath(String path);
 
     List<TopicModel> getUserTopics(long idUser, int page);
 
-    boolean checkName(String name);
-
-    boolean checkUrlName(String urlName);
+    boolean checkPath(String path);
 
 }

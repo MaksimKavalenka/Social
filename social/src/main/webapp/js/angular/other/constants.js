@@ -1,11 +1,14 @@
 'use strict';
-app.constant('CONTROLLER', {
-	'CTRL': 'ctrl',
-	'POST_CONTROLLER': 'PostController',
-	'TOPIC_CONTROLLER': 'TopicController',
-	'TOPIC_EDIT_CONTROLLER': 'TopicEditController',
-	'USER_EDIT_CONTROLLER': 'UserEditController'
-});
+app.constant('CONTROLLER', (function() {
+	return {
+		CTRL: 'ctrl',
+		POST_CONTROLLER: 'PostController',
+		TOPIC_CONTROLLER: 'TopicController',
+		TOPIC_EDIT_CONTROLLER: 'TopicEditController',
+		USER_EDIT_CONTROLLER: 'UserEditController'
+	}
+})());
+
 app.constant('MESSAGE', (function() {
 	var creatingError = 'Error while creating ';
 	var updatingError = 'Error while updating ';
@@ -27,10 +30,12 @@ app.constant('MESSAGE', (function() {
 		GETTING_USER_ERROR: gettingError + 'user'
 	}
 })());
+
 app.constant('PATH', (function() {
 	var path = 'social/html';
 	var contentPath = path + '/content';
 	var formPath = path + '/form';
+	var infoPath = path + '/info';
 	var titlePath = path + '/title';
 	var toolPath = path + '/tool';
 	var htmlExt = '.html';
@@ -40,12 +45,16 @@ app.constant('PATH', (function() {
 		LOGIN_FORM: formPath + '/login' + htmlExt,
 		REGISTER_FORM: formPath + '/register' + htmlExt,
 		TOPIC_EDIT_FORM: formPath + '/topic.edit' + htmlExt,
+		TOPIC_INFO: infoPath + '/topic.info' + htmlExt,
+		TOPICS_INFO: infoPath + '/topics.info' + htmlExt,
 		FOOTER: titlePath + '/footer' + htmlExt,
 		HEADER: titlePath + '/header' + htmlExt,
 		WELCOME_HEADER: titlePath + '/welcome.header' + htmlExt,
-		PAGINATION_TOOL: toolPath + '/pagination' + htmlExt
+		PAGINATION_TOOL: toolPath + '/pagination' + htmlExt,
+		SEARCH_TOOL: toolPath + '/search' + htmlExt
 	}
 })());
+
 app.constant('REST', (function() {
 	var url = '/social';
 	return {
@@ -55,19 +64,32 @@ app.constant('REST', (function() {
 		USERS: url + '/users'
 	}
 })());
+
 app.constant('STATE', (function() {
 	var topic = 'topic';
 	var topics = 'topics';
-	var addOperation = '/add';
+	var addOperation = '_add';
 	return {
 		LOGIN: 'login',
 		REGISTER: 'register',
+		SEARCH: 'search',
+		TOPIC_ADD: topic + addOperation,
 		FEED: 'feed',
 		TOPIC: topic,
-		TOPICS: topics,
-		TOPIC_ADD: topic + addOperation
+		TOPICS: topics
 	}
 })());
+
+app.constant('TITLE', (function() {
+	return {
+		LOGIN: 'Login',
+		REGISTER: 'Register',
+		SEARCH: 'Search',
+		FEED: 'Feed',
+		TOPICS: 'Topics'
+	}
+})());
+
 app.constant('URL', (function() {
 	var url = '/social';
 	var feedUrl = '/feed';
@@ -77,14 +99,14 @@ app.constant('URL', (function() {
 	var pageOperation = '/page';
 	var idPattern = '/{id:[0-9]{1,}}';
 	var pagePattern = '/{page:[0-9]{1,}}';
-	var urlNamePattern = '/{urlName:[a-z\\0-9\\.\\_]{1,}}';
+	var pathPattern = '/{path:[a-z0-9._]{1,}}';
 	return {
-		HOME_PAGE: url + feedUrl + pageOperation + '/1',
 		LOGIN: url + '/login',
 		REGISTER: url + '/register',
+		SEARCH: url + '/search',
+		TOPIC_ADD: url + topicUrl + addOperation,
 		FEED: url + feedUrl + pageOperation + pagePattern,
-		TOPIC: url + topicUrl + urlNamePattern + pageOperation + pagePattern,
-		TOPICS: url + topicsUrl + pageOperation + pagePattern,
-		TOPIC_ADD: url + topicUrl + addOperation
+		TOPIC: url + topicUrl + pathPattern + pageOperation + pagePattern,
+		TOPICS: url + topicsUrl + pageOperation + pagePattern
 	}
 })());

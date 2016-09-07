@@ -19,11 +19,14 @@ import by.training.model.TopicModel;
 @RestController
 public class PostRestController extends by.training.controller.rest.RestController {
 
-    @RequestMapping(value = POSTS_PATH + "/topic/{urlName}/{page}"
+    @RequestMapping(value = POSTS_PATH + "/topic/{path}/{page}"
             + JSON_EXT, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PostModel>> getPostsByCriteria(
-            @PathVariable("urlName") final String urlName, @PathVariable("page") final int page) {
-        TopicModel topic = topicDAO.getTopicByUrlName(urlName);
+            @PathVariable("path") final String path, @PathVariable("page") final int page) {
+        TopicModel topic = topicDAO.getTopicByPath(path);
+        if (topic == null) {
+            return new ResponseEntity<List<PostModel>>(HttpStatus.NO_CONTENT);
+        }
         List<PostModel> posts = postDAO.getTopicPosts(topic.getId(), page);
         if (posts == null) {
             return new ResponseEntity<List<PostModel>>(HttpStatus.NO_CONTENT);

@@ -1,25 +1,30 @@
 'use strict';
 app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 'FlashService', 'PaginationService', function($scope, $state, STATE, TopicFactory, FlashService, PaginationService) {
+
 	var self = this;
 	self.topic = {};
 	self.topics = [];
 
 	self.init = function(state, page) {
 		switch (state) {
+			case STATE.TOPIC:
+				self.getTopicByPath($state.params.path);
+				break;
 			case STATE.TOPICS:
 				self.getTopicsByCriteria('user', $scope.user.id, page);
-				break;
-			case STATE.TOPIC:
-				self.getTopicByUrlName($state.params.urlName, page);
 				break;
 		}
 		PaginationService.getPages(page, state);
 	};
 
-	self.getTopicByUrlName = function(urlName) {
-		TopicFactory.getTopicsByCriteria(relation, id, page, function(response) {
+	self.getTopicByPath = function(path) {
+		TopicFactory.getTopicByPath(path, function(response) {
 			if (response.success) {
-				self.topic = response.data;
+				if (response.data) {
+					self.topic = response.data;
+				} else {
+					$state.go(STATE.TOPICS);
+				}
 			} else {
 				FlashService.error(response.message);
 			}
@@ -37,4 +42,5 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 	};
 
 	self.init($state.current.name, $state.params.page);
+
 }]);

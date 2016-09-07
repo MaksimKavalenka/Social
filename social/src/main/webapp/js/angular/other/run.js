@@ -1,5 +1,8 @@
 'use strict';
 app.run(['$cookies', '$location', '$rootScope', '$state', 'STATE', 'URL', 'FlashService', function($cookies, $location, $rootScope, $state, STATE, URL, FlashService) {
+
+	$rootScope.$state = $state;
+
 	$rootScope.isPermitted = function() {
 		var restrictedPage = $.inArray($location.path(), [URL.LOGIN, URL.REGISTER]) === -1;
 		var loggedIn = $rootScope.user;
@@ -20,4 +23,5 @@ app.run(['$cookies', '$location', '$rootScope', '$state', 'STATE', 'URL', 'Flash
 	$rootScope.$on('$stateChangeStart', function() {
 		FlashService.clearFlashMessage(0);
 	});
+
 }]);

@@ -16,4 +16,5 @@ app.factory('PostFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE,
 	return {
 		getPostsByCriteria: getPostsByCriteria
 	};
+
 }]);
