@@ -1,7 +1,21 @@
-<div class="ct-header">
+<div class="content ct-title">
+	<div>{{ctrl.topic.name}}</div>
 	<div ng-show="user.id == ctrl.topic.creator.id">
 		<a ui-sref="topic_add">Edit topic</a>
 		<a ui-sref="topic_add">Invite</a>
 	</div>
-	<a ui-sref="post_add">Create post</a>
+	<div ng-controller="PostEditController as postCtrl">
+		<div ng-click="postCtrl.showForm(true)" ng-show="!postCtrl.form">Create post</div>
+		<div class="form-validation" ng-show="postCtrl.form">
+			<div class="field">
+				<label class="required" for="text">Text</label>
+				<textarea id="text" name="text" ng-model="postCtrl.post.text" required></textarea>
+			</div>
+			<div>
+				<button class="btn btn-primary" ng-click="postCtrl.createPost(ctrl.topic.id, 0)" ng-disabled="form.$invalid || postCtrl.dataLoading">Submit</button>
+				<button class="btn btn-danger" ng-click="postCtrl.showForm(false)">Cancel</button>
+				<img ng-if="postCtrl.dataLoading" src="/social/img/load.gif"/>
+			</div>
+		</div>
+	</div>
 </div>

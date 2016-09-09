@@ -7,6 +7,7 @@ app.controller('PostController', ['$scope', '$state', 'STATE', 'PostFactory', 'F
 	self.init = function(state, page) {
 		switch (state) {
 			case STATE.FEED:
+				self.getFeedPosts($scope.user.id, page);
 				break;
 			case STATE.TOPIC:
 				self.getPostsByCriteria('topic', $state.params.path, page);
@@ -17,6 +18,16 @@ app.controller('PostController', ['$scope', '$state', 'STATE', 'PostFactory', 'F
 
 	self.getPostsByCriteria = function(relation, id, page) {
 		PostFactory.getPostsByCriteria(relation, id, page, function(response) {
+			if (response.success) {
+				self.posts = response.data;
+			} else {
+				FlashService.error(response.message);
+			}
+		});
+	};
+
+	self.getFeedPosts = function(id, page) {
+		PostFactory.getFeedPosts(id, page, function(response) {
 			if (response.success) {
 				self.posts = response.data;
 			} else {

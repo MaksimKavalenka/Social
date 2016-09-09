@@ -1,9 +1,9 @@
-<form method="POST" class="form-submit form-validation" name="form">
+<div class="form-submit form-validation">
 	<fieldset>
 		<legend>Topic</legend>
 		<div class="field">
 			<label class="required" for="name">Name</label>
-			<input type="text" id="name" name="name" maxlength="255" ng-model="ctrl.topic.name" ng-topic-name-exist required/>
+			<input type="text" id="name" name="name" maxlength="255" ng-model="ctrl.topic.name" required/>
 		</div>
 		<div class="field">
 			<label class="required" for="urlName">Path</label>
@@ -25,4 +25,4 @@
 			<img ng-if="ctrl.dataLoading" src="/social/img/load.gif"/>
 		</div>
 	</fieldset>
-</form>
+</div>

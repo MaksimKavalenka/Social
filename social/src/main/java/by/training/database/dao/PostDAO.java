@@ -1,11 +1,13 @@
 package by.training.database.dao;
 
-import java.util.List;
-
 import by.training.model.PostModel;
+import by.training.model.TopicModel;
+import by.training.model.UserModel;
 
 public interface PostDAO {
 
-    List<PostModel> getTopicPosts(long idTopic, int page);
+    PostModel createPost(String text, UserModel creator, TopicModel topic, PostModel parentPost);
+
+    PostModel getPostById(long id);
 
 }

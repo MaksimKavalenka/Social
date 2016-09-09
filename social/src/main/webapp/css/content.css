@@ -1,11 +1,11 @@
 .content {
-	margin: 0 auto;
-	padding: 0;
-}
-.ct-header,
-.content li {
-	border: 3px solid #292929;
 	display: block;
 	margin: 15px 0;
 	padding: 15px;
+}
+.ct-title {
+	border: 3px solid #eb0606;
+}
+.ct-content {
+	border: 3px solid #292929;
 }

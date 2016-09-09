@@ -26,6 +26,11 @@ public class RoleModel extends Model {
         super();
     }
 
+    public RoleModel(final String name) {
+        super();
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }

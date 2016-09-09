@@ -17,7 +17,7 @@ public class NotificationModel extends Model {
     private static final long serialVersionUID = -8131266384051642285L;
 
     @Column(name = "created", nullable = false)
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date              date;
 
     @ManyToOne(targetEntity = UserModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
@@ -34,6 +34,15 @@ public class NotificationModel extends Model {
 
     public NotificationModel() {
         super();
+    }
+
+    public NotificationModel(final UserModel user, final UserModel inviter,
+            final TopicModel topic) {
+        super();
+        date = new Date();
+        this.user = user;
+        this.inviter = inviter;
+        this.topic = topic;
     }
 
     public Date getDate() {

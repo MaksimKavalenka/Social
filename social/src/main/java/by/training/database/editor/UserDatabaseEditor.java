@@ -34,10 +34,7 @@ public class UserDatabaseEditor extends DatabaseEditor implements UserDAO {
             UserModel checkUserLogin = getUniqueResultByCriteria(UserModel.class,
                     Restrictions.eq(UserFields.LOGIN, login));
             if (checkUserLogin == null) {
-                UserModel user = new UserModel();
-                user.setLogin(login);
-                user.setPassword(SecureData.secureSha1(password));
-                user.setRole(role);
+                UserModel user = new UserModel(login, SecureData.secureSha1(password), role);
                 sessionFactory.getCurrentSession().save(user);
                 return user;
             } else {

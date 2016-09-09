@@ -3,6 +3,7 @@ package by.training.controller.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import by.training.database.dao.PostDAO;
+import by.training.database.dao.RelationDAO;
 import by.training.database.dao.RoleDAO;
 import by.training.database.dao.TopicDAO;
 import by.training.database.dao.UserDAO;
@@ -10,12 +11,14 @@ import by.training.database.dao.UserDAO;
 public class RestController {
 
     @Autowired
-    public PostDAO  postDAO;
+    public PostDAO     postDAO;
     @Autowired
-    public RoleDAO  roleDAO;
+    public RoleDAO     roleDAO;
     @Autowired
-    public TopicDAO topicDAO;
+    public TopicDAO    topicDAO;
     @Autowired
-    public UserDAO  userDAO;
+    public UserDAO     userDAO;
+    @Autowired
+    public RelationDAO relationDAO;
 
 }

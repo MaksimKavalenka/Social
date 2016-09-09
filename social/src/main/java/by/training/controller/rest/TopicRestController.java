@@ -22,7 +22,7 @@ public class TopicRestController extends by.training.controller.rest.RestControl
 
     @RequestMapping(value = TOPICS_PATH + "/create/{name}/{path}/{description}/{access}/{creatorId}"
             + JSON_EXT, method = RequestMethod.POST)
-    public ResponseEntity<TopicModel> createUser(@PathVariable("name") final String name,
+    public ResponseEntity<TopicModel> createTopic(@PathVariable("name") final String name,
             @PathVariable("path") final String path,
             @PathVariable("description") final String description,
             @PathVariable("access") final boolean access,
@@ -46,11 +46,13 @@ public class TopicRestController extends by.training.controller.rest.RestControl
         return new ResponseEntity<TopicModel>(topic, HttpStatus.OK);
     }
 
-    @RequestMapping(value = TOPICS_PATH + "/user/{id}/{page}"
+    @RequestMapping(value = TOPICS_PATH + "/{relation}/{id}/{page}"
             + JSON_EXT, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TopicModel>> getTopicsByCriteria(@PathVariable("id") final long id,
+    public ResponseEntity<List<TopicModel>> getTopicsByCriteria(
+            @PathVariable("relation") final String relation, @PathVariable("id") final long id,
             @PathVariable("page") final int page) {
-        List<TopicModel> topics = topicDAO.getUserTopics(id, page);
+        List<TopicModel> topics = relationDAO.getElementsByCriteria(TopicModel.class, relation, id,
+                page);
         if (topics == null) {
             return new ResponseEntity<List<TopicModel>>(HttpStatus.NO_CONTENT);
         }

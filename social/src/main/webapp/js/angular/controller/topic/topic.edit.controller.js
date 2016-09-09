@@ -1,5 +1,5 @@
 'use strict';
-app.controller('TopicEditController', ['$location', '$scope', '$state', 'URL', 'TopicFactory', 'CookieService', 'FlashService', function($location, $scope, $state, URL, TopicFactory, CookieService, FlashService) {
+app.controller('TopicEditController', ['$scope', '$state', 'STATE', 'TopicFactory', 'FlashService', function($scope, $state, STATE, TopicFactory, FlashService) {
 
 	var self = this;
 

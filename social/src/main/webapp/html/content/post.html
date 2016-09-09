@@ -1,6 +1,5 @@
-<ul class="content">
-	<li ng-repeat="post in ctrl.posts">
-		<div class="ct-title">
-			<a ui-sref="post({id: post.id, page: 1})">{{post.text}}</a>
-		</div>
-</ul>
+<div class="content ct-content" ng-repeat="post in ctrl.posts">
+	<div>{{post.topic.name}}</div>
+	<div>Created by {{post.creator.login}} ({{post.date | date: 'dd MMMM yyyy HH:mm:ss'}})</div>
+	<a ui-sref="post({id: post.id, page: 1})">{{post.text}}</a>
+</div>

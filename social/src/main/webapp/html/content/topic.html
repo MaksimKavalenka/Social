@@ -1,9 +1,6 @@
-<ul class="content">
-	<li ng-repeat="topic in ctrl.topics">
-		<div class="ct-title">
-			<a ui-sref="topic({path: topic.path, page: 1})">{{topic.name}}</a>
-			<div ng-show="!topic.access">Private topic</div>
-			<div>{{topic.description}}</div>
-			<div>Created by {{topic.creator.login}}</div>
-		</div>
-</ul>
+<div class="content ct-content" ng-repeat="topic in ctrl.topics">
+	<a ui-sref="topic({path: topic.path, page: 1})">{{topic.name}}</a>
+	<div ng-show="!topic.access">Private topic</div>
+	<div>{{topic.description}}</div>
+	<div>Created by {{topic.creator.login}}</div>
+</div>

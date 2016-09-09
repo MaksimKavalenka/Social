@@ -3,6 +3,7 @@ app.constant('CONTROLLER', (function() {
 	return {
 		CTRL: 'ctrl',
 		POST_CONTROLLER: 'PostController',
+		POST_EDIT_CONTROLLER: 'PostEditController',
 		TOPIC_CONTROLLER: 'TopicController',
 		TOPIC_EDIT_CONTROLLER: 'TopicEditController',
 		USER_EDIT_CONTROLLER: 'UserEditController'

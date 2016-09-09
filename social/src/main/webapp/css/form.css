@@ -59,3 +59,7 @@
 .form-validation input.ng-valid {
 	border-color: none;
 }
+textarea {
+	height: 300px;
+	width: 100%;
+}

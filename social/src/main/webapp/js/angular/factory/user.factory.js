@@ -4,8 +4,8 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE,
 	function createUser(login, password, callback) {
 		$http.post(REST.USERS + '/create/' + login + '/' + password + REST.JSON_EXT)
 		.success(function(response) {
-			response = {success: true};
-			callback(response);
+			var data = {success: true, data: response};
+			callback(data);
 		})
 		.error(function(response) {
 			response = {success: false, message: MESSAGE.CREATING_USER_ERROR};

@@ -24,7 +24,7 @@ public class PostModel extends Model {
     private String                  text;
 
     @Column(name = "created", nullable = false)
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date                    date;
 
     @ManyToOne(targetEntity = UserModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
@@ -49,6 +49,16 @@ public class PostModel extends Model {
 
     public PostModel() {
         super();
+    }
+
+    public PostModel(final String text, final UserModel creator, final TopicModel topic,
+            final PostModel parentPost) {
+        super();
+        date = new Date();
+        this.text = text;
+        this.creator = creator;
+        this.topic = topic;
+        this.parentPost = parentPost;
     }
 
     public String getText() {
