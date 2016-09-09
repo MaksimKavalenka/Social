@@ -1,5 +1,5 @@
 'use strict';
-app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE, REST) {
+app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'CookieService', function($http, MESSAGE, REST, CookieService) {
 
 	function createUser(login, password, callback) {
 		$http.post(REST.USERS + '/create/' + login + '/' + password + REST.JSON_EXT)
@@ -7,26 +7,59 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE,
 			var data = {success: true, data: response};
 			callback(data);
 		})
-		.error(function(response) {
-			response = {success: false, message: MESSAGE.CREATING_USER_ERROR};
+		.error(function() {
+			var response = {success: false, message: MESSAGE.CREATING_USER_ERROR};
 			callback(response);
 		});
 	}
 
-	function authentication(login, password, callback) {
-		$http.post(REST.USERS + '/auth/' + login + '/' + password + REST.JSON_EXT)
+	function authentication(login, password, remember, callback) {
+		if (!login || !password) {
+			var response = {success: false, message: MESSAGE.FORM_ERROR};
+			callback(response);
+			return;
+		}
+		var headers = {authorization : "Basic " + btoa(login + ":" + password)};
+		$http.get(REST.USERS + '/auth' + REST.JSON_EXT, {'headers' : headers})
 		.success(function(response) {
-			var data = {success: true, data: response};
-			callback(data);
+			if (response) {
+				if (remember) {
+					CookieService.createRememberMeCookie(response);
+				}
+				response = {success: true};
+				callback(response);
+			} else {
+				response = {success: false, message: MESSAGE.AUTHENTICATION_ERROR};
+				callback(response);
+			}
 		})
-		.error(function(response) {
-			response = {success: false, message: MESSAGE.AUTHENTICATION_ERROR};
+		.error(function() {
+			var response = {success: false, message: MESSAGE.GETTING_USER_ERROR};
 			callback(response);
 		});
+	}
+
+	function getUser(callback) {
+		$http.get(REST.USERS + '/auth' + REST.JSON_EXT, {})
+		.success(function(response) {
+			if (response.username) {
+				callback(response);
+			} else {
+				callback(null);
+			}
+		})
+		.error(function() {
+			callback(null);
+		});
+	}
+
+	function logout() {
+		CookieService.removeRememberMeCookie();
+		$http.post(REST.USERS + '/logout' + REST.JSON_EXT, {});
 	}
 
 	function checkLogin(login, callback) {
-		$http.post(REST.USERS + '/checkLogin/' + login + REST.JSON_EXT)
+		$http.post(REST.USERS + '/check_login/' + login + REST.JSON_EXT)
 		.success(function(response) {
 			if (response) {
 				response = {success: true};
@@ -35,8 +68,8 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE,
 			}
 			callback(response);
 		})
-		.error(function(response) {
-			response = {success: false, message: MESSAGE.GETTING_USER_ERROR};
+		.error(function() {
+			var response = {success: false, message: MESSAGE.GETTING_USER_ERROR};
 			callback(response);
 		});
 	}
@@ -44,6 +77,8 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE,
 	return {
 		createUser: createUser,
 		authentication: authentication,
+		getUser: getUser,
+		logout: logout,
 		checkLogin: checkLogin
 	};
 

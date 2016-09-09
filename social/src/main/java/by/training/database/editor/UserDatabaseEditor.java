@@ -9,11 +9,11 @@ import java.util.List;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.transaction.annotation.Transactional;
 
 import by.training.database.dao.UserDAO;
 import by.training.exception.ValidationException;
-import by.training.model.RoleModel;
 import by.training.model.UserModel;
 import by.training.utility.SecureData;
 
@@ -30,7 +30,7 @@ public class UserDatabaseEditor extends DatabaseEditor implements UserDAO {
     @Override
     @Transactional(rollbackFor = ValidationException.class)
     public UserModel createUser(final String login, final String password,
-            final List<RoleModel> roles) throws ValidationException {
+            final List<GrantedAuthority> roles) throws ValidationException {
         try {
             UserModel checkUserLogin = getUniqueResultByCriteria(UserModel.class,
                     Restrictions.eq(UserFields.LOGIN, login));
@@ -53,6 +53,7 @@ public class UserDatabaseEditor extends DatabaseEditor implements UserDAO {
     }
 
     @Override
+    @Transactional
     public UserModel getUserByLogin(final String login) {
         return getUniqueResultByCriteria(UserModel.class, Restrictions.eq(UserFields.LOGIN, login));
     }

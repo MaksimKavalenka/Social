@@ -1,23 +1,24 @@
 'use strict';
-app.service('CookieService', ['$cookies', '$rootScope', function($cookies, $rootScope) {
+app.service('CookieService', ['$cookies', '$http', function($cookies, $http) {
 
-	function setCredentials(user) {
-		$rootScope.user = {
-			id: user.id,
-			login: user.login,
-			role: user.role.name
-		};
-		$cookies.putObject('user', $rootScope.user);
+	function createRememberMeCookie(userdetials) {
+		var name = userdetials.username;
+		var pwd = userdetials.password;
+		var expireDate = new Date();
+		expireDate.setDate(expireDate.getDate() + 30);
+		var cookieValue = btoa(name + ":" + expireDate.getTime().toString() + ":" + md5(name + ":" + expireDate.getTime().toString() + ":" + pwd + ":" + "DEVELNOTES_REMEMBER_TOKEN"));
+		$cookies.put('DEVELNOTES_REMEMBER_ME_COOKIE', cookieValue, {'expires': expireDate, 'path': '/'});
 	}
 
-	function clearCredentials() {
-		$rootScope.user = null;
-		$cookies.remove('user');
+	function removeRememberMeCookie() {
+		var expireDate = new Date();
+		expireDate.setDate(expireDate.getDate() - 1);
+		$cookies.put('DEVELNOTES_REMEMBER_ME_COOKIE', '', {'expires': expireDate, 'path': '/'});
 	}
 
 	return {
-		setCredentials: setCredentials,
-		clearCredentials: clearCredentials
+		createRememberMeCookie: createRememberMeCookie,
+		removeRememberMeCookie: removeRememberMeCookie
 	};
 
 }]);

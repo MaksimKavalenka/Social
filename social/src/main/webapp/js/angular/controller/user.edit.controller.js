@@ -5,9 +5,8 @@ app.controller('UserEditController', ['$state', 'STATE', 'UserFactory', 'CookieS
 
 	self.login = function() {
 		self.dataLoading = true;
-		UserFactory.authentication(self.user.login, self.user.password, function(response) {
+		UserFactory.authentication(self.user.login, self.user.password, true, function(response) {
 			if (response.success) {
-				CookieService.setCredentials(response.data);
 				$state.go(STATE.FEED, {page: 1});
 			} else {
 				FlashService.error(response.message);
@@ -17,7 +16,7 @@ app.controller('UserEditController', ['$state', 'STATE', 'UserFactory', 'CookieS
 	};
 
 	self.logout = function() {
-		CookieService.clearCredentials();
+		UserFactory.logout();
 		$state.go(STATE.LOGIN);
 	};
 

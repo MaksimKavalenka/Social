@@ -15,6 +15,7 @@ app.constant('MESSAGE', (function() {
 	var updatingError = 'Error while updating ';
 	var gettingError = 'Error while getting ';
 	return {
+		FORM_ERROR: 'Required fields must be filled',
 		AUTHENTICATION_ERROR: 'Login or password is wrong',
 		TAKEN_LOGIN_ERROR: 'This login is already taken',
 		TAKEN_PATH_ERROR: 'This path is already taken',

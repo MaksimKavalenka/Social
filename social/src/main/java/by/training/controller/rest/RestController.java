@@ -10,15 +10,17 @@ import by.training.database.dao.UserDAO;
 
 public class RestController {
 
+    public static final String JSON_EXT = ".json";
+
     @Autowired
-    public PostDAO     postDAO;
+    public PostDAO             postDAO;
     @Autowired
-    public RoleDAO     roleDAO;
+    public RoleDAO             roleDAO;
     @Autowired
-    public TopicDAO    topicDAO;
+    public TopicDAO            topicDAO;
     @Autowired
-    public UserDAO     userDAO;
+    public UserDAO             userDAO;
     @Autowired
-    public RelationDAO relationDAO;
+    public RelationDAO         relationDAO;
 
 }

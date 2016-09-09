@@ -1,8 +1,5 @@
 package by.training.controller.rest;
 
-import static by.training.constants.RestConstants.JSON_EXT;
-import static by.training.constants.RestConstants.POSTS_PATH;
-
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -19,10 +16,11 @@ import by.training.model.TopicModel;
 import by.training.model.UserModel;
 
 @RestController
+@RequestMapping("/posts")
 public class PostRestController extends by.training.controller.rest.RestController {
 
-    @RequestMapping(value = POSTS_PATH + "/create/{text}/{creatorId}/{topicId}/{parentPostId}"
-            + JSON_EXT, method = RequestMethod.POST)
+    @RequestMapping(value = "/create/{text}/{creatorId}/{topicId}/{parentPostId}"
+            + JSON_EXT, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PostModel> createPost(@PathVariable("text") final String text,
             @PathVariable("creatorId") final long creatorId,
             @PathVariable("topicId") final long topicId,
@@ -37,15 +35,15 @@ public class PostRestController extends by.training.controller.rest.RestControll
         return new ResponseEntity<PostModel>(post, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = POSTS_PATH + "/update/{id}/{text}"
-            + JSON_EXT, method = RequestMethod.POST)
+    @RequestMapping(value = "/update/{id}/{text}"
+            + JSON_EXT, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PostModel> updatePost(@PathVariable("id") final long id,
             @PathVariable("text") final String text) {
         PostModel post = postDAO.updatePost(id, text);
         return new ResponseEntity<PostModel>(post, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = POSTS_PATH + "/{relation}/{id}/{page}"
+    @RequestMapping(value = "/{relation}/{id}/{page}"
             + JSON_EXT, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PostModel>> getPostsByCriteria(
             @PathVariable("relation") final String relation, @PathVariable("id") final long id,
@@ -58,7 +56,7 @@ public class PostRestController extends by.training.controller.rest.RestControll
         return new ResponseEntity<List<PostModel>>(posts, HttpStatus.OK);
     }
 
-    @RequestMapping(value = POSTS_PATH + "/topic/{path}/{page}"
+    @RequestMapping(value = "/topic/{path}/{page}"
             + JSON_EXT, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PostModel>> getPostsByCriteria(
             @PathVariable("path") final String path, @PathVariable("page") final int page) {
@@ -74,7 +72,7 @@ public class PostRestController extends by.training.controller.rest.RestControll
         return new ResponseEntity<List<PostModel>>(posts, HttpStatus.OK);
     }
 
-    @RequestMapping(value = POSTS_PATH + "/feed/{userId}/{page}"
+    @RequestMapping(value = "/feed/{userId}/{page}"
             + JSON_EXT, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PostModel>> getFeedPosts(@PathVariable("userId") final long userId,
             @PathVariable("page") final int page) {

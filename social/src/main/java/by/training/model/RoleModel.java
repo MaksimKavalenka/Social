@@ -55,13 +55,13 @@ public class RoleModel extends Model implements GrantedAuthority {
     }
 
     @Override
-    public String toString() {
-        return "Role [id=" + super.getId() + ", name=" + name + "]";
+    public String getAuthority() {
+        return name;
     }
 
     @Override
-    public String getAuthority() {
-        return name;
+    public String toString() {
+        return "Role [id=" + super.getId() + ", name=" + name + "]";
     }
 
 }

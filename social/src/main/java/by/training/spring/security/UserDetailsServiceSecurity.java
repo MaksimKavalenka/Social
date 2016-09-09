@@ -1,4 +1,4 @@
-package by.training.spring;
+package by.training.spring.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,7 +9,7 @@ import by.training.database.dao.UserDAO;
 import by.training.model.UserModel;
 
 @Service
-public class CustomUserService implements UserDetailsService {
+public class UserDetailsServiceSecurity implements UserDetailsService {
 
     @Autowired
     private UserDAO userDAO;

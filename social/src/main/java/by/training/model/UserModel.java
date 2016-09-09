@@ -25,6 +25,11 @@ public class UserModel extends Model implements UserDetails {
 
     private static final long       serialVersionUID = 7372820574885171442L;
 
+    private boolean                 accountNonExpired;
+    private boolean                 accountNonLocked;
+    private boolean                 credentialsNonExpired;
+    private boolean                 enabled;
+
     @Column(name = "login", unique = true, nullable = false, length = 255)
     private String                  login;
 
@@ -32,10 +37,11 @@ public class UserModel extends Model implements UserDetails {
     @Column(name = "password", nullable = false, length = 255)
     private String                  password;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(targetEntity = RoleModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
             CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", nullable = false, updatable = false), inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false, updatable = false))
-    private List<RoleModel>         roles;
+    private List<GrantedAuthority>  roles;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")
@@ -60,12 +66,22 @@ public class UserModel extends Model implements UserDetails {
         super();
     }
 
-    public UserModel(final String login, final String password, final List<RoleModel> roles) {
+    public UserModel(final String login, final String password,
+            final List<GrantedAuthority> roles) {
+        this(true, true, true, true, login, password, roles);
+    }
+
+    public UserModel(final boolean accountNonExpired, final boolean accountNonLocked,
+            final boolean credentialsNonExpired, final boolean enabled, final String login,
+            final String password, final List<GrantedAuthority> roles) {
         super();
+        this.accountNonExpired = accountNonExpired;
+        this.accountNonLocked = accountNonLocked;
+        this.credentialsNonExpired = credentialsNonExpired;
+        this.enabled = enabled;
         this.login = login;
         this.password = password;
         this.roles = roles;
-
     }
 
     public String getLogin() {
@@ -85,11 +101,11 @@ public class UserModel extends Model implements UserDetails {
         this.password = password;
     }
 
-    public List<RoleModel> getRoles() {
+    public List<GrantedAuthority> getRoles() {
         return roles;
     }
 
-    public void setRoles(final List<RoleModel> roles) {
+    public void setRoles(final List<GrantedAuthority> roles) {
         this.roles = roles;
     }
 
@@ -126,11 +142,6 @@ public class UserModel extends Model implements UserDetails {
     }
 
     @Override
-    public String toString() {
-        return "User [id=" + super.getId() + ", login=" + login + "]";
-    }
-
-    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
     }
@@ -142,26 +153,27 @@ public class UserModel extends Model implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        // TODO Auto-generated method stub
-        return false;
+        return accountNonExpired;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        // TODO Auto-generated method stub
-        return false;
+        return accountNonLocked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        // TODO Auto-generated method stub
-        return false;
+        return credentialsNonExpired;
     }
 
     @Override
     public boolean isEnabled() {
-        // TODO Auto-generated method stub
-        return false;
+        return enabled;
+    }
+
+    @Override
+    public String toString() {
+        return "User [id=" + super.getId() + ", login=" + login + "]";
     }
 
 }

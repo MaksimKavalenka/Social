@@ -1,8 +1,5 @@
 package by.training.controller.rest;
 
-import static by.training.constants.RestConstants.JSON_EXT;
-import static by.training.constants.RestConstants.TOPICS_PATH;
-
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -18,10 +15,11 @@ import by.training.model.TopicModel;
 import by.training.model.UserModel;
 
 @RestController
+@RequestMapping("/topics")
 public class TopicRestController extends by.training.controller.rest.RestController {
 
-    @RequestMapping(value = TOPICS_PATH + "/create/{name}/{path}/{description}/{access}/{creatorId}"
-            + JSON_EXT, method = RequestMethod.POST)
+    @RequestMapping(value = "/create/{name}/{path}/{description}/{access}/{creatorId}"
+            + JSON_EXT, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TopicModel> createTopic(@PathVariable("name") final String name,
             @PathVariable("path") final String path,
             @PathVariable("description") final String description,
@@ -36,7 +34,7 @@ public class TopicRestController extends by.training.controller.rest.RestControl
         }
     }
 
-    @RequestMapping(value = TOPICS_PATH + "/{path}"
+    @RequestMapping(value = "/{path}"
             + JSON_EXT, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TopicModel> getTopicByUrlName(@PathVariable("path") final String path) {
         TopicModel topic = topicDAO.getTopicByPath(path);
@@ -46,7 +44,7 @@ public class TopicRestController extends by.training.controller.rest.RestControl
         return new ResponseEntity<TopicModel>(topic, HttpStatus.OK);
     }
 
-    @RequestMapping(value = TOPICS_PATH + "/{relation}/{id}/{page}"
+    @RequestMapping(value = "/{relation}/{id}/{page}"
             + JSON_EXT, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TopicModel>> getTopicsByCriteria(
             @PathVariable("relation") final String relation, @PathVariable("id") final long id,
@@ -59,7 +57,7 @@ public class TopicRestController extends by.training.controller.rest.RestControl
         return new ResponseEntity<List<TopicModel>>(topics, HttpStatus.OK);
     }
 
-    @RequestMapping(value = TOPICS_PATH + "/search/{value}/{userId}/{page}"
+    @RequestMapping(value = "/search/{value}/{userId}/{page}"
             + JSON_EXT, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TopicModel>> getTopicsByValue(
             @PathVariable("value") final String value, @PathVariable("userId") final long userId,
@@ -71,7 +69,7 @@ public class TopicRestController extends by.training.controller.rest.RestControl
         return new ResponseEntity<List<TopicModel>>(topics, HttpStatus.OK);
     }
 
-    @RequestMapping(value = TOPICS_PATH + "/join/{topicPath}/{userId}"
+    @RequestMapping(value = "/join/{topicPath}/{userId}"
             + JSON_EXT, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> joinTopic(@PathVariable("topicPath") final String topicPath,
             @PathVariable("userId") final long userId) {
@@ -80,7 +78,7 @@ public class TopicRestController extends by.training.controller.rest.RestControl
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = TOPICS_PATH + "/leave/{topicPath}/{userId}"
+    @RequestMapping(value = "/leave/{topicPath}/{userId}"
             + JSON_EXT, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> leaveTopic(@PathVariable("topicPath") final String topicPath,
             @PathVariable("userId") final long userId) {
@@ -89,14 +87,14 @@ public class TopicRestController extends by.training.controller.rest.RestControl
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = TOPICS_PATH + "/check_path/{path}"
+    @RequestMapping(value = "/check_path/{path}"
             + JSON_EXT, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Boolean> checkPath(@PathVariable("path") final String path) {
         boolean exists = topicDAO.checkPath(path);
         return new ResponseEntity<Boolean>(exists, HttpStatus.OK);
     }
 
-    @RequestMapping(value = TOPICS_PATH + "/check_member/{topicPath}/{userId}"
+    @RequestMapping(value = "/check_member/{topicPath}/{userId}"
             + JSON_EXT, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Boolean> checkMember(@PathVariable("topicPath") final String topicPath,
             @PathVariable("userId") final long userId) {

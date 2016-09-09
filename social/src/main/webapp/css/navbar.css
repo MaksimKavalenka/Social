@@ -9,6 +9,9 @@
 	display: inline-block;
 	font-family: "Berlin Sans FB";
 }
+.navigation > li.main {
+	padding: 5px 0;
+}
 .navigation > li > a,
 .navigation > li > button.link {
 	display: inline-block;
@@ -21,8 +24,13 @@
 }
 .navigation > li.main > a,
 .navigation > li.main > button.link {
+	background-image: url(/social/img/icon.png);
+	background-repeat: no-repeat;
+	background-size: 70px;
+	height: 70px;
 	margin-right: 25px;
-	padding: 5px 0;
+	padding: 0;
+	width: 70px;
 }
 .navbar-menu > li.main:hover {
 	background: transparent;
