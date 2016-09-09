@@ -26,8 +26,8 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'CookieService', functio
 				if (remember) {
 					CookieService.createRememberMeCookie(response);
 				}
-				response = {success: true};
-				callback(response);
+				var data = {success: true, data: response};
+				callback(data);
 			} else {
 				response = {success: false, message: MESSAGE.AUTHENTICATION_ERROR};
 				callback(response);

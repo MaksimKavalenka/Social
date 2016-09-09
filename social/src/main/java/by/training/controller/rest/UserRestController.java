@@ -27,15 +27,15 @@ public class UserRestController extends by.training.controller.rest.RestControll
 
     @RequestMapping(value = "/create/{login}/{password}"
             + JSON_EXT, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserModel> createUser(@PathVariable("login") final String login,
+    public ResponseEntity<Void> createUser(@PathVariable("login") final String login,
             @PathVariable("password") final String password) {
         try {
             List<GrantedAuthority> roles = new LinkedList<>();
             roles.add(roleDAO.getRoleById(1));
-            UserModel user = userDAO.createUser(login, password, roles);
-            return new ResponseEntity<UserModel>(user, HttpStatus.CREATED);
+            userDAO.createUser(login, password, roles);
+            return new ResponseEntity<Void>(HttpStatus.CREATED);
         } catch (ValidationException e) {
-            return new ResponseEntity<UserModel>(HttpStatus.CONFLICT);
+            return new ResponseEntity<Void>(HttpStatus.CONFLICT);
         }
     }
 

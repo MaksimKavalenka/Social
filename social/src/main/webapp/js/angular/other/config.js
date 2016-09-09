@@ -1,7 +1,5 @@
 'use strict';
-app.config(['$cookiesProvider', '$locationProvider', function($cookiesProvider, $locationProvider) {
-	$cookiesProvider.defaults.path = "/social/";
-	$cookiesProvider.defaults.expires = new Date(new Date().getTime() + 604800000);
+app.config(['$locationProvider', function($locationProvider) {
 	$locationProvider.html5Mode(true);
 }]);
 

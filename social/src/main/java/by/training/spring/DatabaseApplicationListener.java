@@ -21,7 +21,7 @@ public class DatabaseApplicationListener implements ApplicationListener<ContextR
 
     @Transactional
     private void roleInit() {
-        String[] roles = {"User"};
+        String[] roles = {"ROLE_USER"};
         for (String role : roles) {
             if (roleDAO.getRoleByName(role) == null) {
                 roleDAO.createRole(role);

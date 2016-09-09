@@ -16,8 +16,6 @@ public interface UserDAO {
 
     UserModel getUserByLogin(String login);
 
-    UserModel authentication(String login, String password) throws ValidationException;
-
     boolean checkLogin(String login);
 
 }

@@ -10,6 +10,10 @@
 			<input type="password" id="password" name="password" maxlength="255" ng-model="ctrl.user.password" ng-minlength="3" required/>
 			<span ng-show="form.password.$error.required || form.password.$error.minlength">Minimal count of symbols is 3</span>
 		</div>
+		<div class="field simple">
+			<label for="remember">Remember</label>
+			<input type="checkbox" id="remember" name="remember" ng-model="ctrl.user.remember"/>
+		</div>
 		<div>
 			<button class="btn btn-primary" ng-click="ctrl.login()" ng-disabled="form.$invalid || ctrl.dataLoading">Login</button>
 			<button class="btn btn-primary" ui-sref="register">Register</button>

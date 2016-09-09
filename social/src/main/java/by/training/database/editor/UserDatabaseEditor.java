@@ -1,6 +1,5 @@
 package by.training.database.editor;
 
-import static by.training.constants.ExceptionConstants.AUTHORIZATION_ERROR;
 import static by.training.constants.ExceptionConstants.TAKEN_LOGIN_ERROR;
 import static by.training.constants.ModelStructureConstants.UserFields;
 
@@ -35,7 +34,8 @@ public class UserDatabaseEditor extends DatabaseEditor implements UserDAO {
             UserModel checkUserLogin = getUniqueResultByCriteria(UserModel.class,
                     Restrictions.eq(UserFields.LOGIN, login));
             if (checkUserLogin == null) {
-                UserModel user = new UserModel(login, SecureData.secureSha1(password), roles);
+                UserModel user = new UserModel(login, SecureData.secureBySha(password, login),
+                        roles);
                 sessionFactory.getCurrentSession().save(user);
                 return user;
             } else {
@@ -56,24 +56,6 @@ public class UserDatabaseEditor extends DatabaseEditor implements UserDAO {
     @Transactional
     public UserModel getUserByLogin(final String login) {
         return getUniqueResultByCriteria(UserModel.class, Restrictions.eq(UserFields.LOGIN, login));
-    }
-
-    @Override
-    @Transactional(rollbackFor = ValidationException.class)
-    public UserModel authentication(final String login, final String password)
-            throws ValidationException {
-        try {
-            UserModel user = getUniqueResultByCriteria(UserModel.class,
-                    Restrictions.eq(UserFields.LOGIN, login),
-                    Restrictions.eq(UserFields.PASSWORD, SecureData.secureSha1(password)));
-            if (user != null) {
-                return user;
-            } else {
-                throw new ValidationException(AUTHORIZATION_ERROR);
-            }
-        } catch (NoSuchAlgorithmException e) {
-            throw new ValidationException(e.getMessage());
-        }
     }
 
     @Override

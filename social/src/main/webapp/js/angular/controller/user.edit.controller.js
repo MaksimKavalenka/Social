@@ -1,12 +1,13 @@
 'use strict';
-app.controller('UserEditController', ['$state', 'STATE', 'UserFactory', 'CookieService', 'FlashService', function($state, STATE, UserFactory, CookieService, FlashService) {
+app.controller('UserEditController', ['$rootScope', '$state', 'STATE', 'UserFactory', 'CookieService', 'FlashService', function($rootScope, $state, STATE, UserFactory, CookieService, FlashService) {
 
 	var self = this;
 
 	self.login = function() {
 		self.dataLoading = true;
-		UserFactory.authentication(self.user.login, self.user.password, true, function(response) {
+		UserFactory.authentication(self.user.login, self.user.password, self.user.remember, function(response) {
 			if (response.success) {
+				$rootScope.user = {id: response.data.id};
 				$state.go(STATE.FEED, {page: 1});
 			} else {
 				FlashService.error(response.message);
@@ -24,8 +25,7 @@ app.controller('UserEditController', ['$state', 'STATE', 'UserFactory', 'CookieS
 		self.dataLoading = true;
 		UserFactory.createUser(self.user.login, self.user.password, function(response) {
 			if (response.success) {
-				CookieService.setCredentials(response.data);
-				$state.go(STATE.FEED, {page: 1});
+				self.login();
 			} else {
 				FlashService.error(response.message);
 			}
