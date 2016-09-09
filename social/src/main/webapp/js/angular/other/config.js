@@ -1,9 +1,5 @@
 'use strict';
-app.config(['$locationProvider', function($locationProvider) {
-	$locationProvider.html5Mode(true);
-}]);
-
-app.config(['$stateProvider', '$urlRouterProvider', 'CONTROLLER', 'PATH', 'STATE', 'TITLE', 'URL', function($stateProvider, $urlRouterProvider, CONTROLLER, PATH, STATE, TITLE, URL) {
+app.config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'CONTROLLER', 'PATH', 'STATE', 'TITLE', 'URL', function($locationProvider, $stateProvider, $urlRouterProvider, CONTROLLER, PATH, STATE, TITLE, URL) {
 	var footer = {
 		templateUrl: PATH.FOOTER
 	}
@@ -18,6 +14,8 @@ app.config(['$stateProvider', '$urlRouterProvider', 'CONTROLLER', 'PATH', 'STATE
 		controllerAs: CONTROLLER.CTRL,
 		templateUrl: PATH.SEARCH_TOOL
 	}
+
+	$locationProvider.html5Mode(true);
 
 	$stateProvider
 	.state(STATE.LOGIN, {

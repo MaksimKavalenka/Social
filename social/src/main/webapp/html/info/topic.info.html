@@ -8,11 +8,11 @@
 			<a ui-sref="topic_add">Edit topic</a>
 			<a ui-sref="topic_add">Invite</a>
 		</div>
-		<a ng-click="ctrl.joinTopic()" ng-show="!ctrl.member">Join</a>
+		<a ng-click="ctrl.joinTopic()" ng-show="ctrl.topic.access && !ctrl.member">Join</a>
 		<a ng-click="ctrl.leaveTopic()" ng-show="ctrl.member && (user.id !== ctrl.topic.creator.id)">Leave</a>
 	</div>
 	<div ng-controller="PostEditController as postCtrl" ng-show="ctrl.member">
-		<div ng-click="postCtrl.showForm()" ng-show="!postCtrl.form">Create post</div>
+		<div ng-click="postCtrl.creationForm(ctrl.member)" ng-show="!postCtrl.form">Create post</div>
 		<div class="form-validation" ng-show="postCtrl.form">
 			<div class="field">
 				<label class="required" for="text">Post</label>

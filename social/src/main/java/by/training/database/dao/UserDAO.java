@@ -1,6 +1,6 @@
 package by.training.database.dao;
 
-import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 
@@ -9,7 +9,7 @@ import by.training.model.UserModel;
 
 public interface UserDAO {
 
-    UserModel createUser(String login, String password, List<GrantedAuthority> roles)
+    UserModel createUser(String login, String password, Set<GrantedAuthority> roles)
             throws ValidationException;
 
     UserModel getUserById(long id);

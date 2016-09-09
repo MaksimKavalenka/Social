@@ -4,7 +4,7 @@
 		<div>Created by {{post.creator.login}} ({{post.date | date: 'dd MMMM yyyy HH:mm:ss'}})</div>
 	</div>
 	<div ng-controller="PostEditController as postCtrl">
-		<div class="edit" ng-click="postCtrl.showForm(post.text)" ng-show="(user.id === post.creator.id) && !postCtrl.form">Edit</div>
+		<div class="edit" ng-click="postCtrl.editionForm(post)" ng-show="(user.id === post.creator.id) && !postCtrl.form">Edit</div>
 		<div class="post" ng-show="!postCtrl.form">{{post.text}}</div>
 		<div class="form-validation" ng-show="postCtrl.form">
 			<div class="field">

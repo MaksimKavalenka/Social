@@ -1,8 +1,8 @@
 package by.training.controller.rest;
 
 import java.security.Principal;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,7 +30,7 @@ public class UserRestController extends by.training.controller.rest.RestControll
     public ResponseEntity<Void> createUser(@PathVariable("login") final String login,
             @PathVariable("password") final String password) {
         try {
-            List<GrantedAuthority> roles = new LinkedList<>();
+            Set<GrantedAuthority> roles = new HashSet<>();
             roles.add(roleDAO.getRoleById(1));
             userDAO.createUser(login, password, roles);
             return new ResponseEntity<Void>(HttpStatus.CREATED);

@@ -29,9 +29,19 @@ app.controller('PostEditController', ['$scope', '$state', 'STATE', 'PostFactory'
 		});
 	};
 
-	self.showForm = function(initText) {
+	self.creationForm = function(access) {
+		if (!access) {
+			return;
+		}
 		self.form = true;
-		self.post = {text: initText};
+	};
+
+	self.editionForm = function(object) {
+		if ($scope.user.id !== post.creator.id) {
+			return;
+		}
+		self.form = true;
+		self.post = {text: post.text};
 	};
 
 	self.hideForm = function() {

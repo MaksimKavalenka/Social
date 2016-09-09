@@ -1,6 +1,6 @@
 package by.training.model;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -27,7 +27,7 @@ public class RoleModel extends Model implements GrantedAuthority {
     @ManyToMany(targetEntity = UserModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
             CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "role_id", nullable = false, updatable = false), inverseJoinColumns = @JoinColumn(name = "user_id", nullable = false, updatable = false))
-    private List<UserModel>   users;
+    private Set<UserModel>    users;
 
     public RoleModel() {
         super();
@@ -46,11 +46,11 @@ public class RoleModel extends Model implements GrantedAuthority {
         this.name = name;
     }
 
-    public List<UserModel> getUsers() {
+    public Set<UserModel> getUsers() {
         return users;
     }
 
-    public void setUsers(final List<UserModel> users) {
+    public void setUsers(final Set<UserModel> users) {
         this.users = users;
     }
 

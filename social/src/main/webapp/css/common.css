@@ -44,7 +44,7 @@ hr.header-user {
 	color: #eb0606;
 	font-size: 80px;
 	font-style: italic;
-	margin: 30px;
+	margin: 30px auto;
 	text-align: center;
 }
 .welcome-title > .logo {

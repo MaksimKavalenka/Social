@@ -1,13 +1,10 @@
 'use strict';
-app.service('ObserverService', ['$rootScope', '$q', '$window', function($rootScope, $q, $window) {
+app.service('ObserverService', ['$q', 'STATE', function($q, STATE) {
 	return {
 		'responseError': function(errorResponse) {
 			switch (errorResponse.status) {
 				case 403:
-					if ($window.location.hash.indexOf("login") == -1) {
-						$rootScope.targetUrl = $window.location.hash;
-					}
-					$window.location = '#/login';
+					$injector.get('$state').transitionTo(STATE.LOGIN);
 					break;
 			}
 			return $q.reject(errorResponse);

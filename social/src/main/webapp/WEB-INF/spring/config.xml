@@ -70,6 +70,7 @@ http://www.springframework.org/schema/security/spring-security-4.1.xsd">
     <security:intercept-url pattern="/notifications" access="hasRole('USER')"/>
     <security:intercept-url pattern="/search" access="hasRole('USER')"/>
     <security:intercept-url pattern="/profile" access="hasRole('USER')"/>
+    <security:form-login login-page="/login"/>
     <security:http-basic entry-point-ref="http403ForbiddenEntryPoint"/>
     <security:csrf token-repository-ref="csrfTokenRepository"/>
     <security:custom-filter after="CSRF_FILTER" ref="csrfHeaderFilter"/>

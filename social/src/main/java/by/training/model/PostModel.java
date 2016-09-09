@@ -1,7 +1,7 @@
 package by.training.model;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,34 +18,34 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "post")
 public class PostModel extends Model {
 
-    private static final long       serialVersionUID = 7372820574885171442L;
+    private static final long      serialVersionUID = 7372820574885171442L;
 
     @Column(name = "text", nullable = false, columnDefinition = "TEXT")
-    private String                  text;
+    private String                 text;
 
     @Column(name = "created", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date                    date;
+    private Date                   date;
 
     @ManyToOne(targetEntity = UserModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
             CascadeType.REFRESH, CascadeType.PERSIST}, optional = false)
-    private UserModel               creator;
+    private UserModel              creator;
 
     @ManyToOne(targetEntity = TopicModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
             CascadeType.REFRESH, CascadeType.PERSIST}, optional = false)
-    private TopicModel              topic;
+    private TopicModel             topic;
 
     @ManyToOne(targetEntity = PostModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
             CascadeType.REFRESH, CascadeType.PERSIST})
-    private PostModel               parentPost;
+    private PostModel              parentPost;
 
     @JsonIgnore
     @OneToMany(mappedBy = "parentPost")
-    private List<PostModel>         posts;
+    private Set<PostModel>         posts;
 
     @JsonIgnore
     @OneToMany(mappedBy = "topic")
-    private List<NotificationModel> notifications;
+    private Set<NotificationModel> notifications;
 
     public PostModel() {
         super();
@@ -101,19 +101,19 @@ public class PostModel extends Model {
         this.parentPost = parentPost;
     }
 
-    public List<PostModel> getPosts() {
+    public Set<PostModel> getPosts() {
         return posts;
     }
 
-    public void setPosts(final List<PostModel> posts) {
+    public void setPosts(final Set<PostModel> posts) {
         this.posts = posts;
     }
 
-    public List<NotificationModel> getNotifications() {
+    public Set<NotificationModel> getNotifications() {
         return notifications;
     }
 
-    public void setNotifications(final List<NotificationModel> notifications) {
+    public void setNotifications(final Set<NotificationModel> notifications) {
         this.notifications = notifications;
     }
 

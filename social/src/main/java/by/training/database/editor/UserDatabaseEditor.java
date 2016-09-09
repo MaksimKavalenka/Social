@@ -4,7 +4,7 @@ import static by.training.constants.ExceptionConstants.TAKEN_LOGIN_ERROR;
 import static by.training.constants.ModelStructureConstants.UserFields;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
+import java.util.Set;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -29,7 +29,7 @@ public class UserDatabaseEditor extends DatabaseEditor implements UserDAO {
     @Override
     @Transactional(rollbackFor = ValidationException.class)
     public UserModel createUser(final String login, final String password,
-            final List<GrantedAuthority> roles) throws ValidationException {
+            final Set<GrantedAuthority> roles) throws ValidationException {
         try {
             UserModel checkUserLogin = getUniqueResultByCriteria(UserModel.class,
                     Restrictions.eq(UserFields.LOGIN, login));

@@ -1,7 +1,7 @@
 package by.training.model;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -22,38 +22,38 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "topic")
 public class TopicModel extends Model {
 
-    private static final long       serialVersionUID = 8849827068678797244L;
+    private static final long      serialVersionUID = 8849827068678797244L;
 
     @Column(name = "name", nullable = false, length = 255)
-    private String                  name;
+    private String                 name;
 
     @Column(name = "path", unique = true, nullable = false, length = 255)
-    private String                  path;
+    private String                 path;
 
     @Column(name = "description", nullable = false, length = 255)
-    private String                  description;
+    private String                 description;
 
     @Column(name = "access", nullable = false)
-    private boolean                 access;
+    private boolean                access;
 
     @ManyToOne(targetEntity = UserModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
             CascadeType.REFRESH, CascadeType.PERSIST}, optional = false)
-    private UserModel               creator;
+    private UserModel              creator;
 
     @JsonIgnore
     @OneToMany(mappedBy = "topic")
-    private List<NotificationModel> notifications;
+    private Set<NotificationModel> notifications;
 
     @JsonIgnore
     @OneToMany(mappedBy = "topic")
-    private List<PostModel>         posts;
+    private Set<PostModel>         posts;
 
     @JsonIgnore
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(targetEntity = UserModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
             CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinTable(name = "topic_user", joinColumns = @JoinColumn(name = "topic_id", nullable = false, updatable = false), inverseJoinColumns = @JoinColumn(name = "user_id", nullable = false, updatable = false))
-    private List<UserModel>         users;
+    private Set<UserModel>         users;
 
     public TopicModel() {
         super();
@@ -67,7 +67,7 @@ public class TopicModel extends Model {
         this.description = description;
         this.access = access;
         this.creator = creator;
-        users = new LinkedList<>();
+        users = new HashSet<>();
         users.add(creator);
     }
 
@@ -111,27 +111,27 @@ public class TopicModel extends Model {
         this.creator = creator;
     }
 
-    public List<NotificationModel> getNotifications() {
+    public Set<NotificationModel> getNotifications() {
         return notifications;
     }
 
-    public void setNotifications(final List<NotificationModel> notifications) {
+    public void setNotifications(final Set<NotificationModel> notifications) {
         this.notifications = notifications;
     }
 
-    public List<PostModel> getPosts() {
+    public Set<PostModel> getPosts() {
         return posts;
     }
 
-    public void setPosts(final List<PostModel> posts) {
+    public void setPosts(final Set<PostModel> posts) {
         this.posts = posts;
     }
 
-    public List<UserModel> getUsers() {
+    public Set<UserModel> getUsers() {
         return users;
     }
 
-    public void setUsers(final List<UserModel> users) {
+    public void setUsers(final Set<UserModel> users) {
         this.users = users;
     }
 

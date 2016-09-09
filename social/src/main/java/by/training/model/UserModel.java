@@ -1,7 +1,7 @@
 package by.training.model;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -23,57 +23,56 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "user")
 public class UserModel extends Model implements UserDetails {
 
-    private static final long       serialVersionUID = 7372820574885171442L;
+    private static final long      serialVersionUID = 7372820574885171442L;
 
-    private boolean                 accountNonExpired;
-    private boolean                 accountNonLocked;
-    private boolean                 credentialsNonExpired;
-    private boolean                 enabled;
+    private boolean                accountNonExpired;
+    private boolean                accountNonLocked;
+    private boolean                credentialsNonExpired;
+    private boolean                enabled;
 
     @Column(name = "login", unique = true, nullable = false, length = 255)
-    private String                  login;
+    private String                 login;
 
     @JsonIgnore
     @Column(name = "password", nullable = false, length = 255)
-    private String                  password;
+    private String                 password;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(targetEntity = RoleModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
             CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", nullable = false, updatable = false), inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false, updatable = false))
-    private List<GrantedAuthority>  roles;
+    private Set<GrantedAuthority>  roles;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<NotificationModel> notifications;
+    private Set<NotificationModel> notifications;
 
     @JsonIgnore
     @OneToMany(mappedBy = "inviter")
-    private List<NotificationModel> notificationsFrom;
+    private Set<NotificationModel> notificationsFrom;
 
     @JsonIgnore
     @OneToMany(mappedBy = "creator")
-    private List<PostModel>         posts;
+    private Set<PostModel>         posts;
 
     @JsonIgnore
     @ManyToMany(targetEntity = TopicModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
             CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinTable(name = "topic_user", joinColumns = @JoinColumn(name = "user_id", nullable = false, updatable = false), inverseJoinColumns = @JoinColumn(name = "topic_id", nullable = false, updatable = false))
-    private List<TopicModel>        topics;
+    private Set<TopicModel>        topics;
 
     public UserModel() {
         super();
     }
 
-    public UserModel(final String login, final String password,
-            final List<GrantedAuthority> roles) {
+    public UserModel(final String login, final String password, final Set<GrantedAuthority> roles) {
         this(true, true, true, true, login, password, roles);
     }
 
     public UserModel(final boolean accountNonExpired, final boolean accountNonLocked,
             final boolean credentialsNonExpired, final boolean enabled, final String login,
-            final String password, final List<GrantedAuthority> roles) {
+            final String password, final Set<GrantedAuthority> roles) {
         super();
         this.accountNonExpired = accountNonExpired;
         this.accountNonLocked = accountNonLocked;
@@ -101,43 +100,43 @@ public class UserModel extends Model implements UserDetails {
         this.password = password;
     }
 
-    public List<GrantedAuthority> getRoles() {
+    public Set<GrantedAuthority> getRoles() {
         return roles;
     }
 
-    public void setRoles(final List<GrantedAuthority> roles) {
+    public void setRoles(final Set<GrantedAuthority> roles) {
         this.roles = roles;
     }
 
-    public List<NotificationModel> getNotifications() {
+    public Set<NotificationModel> getNotifications() {
         return notifications;
     }
 
-    public void setNotifications(final List<NotificationModel> notifications) {
+    public void setNotifications(final Set<NotificationModel> notifications) {
         this.notifications = notifications;
     }
 
-    public List<NotificationModel> getNotificationsFrom() {
+    public Set<NotificationModel> getNotificationsFrom() {
         return notificationsFrom;
     }
 
-    public void setNotificationsFrom(final List<NotificationModel> notificationsFrom) {
+    public void setNotificationsFrom(final Set<NotificationModel> notificationsFrom) {
         this.notificationsFrom = notificationsFrom;
     }
 
-    public List<PostModel> getPosts() {
+    public Set<PostModel> getPosts() {
         return posts;
     }
 
-    public void setPosts(final List<PostModel> posts) {
+    public void setPosts(final Set<PostModel> posts) {
         this.posts = posts;
     }
 
-    public List<TopicModel> getTopics() {
+    public Set<TopicModel> getTopics() {
         return topics;
     }
 
-    public void setTopics(final List<TopicModel> topics) {
+    public void setTopics(final Set<TopicModel> topics) {
         this.topics = topics;
     }
 
