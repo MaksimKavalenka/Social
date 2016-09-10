@@ -1,5 +1,5 @@
 'use strict';
-app.controller('PostController', ['$scope', '$state', 'STATE', 'PostFactory', 'FlashService', 'PaginationService', function($scope, $state, STATE, PostFactory, FlashService, PaginationService) {
+app.controller('PostController', ['$scope', '$state', 'STATE', 'PostFactory', 'TopicFactory', 'FlashService', 'PaginationService', function($scope, $state, STATE, PostFactory, TopicFactory, FlashService, PaginationService) {
 
 	var self = this;
 	self.posts = [];
@@ -26,8 +26,8 @@ app.controller('PostController', ['$scope', '$state', 'STATE', 'PostFactory', 'F
 		});
 	};
 
-	self.getFeedPosts = function(idUser, page) {
-		PostFactory.getFeedPosts(idUser, page, function(response) {
+	self.getFeedPosts = function(userId, page) {
+		PostFactory.getFeedPosts(userId, page, function(response) {
 			if (response.success) {
 				self.posts = response.data;
 			} else {

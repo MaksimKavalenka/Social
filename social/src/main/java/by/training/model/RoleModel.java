@@ -2,16 +2,21 @@ package by.training.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import org.springframework.security.core.GrantedAuthority;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "role")
-public class RoleModel extends Model {
+public class RoleModel extends Model implements GrantedAuthority {
 
     private static final long serialVersionUID = -2838272686668080339L;
 
@@ -19,7 +24,9 @@ public class RoleModel extends Model {
     private String            name;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "role")
+    @ManyToMany(targetEntity = UserModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
+            CascadeType.REFRESH, CascadeType.PERSIST})
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "role_id", nullable = false, updatable = false), inverseJoinColumns = @JoinColumn(name = "user_id", nullable = false, updatable = false))
     private List<UserModel>   users;
 
     public RoleModel() {
@@ -50,6 +57,11 @@ public class RoleModel extends Model {
     @Override
     public String toString() {
         return "Role [id=" + super.getId() + ", name=" + name + "]";
+    }
+
+    @Override
+    public String getAuthority() {
+        return name;
     }
 
 }

@@ -12,8 +12,9 @@ http://www.springframework.org/schema/mvc/spring-mvc.xsd
 http://www.springframework.org/schema/tx
 http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-  <import resource="database/DataSource.xml"/>
-  <import resource="database/Hibernate.xml"/>
+  <import resource="config/DataSource.xml"/>
+  <import resource="config/Hibernate.xml"/>
+  <import resource="config/Security.xml"/>
 
   <context:component-scan base-package="by.training"/>
   <mvc:annotation-driven/>

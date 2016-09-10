@@ -37,8 +37,8 @@ app.factory('PostFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE,
 		});
 	}
 
-	function getFeedPosts(idUser, page, callback) {
-		$http.get(REST.POSTS + '/feed/' + idUser + '/' + page + REST.JSON_EXT)
+	function getFeedPosts(userId, page, callback) {
+		$http.get(REST.POSTS + '/feed/' + userId + '/' + page + REST.JSON_EXT)
 		.success(function(response) {
 			var data = {success: true, data: response};
 			callback(data);

@@ -59,22 +59,50 @@ public class TopicRestController extends by.training.controller.rest.RestControl
         return new ResponseEntity<List<TopicModel>>(topics, HttpStatus.OK);
     }
 
-    @RequestMapping(value = TOPICS_PATH + "/search/{value}/{idUser}/{page}"
+    @RequestMapping(value = TOPICS_PATH + "/search/{value}/{userId}/{page}"
             + JSON_EXT, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TopicModel>> getTopicsByValue(
-            @PathVariable("value") final String value, @PathVariable("idUser") final long idUser,
+            @PathVariable("value") final String value, @PathVariable("userId") final long userId,
             @PathVariable("page") final int page) {
-        List<TopicModel> topics = relationDAO.getTopicsByValue(value, idUser, page);
+        List<TopicModel> topics = relationDAO.getTopicsByValue(value, userId, page);
         if (topics == null) {
             return new ResponseEntity<List<TopicModel>>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<List<TopicModel>>(topics, HttpStatus.OK);
     }
 
+    @RequestMapping(value = TOPICS_PATH + "/join/{topicPath}/{userId}"
+            + JSON_EXT, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> joinTopic(@PathVariable("topicPath") final String topicPath,
+            @PathVariable("userId") final long userId) {
+        UserModel user = userDAO.getUserById(userId);
+        topicDAO.joinTopic(topicPath, user);
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = TOPICS_PATH + "/leave/{topicPath}/{userId}"
+            + JSON_EXT, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> leaveTopic(@PathVariable("topicPath") final String topicPath,
+            @PathVariable("userId") final long userId) {
+        UserModel user = userDAO.getUserById(userId);
+        topicDAO.leaveTopic(topicPath, user);
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
     @RequestMapping(value = TOPICS_PATH + "/check_path/{path}"
             + JSON_EXT, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Boolean> checkPath(@PathVariable("path") final String path) {
         boolean exists = topicDAO.checkPath(path);
+        return new ResponseEntity<Boolean>(exists, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = TOPICS_PATH + "/check_member/{topicPath}/{userId}"
+            + JSON_EXT, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> checkMember(@PathVariable("topicPath") final String topicPath,
+            @PathVariable("userId") final long userId) {
+        TopicModel topic = topicDAO.getTopicByPath(topicPath);
+        UserModel user = userDAO.getUserById(userId);
+        boolean exists = topic.getUsers().contains(user);
         return new ResponseEntity<Boolean>(exists, HttpStatus.OK);
     }
 

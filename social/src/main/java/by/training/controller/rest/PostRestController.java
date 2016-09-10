@@ -74,11 +74,11 @@ public class PostRestController extends by.training.controller.rest.RestControll
         return new ResponseEntity<List<PostModel>>(posts, HttpStatus.OK);
     }
 
-    @RequestMapping(value = POSTS_PATH + "/feed/{idUser}/{page}"
+    @RequestMapping(value = POSTS_PATH + "/feed/{userId}/{page}"
             + JSON_EXT, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PostModel>> getFeedPosts(@PathVariable("idUser") final long idUser,
+    public ResponseEntity<List<PostModel>> getFeedPosts(@PathVariable("userId") final long userId,
             @PathVariable("page") final int page) {
-        List<PostModel> posts = relationDAO.getFeedPosts(idUser, page);
+        List<PostModel> posts = relationDAO.getFeedPosts(userId, page);
         if (posts == null) {
             return new ResponseEntity<List<PostModel>>(HttpStatus.NO_CONTENT);
         }

@@ -17,8 +17,7 @@ app.constant('MESSAGE', (function() {
 	return {
 		AUTHENTICATION_ERROR: 'Login or password is wrong',
 		TAKEN_LOGIN_ERROR: 'This login is already taken',
-		TAKEN_TOPIC_NAME_ERROR: 'This name is already taken',
-		TAKEN_TOPIC_URL_NAME_ERROR: 'This url name is already taken',
+		TAKEN_PATH_ERROR: 'This path is already taken',
 		SAVING_FILE_ERROR: 'Error while saving file',
 		CREATING_POST_ERROR: creatingError + 'post',
 		CREATING_TOPIC_ERROR: creatingError + 'topic',

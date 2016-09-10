@@ -4,8 +4,30 @@
 	padding: 15px;
 }
 .ct-title {
-	border: 3px solid #eb0606;
+	border: 5px solid #eb0606;
 }
 .ct-content {
-	border: 3px solid #292929;
+	border: 2px solid #292929;
+}
+.topic {
+	color: #292929;
+	font-family: sans-serif;
+	font-size: 20px;
+}
+.link-topic {
+	color: #eb0606;
+	font-family: sans-serif;
+	font-size: 16px;
+	font-weight: 600;
+	text-decoration: none;
+}
+.link-topic:hover,
+.link-topic:active {
+	text-decoration: underline;
+}
+.post {
+	text-align: justify;
+}
+.edit {
+	text-align: right;
 }

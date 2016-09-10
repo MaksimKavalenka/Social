@@ -4,10 +4,12 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 	var self = this;
 	self.topic = {};
 	self.topics = [];
+	self.member = false;
 
 	self.init = function(state, page) {
 		switch (state) {
 			case STATE.TOPIC:
+				self.checkMember($state.params.path, $scope.user.id);
 				self.getTopicByPath($state.params.path);
 				break;
 			case STATE.TOPICS:
@@ -44,10 +46,40 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 		});
 	};
 
-	self.getTopicsByValue = function(value, idUser, page) {
-		TopicFactory.getTopicsByValue(value, idUser, page, function(response) {
+	self.getTopicsByValue = function(value, userId, page) {
+		TopicFactory.getTopicsByValue(value, userId, page, function(response) {
 			if (response.success) {
 				self.topics = response.data;
+			} else {
+				FlashService.error(response.message);
+			}
+		});
+	};
+
+	self.joinTopic = function() {
+		TopicFactory.joinTopic($state.params.path, $scope.user.id, function(response) {
+			if (response.success) {
+				self.member = true;
+			} else {
+				FlashService.error(response.message);
+			}
+		});
+	};
+
+	self.leaveTopic = function() {
+		TopicFactory.leaveTopic($state.params.path, $scope.user.id, function(response) {
+			if (response.success) {
+				self.member = false;
+			} else {
+				FlashService.error(response.message);
+			}
+		});
+	};
+
+	self.checkMember = function(topicPath, userId) {
+		TopicFactory.checkMember(topicPath, userId, function(response) {
+			if (response.success) {
+				self.member = response.data;
 			} else {
 				FlashService.error(response.message);
 			}

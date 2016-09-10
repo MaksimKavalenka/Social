@@ -13,6 +13,10 @@ public interface TopicDAO {
 
     TopicModel getTopicByPath(String path);
 
+    void joinTopic(String path, UserModel user);
+
+    void leaveTopic(String path, UserModel user);
+
     boolean checkPath(String path);
 
 }

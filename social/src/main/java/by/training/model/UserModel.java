@@ -1,5 +1,6 @@
 package by.training.model;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -8,18 +9,19 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "user")
-public class UserModel extends Model {
+public class UserModel extends Model implements UserDetails {
 
     private static final long       serialVersionUID = 7372820574885171442L;
 
@@ -30,35 +32,40 @@ public class UserModel extends Model {
     @Column(name = "password", nullable = false, length = 255)
     private String                  password;
 
-    @ManyToOne(targetEntity = RoleModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.REFRESH, CascadeType.PERSIST}, optional = false)
-    private RoleModel               role;
+    @ManyToMany(targetEntity = RoleModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
+            CascadeType.REFRESH, CascadeType.PERSIST})
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", nullable = false, updatable = false), inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false, updatable = false))
+    private List<RoleModel>         roles;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "topic")
+    @OneToMany(mappedBy = "user")
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<NotificationModel> notifications;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "inviter")
+    private List<NotificationModel> notificationsFrom;
 
     @JsonIgnore
     @OneToMany(mappedBy = "creator")
     private List<PostModel>         posts;
 
     @JsonIgnore
-    @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(targetEntity = TopicModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
             CascadeType.REFRESH, CascadeType.PERSIST})
-    @JoinTable(name = "topic_user", joinColumns = @JoinColumn(name = "id_user", nullable = false, updatable = false), inverseJoinColumns = @JoinColumn(name = "id_topic", nullable = false, updatable = false))
+    @JoinTable(name = "topic_user", joinColumns = @JoinColumn(name = "user_id", nullable = false, updatable = false), inverseJoinColumns = @JoinColumn(name = "topic_id", nullable = false, updatable = false))
     private List<TopicModel>        topics;
 
     public UserModel() {
         super();
     }
 
-    public UserModel(final String login, final String password, final RoleModel role) {
+    public UserModel(final String login, final String password, final List<RoleModel> roles) {
         super();
         this.login = login;
         this.password = password;
-        this.role = role;
+        this.roles = roles;
+
     }
 
     public String getLogin() {
@@ -69,6 +76,7 @@ public class UserModel extends Model {
         this.login = login;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
@@ -77,12 +85,12 @@ public class UserModel extends Model {
         this.password = password;
     }
 
-    public RoleModel getRole() {
-        return role;
+    public List<RoleModel> getRoles() {
+        return roles;
     }
 
-    public void setRole(final RoleModel role) {
-        this.role = role;
+    public void setRoles(final List<RoleModel> roles) {
+        this.roles = roles;
     }
 
     public List<NotificationModel> getNotifications() {
@@ -91,6 +99,14 @@ public class UserModel extends Model {
 
     public void setNotifications(final List<NotificationModel> notifications) {
         this.notifications = notifications;
+    }
+
+    public List<NotificationModel> getNotificationsFrom() {
+        return notificationsFrom;
+    }
+
+    public void setNotificationsFrom(final List<NotificationModel> notificationsFrom) {
+        this.notificationsFrom = notificationsFrom;
     }
 
     public List<PostModel> getPosts() {
@@ -112,6 +128,40 @@ public class UserModel extends Model {
     @Override
     public String toString() {
         return "User [id=" + super.getId() + ", login=" + login + "]";
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
+    @Override
+    public String getUsername() {
+        return login;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        // TODO Auto-generated method stub
+        return false;
     }
 
 }

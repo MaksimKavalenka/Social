@@ -23,4 +23,5 @@ app.service('PaginationService', ['$rootScope', function($rootScope) {
 	return {
 		getPages: getPages
 	};
+
 }]);

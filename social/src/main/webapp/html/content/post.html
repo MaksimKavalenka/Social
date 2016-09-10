@@ -1,16 +1,19 @@
-<div class="content ct-content" ng-repeat="post in ctrl.posts" ui-sref="post({id: post.id, page: 1})">
-	<a ui-sref="topic({path: post.topic.path})">{{post.topic.name}}</a>
-	<div>Created by {{post.creator.login}} ({{post.date | date: 'dd MMMM yyyy HH:mm:ss'}})</div>
+<div class="content ct-content" ng-repeat="post in ctrl.posts">
+	<div class="justify">
+		<a class="link-topic" ui-sref="topic({path: post.topic.path})">{{post.topic.name}}</a>
+		<div>Created by {{post.creator.login}} ({{post.date | date: 'dd MMMM yyyy HH:mm:ss'}})</div>
+	</div>
 	<div ng-controller="PostEditController as postCtrl">
-		<div ng-click="postCtrl.showForm(true)" ng-show="!postCtrl.form">{{post.text}}</div>
+		<div class="edit" ng-click="postCtrl.showForm(post.text)" ng-show="(user.id === post.creator.id) && !postCtrl.form">Edit</div>
+		<div class="post" ng-show="!postCtrl.form">{{post.text}}</div>
 		<div class="form-validation" ng-show="postCtrl.form">
 			<div class="field">
-				<label class="required" for="text">Text</label>
+				<label class="required" for="text">Post</label>
 				<textarea id="text" name="text" ng-model="postCtrl.post.text" required></textarea>
 			</div>
 			<div>
 				<button class="btn btn-primary" ng-click="postCtrl.updatePost(post.id)" ng-disabled="form.$invalid || postCtrl.dataLoading">Submit</button>
-				<button class="btn btn-danger" ng-click="postCtrl.showForm(false)">Cancel</button>
+				<button class="btn btn-danger" ng-click="postCtrl.hideForm()">Cancel</button>
 				<img ng-if="postCtrl.dataLoading" src="/social/img/load.gif"/>
 			</div>
 		</div>

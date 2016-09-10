@@ -4,7 +4,7 @@ var fileModel = 'fileModel';
 var ngMatch = 'ngMatch';
 var ngModel = 'ngModel';
 var ngLoginExist = 'ngLoginExist';
-var ngPathExist = 'ngPahtExist';
+var ngPathExist = 'ngPathExist';
 
 app.directive(ngLoginExist, ['$timeout', '$q', 'UserFactory', function($timeout, $q, UserFactory) {
 	var timer;

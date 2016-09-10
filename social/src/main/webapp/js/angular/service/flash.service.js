@@ -39,4 +39,5 @@ app.service('FlashService', ['$rootScope', function($rootScope) {
 		success: success,
 		error: error
 	};
+
 }]);

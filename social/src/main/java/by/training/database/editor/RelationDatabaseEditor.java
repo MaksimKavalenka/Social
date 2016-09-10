@@ -42,7 +42,7 @@ public class RelationDatabaseEditor extends DatabaseEditor implements RelationDA
 
     @Override
     @Transactional
-    public List<PostModel> getFeedPosts(final long idUser, final int page) {
+    public List<PostModel> getFeedPosts(final long userId, final int page) {
         Class<PostModel> postClass = PostModel.class;
         Class<TopicModel> topicClass = TopicModel.class;
         Criteria postCriteria = sessionFactory.getCurrentSession().createCriteria(postClass)
@@ -50,7 +50,7 @@ public class RelationDatabaseEditor extends DatabaseEditor implements RelationDA
         Criteria topicCriteria = sessionFactory.getCurrentSession().createCriteria(topicClass)
                 .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
         topicCriteria.createAlias(getSearchField(topicClass, Models.USER), "alias");
-        topicCriteria.add(Restrictions.eq("alias." + ModelFields.ID, idUser));
+        topicCriteria.add(Restrictions.eq("alias." + ModelFields.ID, userId));
         if (topicCriteria.list().isEmpty()) {
             return null;
         }

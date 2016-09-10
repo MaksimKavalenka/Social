@@ -13,6 +13,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -39,17 +42,18 @@ public class TopicModel extends Model {
 
     @JsonIgnore
     @OneToMany(mappedBy = "topic")
-    private List<PostModel>         posts;
-
-    @JsonIgnore
-    @ManyToMany(targetEntity = UserModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.REFRESH, CascadeType.PERSIST})
-    @JoinTable(name = "topic_user", joinColumns = @JoinColumn(name = "id_topic", nullable = false, updatable = false), inverseJoinColumns = @JoinColumn(name = "id_user", nullable = false, updatable = false))
-    private List<UserModel>         users;
+    private List<NotificationModel> notifications;
 
     @JsonIgnore
     @OneToMany(mappedBy = "topic")
-    private List<NotificationModel> notifications;
+    private List<PostModel>         posts;
+
+    @JsonIgnore
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany(targetEntity = UserModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
+            CascadeType.REFRESH, CascadeType.PERSIST})
+    @JoinTable(name = "topic_user", joinColumns = @JoinColumn(name = "topic_id", nullable = false, updatable = false), inverseJoinColumns = @JoinColumn(name = "user_id", nullable = false, updatable = false))
+    private List<UserModel>         users;
 
     public TopicModel() {
         super();
@@ -107,6 +111,14 @@ public class TopicModel extends Model {
         this.creator = creator;
     }
 
+    public List<NotificationModel> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(final List<NotificationModel> notifications) {
+        this.notifications = notifications;
+    }
+
     public List<PostModel> getPosts() {
         return posts;
     }
@@ -121,14 +133,6 @@ public class TopicModel extends Model {
 
     public void setUsers(final List<UserModel> users) {
         this.users = users;
-    }
-
-    public List<NotificationModel> getNotifications() {
-        return notifications;
-    }
-
-    public void setNotifications(final List<NotificationModel> notifications) {
-        this.notifications = notifications;
     }
 
     @Override

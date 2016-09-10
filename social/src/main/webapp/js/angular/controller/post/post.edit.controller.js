@@ -2,6 +2,7 @@
 app.controller('PostEditController', ['$scope', '$state', 'STATE', 'PostFactory', 'FlashService', function($scope, $state, STATE, PostFactory, FlashService) {
 
 	var self = this;
+	self.post = {text: ""};
 	self.form = false;
 
 	self.createPost = function(topicId, parentPostId) {
@@ -28,11 +29,14 @@ app.controller('PostEditController', ['$scope', '$state', 'STATE', 'PostFactory'
 		});
 	};
 
-	self.showForm = function(visibility) {
-		self.form = visibility;
-		if (!visibility) {
-			self.post = {text: ""};
-		}
+	self.showForm = function(initText) {
+		self.form = true;
+		self.post = {text: initText};
+	};
+
+	self.hideForm = function() {
+		self.form = false;
+		self.post = {text: ""};
 	};
 
 }]);

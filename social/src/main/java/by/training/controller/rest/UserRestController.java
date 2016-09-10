@@ -3,6 +3,9 @@ package by.training.controller.rest;
 import static by.training.constants.RestConstants.JSON_EXT;
 import static by.training.constants.RestConstants.USERS_PATH;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import by.training.exception.ValidationException;
+import by.training.model.RoleModel;
 import by.training.model.UserModel;
 
 @RestController
@@ -22,7 +26,9 @@ public class UserRestController extends by.training.controller.rest.RestControll
     public ResponseEntity<UserModel> createUser(@PathVariable("login") final String login,
             @PathVariable("password") final String password) {
         try {
-            UserModel user = userDAO.createUser(login, password, roleDAO.getRoleById(1));
+            List<RoleModel> roles = new LinkedList<>();
+            roles.add(roleDAO.getRoleById(1));
+            UserModel user = userDAO.createUser(login, password, roles);
             return new ResponseEntity<UserModel>(user, HttpStatus.CREATED);
         } catch (ValidationException e) {
             return new ResponseEntity<UserModel>(HttpStatus.CONFLICT);

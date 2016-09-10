@@ -37,8 +37,8 @@ app.factory('TopicFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE
 		});
 	}
 
-	function getTopicsByValue(value, idUser, page, callback) {
-		$http.get(REST.TOPICS + '/search/' + value + '/' + idUser + '/' + page + REST.JSON_EXT)
+	function getTopicsByValue(value, userId, page, callback) {
+		$http.get(REST.TOPICS + '/search/' + value + '/' + userId + '/' + page + REST.JSON_EXT)
 		.success(function(response) {
 			var data = {success: true, data: response};
 			callback(data);
@@ -49,15 +49,51 @@ app.factory('TopicFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE
 		});
 	}
 
+	function joinTopic(topicPath, userId, callback) {
+		$http.post(REST.TOPICS + '/join/' + topicPath + '/' + userId + REST.JSON_EXT)
+		.success(function(response) {
+			response = {success: true};
+			callback(response);
+		})
+		.error(function(response) {
+			response = {success: false, message: MESSAGE.UPDATING_TOPIC_ERROR};
+			callback(response);
+		});
+	}
+
+	function leaveTopic(topicPath, userId, callback) {
+		$http.post(REST.TOPICS + '/leave/' + topicPath + '/' + userId + REST.JSON_EXT)
+		.success(function(response) {
+			response = {success: true};
+			callback(response);
+		})
+		.error(function(response) {
+			response = {success: false, message: MESSAGE.UPDATING_TOPIC_ERROR};
+			callback(response);
+		});
+	}
+
 	function checkPath(path, callback) {
 		$http.post(REST.TOPICS + '/check_path/' + path + REST.JSON_EXT)
 		.success(function(response) {
 			if (response) {
 				response = {success: true};
 			} else {
-				response = {success: false, message: MESSAGE.TAKEN_TOPIC_URL_NAME_ERROR};
+				response = {success: false, message: MESSAGE.TAKEN_PATH_ERROR};
 			}
 			callback(response);
+		})
+		.error(function(response) {
+			response = {success: false, message: MESSAGE.GETTING_TOPIC_ERROR};
+			callback(response);
+		});
+	}
+
+	function checkMember(topicPath, userId, callback) {
+		$http.post(REST.TOPICS + '/check_member/' + topicPath + '/' + userId + REST.JSON_EXT)
+		.success(function(response) {
+			var data = {success: true, data: response};
+			callback(data);
 		})
 		.error(function(response) {
 			response = {success: false, message: MESSAGE.GETTING_TOPIC_ERROR};
@@ -70,7 +106,10 @@ app.factory('TopicFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE
 		getTopicByPath: getTopicByPath,
 		getTopicsByCriteria: getTopicsByCriteria,
 		getTopicsByValue: getTopicsByValue,
-		checkPath: checkPath
+		joinTopic: joinTopic,
+		leaveTopic: leaveTopic,
+		checkPath: checkPath,
+		checkMember: checkMember
 	};
 
 }]);

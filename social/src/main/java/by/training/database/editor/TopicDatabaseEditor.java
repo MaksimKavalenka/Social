@@ -54,6 +54,22 @@ public class TopicDatabaseEditor extends DatabaseEditor implements TopicDAO {
 
     @Override
     @Transactional
+    public void joinTopic(final String path, final UserModel user) {
+        TopicModel topic = getTopicByPath(path);
+        topic.getUsers().add(user);
+        sessionFactory.getCurrentSession().update(topic);
+    }
+
+    @Override
+    @Transactional
+    public void leaveTopic(final String path, final UserModel user) {
+        TopicModel topic = getTopicByPath(path);
+        topic.getUsers().remove(user);
+        sessionFactory.getCurrentSession().update(topic);
+    }
+
+    @Override
+    @Transactional
     public boolean checkPath(final String path) {
         return getUniqueResultByCriteria(TopicModel.class,
                 Restrictions.eq(TopicFields.PATH, path)) != null;
