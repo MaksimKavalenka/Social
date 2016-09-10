@@ -1,4 +1,4 @@
 <form class="form-search" role="search">
-	<input type="text" class="input-search" placeholder="Topic">
-	<button type="submit" class="btn btn-default btn-search">Search</button>
+	<input type="text" class="input-search" placeholder="Topic" ng-model="ctrl.value">
+	<button type="submit" class="btn btn-default btn-search" ui-sref="search({value: ctrl.value})">Search</button>
 </form>

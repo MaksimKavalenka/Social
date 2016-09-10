@@ -68,16 +68,15 @@ app.constant('REST', (function() {
 
 app.constant('STATE', (function() {
 	var topic = 'topic';
-	var topics = 'topics';
 	var addOperation = '_add';
 	return {
 		LOGIN: 'login',
 		REGISTER: 'register',
-		SEARCH: 'search',
 		TOPIC_ADD: topic + addOperation,
 		FEED: 'feed',
 		TOPIC: topic,
-		TOPICS: topics
+		TOPICS: 'topics',
+		SEARCH: 'search',
 	}
 })());
 
@@ -85,9 +84,9 @@ app.constant('TITLE', (function() {
 	return {
 		LOGIN: 'Login',
 		REGISTER: 'Register',
-		SEARCH: 'Search',
 		FEED: 'Feed',
-		TOPICS: 'Topics'
+		TOPICS: 'Topics',
+		SEARCH: 'Search'
 	}
 })());
 
@@ -97,17 +96,18 @@ app.constant('URL', (function() {
 	var topicUrl = '/topic';
 	var topicsUrl = '/topics';
 	var addOperation = '/add';
-	var pageOperation = '/page';
-	var idPattern = '/{id:[0-9]{1,}}';
-	var pagePattern = '/{page:[0-9]{1,}}';
-	var pathPattern = '/{path:[a-z0-9._]{1,}}';
+	var idKey = '{id:[0-9]{1,}}';
+	var pageKey = '{page:[0-9]{1,}}';
+	var pathKey = '{path:[a-z0-9._]{1,}}';
+	var valueKey = '{value:(.){1,}}';
 	return {
+		HOME: url + feedUrl + '?page=1',
 		LOGIN: url + '/login',
 		REGISTER: url + '/register',
-		SEARCH: url + '/search',
 		TOPIC_ADD: url + topicUrl + addOperation,
-		FEED: url + feedUrl + pageOperation + pagePattern,
-		TOPIC: url + topicUrl + pathPattern + pageOperation + pagePattern,
-		TOPICS: url + topicsUrl + pageOperation + pagePattern
+		FEED: url + feedUrl + '?' + pageKey,
+		TOPIC: url + topicUrl + '/' + pathKey + '?' + pageKey,
+		TOPICS: url + topicsUrl + '?' + pageKey,
+		SEARCH: url + '/search' + '?' + valueKey + '&' + pageKey
 	}
 })());

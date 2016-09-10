@@ -23,7 +23,7 @@ public class PostRestController extends by.training.controller.rest.RestControll
 
     @RequestMapping(value = POSTS_PATH + "/create/{text}/{creatorId}/{topicId}/{parentPostId}"
             + JSON_EXT, method = RequestMethod.POST)
-    public ResponseEntity<PostModel> createUser(@PathVariable("text") final String text,
+    public ResponseEntity<PostModel> createPost(@PathVariable("text") final String text,
             @PathVariable("creatorId") final long creatorId,
             @PathVariable("topicId") final long topicId,
             @PathVariable("parentPostId") final long parentPostId) {
@@ -34,6 +34,14 @@ public class PostRestController extends by.training.controller.rest.RestControll
             postDAO.getPostById(parentPostId);
         }
         PostModel post = postDAO.createPost(text, creator, topic, parentPost);
+        return new ResponseEntity<PostModel>(post, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = POSTS_PATH + "/update/{id}/{text}"
+            + JSON_EXT, method = RequestMethod.POST)
+    public ResponseEntity<PostModel> updatePost(@PathVariable("id") final long id,
+            @PathVariable("text") final String text) {
+        PostModel post = postDAO.updatePost(id, text);
         return new ResponseEntity<PostModel>(post, HttpStatus.CREATED);
     }
 
@@ -66,11 +74,11 @@ public class PostRestController extends by.training.controller.rest.RestControll
         return new ResponseEntity<List<PostModel>>(posts, HttpStatus.OK);
     }
 
-    @RequestMapping(value = POSTS_PATH + "/feed/user/{id}/{page}"
+    @RequestMapping(value = POSTS_PATH + "/feed/{idUser}/{page}"
             + JSON_EXT, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PostModel>> getFeedPosts(@PathVariable("id") final long id,
+    public ResponseEntity<List<PostModel>> getFeedPosts(@PathVariable("idUser") final long idUser,
             @PathVariable("page") final int page) {
-        List<PostModel> posts = relationDAO.getPosts(id, page);
+        List<PostModel> posts = relationDAO.getFeedPosts(idUser, page);
         if (posts == null) {
             return new ResponseEntity<List<PostModel>>(HttpStatus.NO_CONTENT);
         }

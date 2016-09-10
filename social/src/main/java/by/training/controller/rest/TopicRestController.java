@@ -59,6 +59,18 @@ public class TopicRestController extends by.training.controller.rest.RestControl
         return new ResponseEntity<List<TopicModel>>(topics, HttpStatus.OK);
     }
 
+    @RequestMapping(value = TOPICS_PATH + "/search/{value}/{idUser}/{page}"
+            + JSON_EXT, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<TopicModel>> getTopicsByValue(
+            @PathVariable("value") final String value, @PathVariable("idUser") final long idUser,
+            @PathVariable("page") final int page) {
+        List<TopicModel> topics = relationDAO.getTopicsByValue(value, idUser, page);
+        if (topics == null) {
+            return new ResponseEntity<List<TopicModel>>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<List<TopicModel>>(topics, HttpStatus.OK);
+    }
+
     @RequestMapping(value = TOPICS_PATH + "/check_path/{path}"
             + JSON_EXT, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Boolean> checkPath(@PathVariable("path") final String path) {

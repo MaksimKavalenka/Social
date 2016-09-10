@@ -26,8 +26,8 @@ app.controller('PostController', ['$scope', '$state', 'STATE', 'PostFactory', 'F
 		});
 	};
 
-	self.getFeedPosts = function(id, page) {
-		PostFactory.getFeedPosts(id, page, function(response) {
+	self.getFeedPosts = function(idUser, page) {
+		PostFactory.getFeedPosts(idUser, page, function(response) {
 			if (response.success) {
 				self.posts = response.data;
 			} else {

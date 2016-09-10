@@ -48,24 +48,17 @@ app.config(['$stateProvider', '$urlRouterProvider', 'CONTROLLER', 'PATH', 'STATE
 		},
 		footer: footer
 	})
-	.state(STATE.SEARCH, {
-		title: TITLE.SEARCH,
-		url: URL.SEARCH,
+	.state(STATE.TOPIC_ADD, {
+		url: URL.TOPIC_ADD,
 		views: {
 			header: header,
-			search: search,
-			pagination: {
-				controller: CONTROLLER.TOPIC_CONTROLLER,
-				controllerAs: CONTROLLER.CTRL,
-				templateUrl: PATH.PAGINATION_TOOL
-			},
 			content: {
-				controller: CONTROLLER.TOPIC_CONTROLLER,
+				controller: CONTROLLER.TOPIC_EDIT_CONTROLLER,
 				controllerAs: CONTROLLER.CTRL,
-				templateUrl: PATH.TOPIC_CONTENT
-			}
-		},
-		footer: footer
+				templateUrl: PATH.TOPIC_EDIT_FORM
+			},
+			footer: footer
+		}
 	})
 	.state(STATE.FEED, {
 		title: TITLE.FEED,
@@ -142,18 +135,29 @@ app.config(['$stateProvider', '$urlRouterProvider', 'CONTROLLER', 'PATH', 'STATE
 			footer: footer
 		}
 	})
-	.state(STATE.TOPIC_ADD, {
-		url: URL.TOPIC_ADD,
+	.state(STATE.SEARCH, {
+		title: TITLE.SEARCH,
+		url: URL.SEARCH,
+		params: {
+			page: '1',
+			value: ' '
+		},
 		views: {
 			header: header,
-			content: {
-				controller: CONTROLLER.TOPIC_EDIT_CONTROLLER,
+			search: search,
+			pagination: {
+				controller: CONTROLLER.TOPIC_CONTROLLER,
 				controllerAs: CONTROLLER.CTRL,
-				templateUrl: PATH.TOPIC_EDIT_FORM
+				templateUrl: PATH.PAGINATION_TOOL
 			},
-			footer: footer
-		}
-	})
+			content: {
+				controller: CONTROLLER.TOPIC_CONTROLLER,
+				controllerAs: CONTROLLER.CTRL,
+				templateUrl: PATH.TOPIC_CONTENT
+			}
+		},
+		footer: footer
+	});
 
-	$urlRouterProvider.otherwise(STATE.FEED, {page: 1});
+	$urlRouterProvider.otherwise(URL.HOME);
 }]);

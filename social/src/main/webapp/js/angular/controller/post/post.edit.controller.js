@@ -16,6 +16,18 @@ app.controller('PostEditController', ['$scope', '$state', 'STATE', 'PostFactory'
 		});
 	};
 
+	self.updatePost = function(id) {
+		self.dataLoading = true;
+		PostFactory.updatePost(id, self.post.text, function(response) {
+			if (response.success) {
+				$state.reload();
+			} else {
+				FlashService.error(response.message);
+			}
+			self.dataLoading = false;
+		});
+	};
+
 	self.showForm = function(visibility) {
 		self.form = visibility;
 		if (!visibility) {

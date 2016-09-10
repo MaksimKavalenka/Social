@@ -37,6 +37,18 @@ app.factory('TopicFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE
 		});
 	}
 
+	function getTopicsByValue(value, idUser, page, callback) {
+		$http.get(REST.TOPICS + '/search/' + value + '/' + idUser + '/' + page + REST.JSON_EXT)
+		.success(function(response) {
+			var data = {success: true, data: response};
+			callback(data);
+		})
+		.error(function(response) {
+			response = {success: false, message: MESSAGE.GETTING_TOPIC_ERROR};
+			callback(response);
+		});
+	}
+
 	function checkPath(path, callback) {
 		$http.post(REST.TOPICS + '/check_path/' + path + REST.JSON_EXT)
 		.success(function(response) {
@@ -57,6 +69,7 @@ app.factory('TopicFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE
 		createTopic: createTopic,
 		getTopicByPath: getTopicByPath,
 		getTopicsByCriteria: getTopicsByCriteria,
+		getTopicsByValue: getTopicsByValue,
 		checkPath: checkPath
 	};
 

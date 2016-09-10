@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import by.training.constants.CountElementConstants;
 import by.training.constants.ModelStructureConstants.ModelFields;
+import by.training.constants.ModelStructureConstants.Models;
+import by.training.constants.ModelStructureConstants.TopicFields;
 import by.training.database.dao.RelationDAO;
 import by.training.model.Model;
 import by.training.model.PostModel;
@@ -31,31 +33,45 @@ public class RelationDatabaseEditor extends DatabaseEditor implements RelationDA
     @Transactional
     public <T extends Model> List<T> getElementsByCriteria(final Class<T> clazz,
             final String relation, final long id, final int page) {
-        return getElements(clazz, getSearchField(clazz, relation), getSortField(clazz), id,
-                getSortOrder(clazz), page);
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(clazz)
+                .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+        criteria.createAlias(getSearchField(clazz, relation), "alias");
+        criteria.add(Restrictions.eq("alias." + ModelFields.ID, id));
+        return getElements(criteria, clazz, getSortField(clazz), getSortOrder(clazz), page);
     }
 
     @Override
     @Transactional
-    public List<PostModel> getPosts(final long id, final int page) {
-        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(PostModel.class)
+    public List<PostModel> getFeedPosts(final long idUser, final int page) {
+        Class<PostModel> postClass = PostModel.class;
+        Class<TopicModel> topicClass = TopicModel.class;
+        Criteria postCriteria = sessionFactory.getCurrentSession().createCriteria(postClass)
                 .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-        Criteria criteria1 = sessionFactory.getCurrentSession().createCriteria(TopicModel.class)
+        Criteria topicCriteria = sessionFactory.getCurrentSession().createCriteria(topicClass)
                 .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-        criteria1.createAlias("users", "alias");
-        criteria1.add(Restrictions.eq("alias" + "." + ModelFields.ID, id));
-        criteria.add(Restrictions.in("topic", criteria1.list()));
-        return getElements(criteria, PostModel.class, getSortField(PostModel.class),
-                getSortOrder(PostModel.class), page);
+        topicCriteria.createAlias(getSearchField(topicClass, Models.USER), "alias");
+        topicCriteria.add(Restrictions.eq("alias." + ModelFields.ID, idUser));
+        if (topicCriteria.list().isEmpty()) {
+            return null;
+        }
+        postCriteria.add(
+                Restrictions.in(getSearchField(postClass, Models.TOPIC), topicCriteria.list()));
+        return getElements(postCriteria, postClass, getSortField(postClass),
+                getSortOrder(postClass), page);
     }
 
-    private <T extends Model> List<T> getElements(final Class<T> clazz, final String searchProperty,
-            final String sortProperty, final long id, final boolean order, final int page) {
+    @Override
+    @Transactional
+    public List<TopicModel> getTopicsByValue(final String value, final long idUser,
+            final int page) {
+        Class<TopicModel> clazz = TopicModel.class;
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(clazz)
                 .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-        criteria.createAlias(searchProperty, "alias");
-        criteria.add(Restrictions.eq("alias" + "." + ModelFields.ID, id));
-        return getElements(criteria, clazz, sortProperty, order, page);
+        criteria.createAlias(getSearchField(clazz, Models.USER), "alias");
+        criteria.add(Restrictions.or(Restrictions.eq("alias." + ModelFields.ID, idUser),
+                Restrictions.eq(TopicFields.ACCESS, true)));
+        criteria.add(Restrictions.ilike(TopicFields.NAME, "%" + value + "%"));
+        return getElements(criteria, clazz, getSortField(clazz), getSortOrder(clazz), page);
     }
 
     @SuppressWarnings("unchecked")

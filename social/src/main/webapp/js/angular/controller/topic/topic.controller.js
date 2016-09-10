@@ -13,6 +13,9 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 			case STATE.TOPICS:
 				self.getTopicsByCriteria('user', $scope.user.id, page);
 				break;
+			case STATE.SEARCH:
+				self.getTopicsByValue($state.params.value, $scope.user.id, $state.params.page);
+				break;
 		}
 		PaginationService.getPages(page, state);
 	};
@@ -33,6 +36,16 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 
 	self.getTopicsByCriteria = function(relation, id, page) {
 		TopicFactory.getTopicsByCriteria(relation, id, page, function(response) {
+			if (response.success) {
+				self.topics = response.data;
+			} else {
+				FlashService.error(response.message);
+			}
+		});
+	};
+
+	self.getTopicsByValue = function(value, idUser, page) {
+		TopicFactory.getTopicsByValue(value, idUser, page, function(response) {
 			if (response.success) {
 				self.topics = response.data;
 			} else {

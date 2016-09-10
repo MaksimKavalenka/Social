@@ -29,6 +29,15 @@ public class PostDatabaseEditor extends DatabaseEditor implements PostDAO {
 
     @Override
     @Transactional
+    public PostModel updatePost(final long id, final String text) {
+        PostModel post = getPostById(id);
+        post.setText(text);
+        sessionFactory.getCurrentSession().update(post);
+        return post;
+    }
+
+    @Override
+    @Transactional
     public PostModel getPostById(final long id) {
         return (PostModel) sessionFactory.getCurrentSession().get(PostModel.class, id);
     }

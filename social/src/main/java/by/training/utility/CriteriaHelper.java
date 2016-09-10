@@ -32,8 +32,6 @@ public abstract class CriteriaHelper {
                     return NotificationFields.USER;
                 } else if (clazz == PostModel.class) {
                     return PostFields.CREATOR;
-                } else if (clazz == TopicModel.class) {
-                    return TopicFields.CREATOR;
                 }
                 return RelationFields.USERS;
             default:

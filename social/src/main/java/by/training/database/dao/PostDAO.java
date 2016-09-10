@@ -8,6 +8,8 @@ public interface PostDAO {
 
     PostModel createPost(String text, UserModel creator, TopicModel topic, PostModel parentPost);
 
+    PostModel updatePost(long id, String text);
+
     PostModel getPostById(long id);
 
 }
