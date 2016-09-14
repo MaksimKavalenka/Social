@@ -1,9 +1,6 @@
 <div class="content ct-content" ng-repeat="topic in ctrl.topics">
 	<div class="justify">
 		<a class="link-topic" ui-sref="topic({path: topic.path})">{{topic.name}}</a>
-		<div>
-			<div>Created by {{topic.creator.login}}</div>
-			<div ng-show="!topic.access">Private topic</div>
-		</div>
+		<div>Created by {{topic.creator.login}}</div>
 	</div>
 </div>

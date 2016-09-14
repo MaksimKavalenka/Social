@@ -7,7 +7,7 @@ app.controller('PostEditController', ['$scope', '$state', 'STATE', 'PostFactory'
 
 	self.createPost = function(topicId, parentPostId) {
 		self.dataLoading = true;
-		PostFactory.createPost(self.post.text, $scope.user.id, topicId, parentPostId, function(response) {
+		PostFactory.createPost(self.post.text, topicId, parentPostId, function(response) {
 			if (response.success) {
 				$state.reload();
 			} else {
@@ -36,7 +36,7 @@ app.controller('PostEditController', ['$scope', '$state', 'STATE', 'PostFactory'
 		self.form = true;
 	};
 
-	self.editionForm = function(object) {
+	self.editionForm = function(post) {
 		if ($scope.user.id !== post.creator.id) {
 			return;
 		}

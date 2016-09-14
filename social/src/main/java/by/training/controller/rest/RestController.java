@@ -1,17 +1,23 @@
 package by.training.controller.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
+import by.training.database.dao.NotificationDAO;
 import by.training.database.dao.PostDAO;
 import by.training.database.dao.RelationDAO;
 import by.training.database.dao.RoleDAO;
 import by.training.database.dao.TopicDAO;
 import by.training.database.dao.UserDAO;
+import by.training.model.UserModel;
 
 public class RestController {
 
     public static final String JSON_EXT = ".json";
 
+    @Autowired
+    public NotificationDAO     notificationDAO;
     @Autowired
     public PostDAO             postDAO;
     @Autowired
@@ -22,5 +28,11 @@ public class RestController {
     public UserDAO             userDAO;
     @Autowired
     public RelationDAO         relationDAO;
+
+    public UserModel getLoggedUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Object user = auth.getPrincipal();
+        return (UserModel) user;
+    }
 
 }

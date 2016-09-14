@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -25,9 +26,13 @@ public class UserModel extends Model implements UserDetails {
 
     private static final long      serialVersionUID = 7372820574885171442L;
 
+    @JsonIgnore
     private boolean                accountNonExpired;
+    @JsonIgnore
     private boolean                accountNonLocked;
+    @JsonIgnore
     private boolean                credentialsNonExpired;
+    @JsonIgnore
     private boolean                enabled;
 
     @Column(name = "login", unique = true, nullable = false, length = 255)
@@ -37,9 +42,9 @@ public class UserModel extends Model implements UserDetails {
     @Column(name = "password", nullable = false, length = 255)
     private String                 password;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonIgnore
     @ManyToMany(targetEntity = RoleModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.REFRESH, CascadeType.PERSIST})
+            CascadeType.REFRESH, CascadeType.PERSIST}, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", nullable = false, updatable = false), inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false, updatable = false))
     private Set<GrantedAuthority>  roles;
 
@@ -50,13 +55,14 @@ public class UserModel extends Model implements UserDetails {
 
     @JsonIgnore
     @OneToMany(mappedBy = "inviter")
-    private Set<NotificationModel> notificationsFrom;
+    private Set<NotificationModel> sentNotifications;
 
     @JsonIgnore
     @OneToMany(mappedBy = "creator")
     private Set<PostModel>         posts;
 
     @JsonIgnore
+    @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(targetEntity = TopicModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
             CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinTable(name = "topic_user", joinColumns = @JoinColumn(name = "user_id", nullable = false, updatable = false), inverseJoinColumns = @JoinColumn(name = "topic_id", nullable = false, updatable = false))
@@ -81,6 +87,38 @@ public class UserModel extends Model implements UserDetails {
         this.login = login;
         this.password = password;
         this.roles = roles;
+    }
+
+    @Override
+    @JsonIgnore
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getUsername() {
+        return login;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return accountNonExpired;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return accountNonLocked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return credentialsNonExpired;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
 
     public String getLogin() {
@@ -116,12 +154,12 @@ public class UserModel extends Model implements UserDetails {
         this.notifications = notifications;
     }
 
-    public Set<NotificationModel> getNotificationsFrom() {
-        return notificationsFrom;
+    public Set<NotificationModel> getSentNotifications() {
+        return sentNotifications;
     }
 
-    public void setNotificationsFrom(final Set<NotificationModel> notificationsFrom) {
-        this.notificationsFrom = notificationsFrom;
+    public void setSentNotifications(final Set<NotificationModel> sentNotifications) {
+        this.sentNotifications = sentNotifications;
     }
 
     public Set<PostModel> getPosts() {
@@ -138,36 +176,6 @@ public class UserModel extends Model implements UserDetails {
 
     public void setTopics(final Set<TopicModel> topics) {
         this.topics = topics;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
-    }
-
-    @Override
-    public String getUsername() {
-        return login;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return accountNonExpired;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return accountNonLocked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return credentialsNonExpired;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
     }
 
     @Override

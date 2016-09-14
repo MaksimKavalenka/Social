@@ -41,10 +41,10 @@ public class UserRestController extends by.training.controller.rest.RestControll
 
     @RequestMapping(value = "/auth"
             + JSON_EXT, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserModel> authentication(final Principal principial) {
-        if (principial != null) {
-            if (principial instanceof AbstractAuthenticationToken) {
-                UserModel user = (UserModel) ((AbstractAuthenticationToken) principial)
+    public ResponseEntity<UserModel> authentication(final Principal principal) {
+        if (principal != null) {
+            if (principal instanceof AbstractAuthenticationToken) {
+                UserModel user = (UserModel) ((AbstractAuthenticationToken) principal)
                         .getPrincipal();
                 return new ResponseEntity<UserModel>(user, HttpStatus.OK);
             }

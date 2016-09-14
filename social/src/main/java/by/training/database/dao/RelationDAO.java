@@ -13,6 +13,6 @@ public interface RelationDAO {
 
     List<PostModel> getFeedPosts(long userId, int page);
 
-    List<TopicModel> getTopicsByValue(String value, long idUser, int page);
+    List<TopicModel> getTopicsByValue(String value, long userId, int page);
 
 }

@@ -5,7 +5,7 @@ app.controller('TopicEditController', ['$scope', '$state', 'STATE', 'TopicFactor
 
 	self.createTopic = function() {
 		self.dataLoading = true;
-		TopicFactory.createTopic(self.topic.name, self.topic.path, self.topic.description, self.topic.access, $scope.user.id, function(response) {
+		TopicFactory.createTopic(self.topic.name, self.topic.path, self.topic.description, self.topic.access, function(response) {
 			if (response.success) {
 				$state.go(STATE.TOPIC, {path: self.topic.path});
 			} else {

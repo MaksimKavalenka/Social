@@ -32,6 +32,12 @@ http://www.springframework.org/schema/security/spring-security-4.1.xsd">
     <property name="sessionFactory" ref="sessionFactory"/>
   </bean>
 
+  <bean id="notificationDAO" class="by.training.database.editor.NotificationDatabaseEditor">
+    <constructor-arg>
+      <ref bean="sessionFactory"/>
+    </constructor-arg>
+  </bean>
+
   <bean id="postDAO" class="by.training.database.editor.PostDatabaseEditor">
     <constructor-arg>
       <ref bean="sessionFactory"/>

@@ -62,13 +62,13 @@ public class RelationDatabaseEditor extends DatabaseEditor implements RelationDA
 
     @Override
     @Transactional
-    public List<TopicModel> getTopicsByValue(final String value, final long idUser,
+    public List<TopicModel> getTopicsByValue(final String value, final long userId,
             final int page) {
         Class<TopicModel> clazz = TopicModel.class;
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(clazz)
                 .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
         criteria.createAlias(getSearchField(clazz, Models.USER), "alias");
-        criteria.add(Restrictions.or(Restrictions.eq("alias." + ModelFields.ID, idUser),
+        criteria.add(Restrictions.or(Restrictions.eq("alias." + ModelFields.ID, userId),
                 Restrictions.eq(TopicFields.ACCESS, true)));
         criteria.add(Restrictions.ilike(TopicFields.NAME, "%" + value + "%"));
         return getElements(criteria, clazz, getSortField(clazz), getSortOrder(clazz), page);

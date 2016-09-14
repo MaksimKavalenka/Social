@@ -7,17 +7,17 @@ app.controller('PostController', ['$scope', '$state', 'STATE', 'PostFactory', 'T
 	self.init = function(state, page) {
 		switch (state) {
 			case STATE.FEED:
-				self.getFeedPosts($scope.user.id, page);
+				self.getFeedPosts(page);
 				break;
 			case STATE.TOPIC:
-				self.getPostsByCriteria('topic', $state.params.path, page);
+				self.getTopicPosts($state.params.path, page);
 				break;
 		}
 		PaginationService.getPages(page, state);
 	};
 
-	self.getPostsByCriteria = function(relation, id, page) {
-		PostFactory.getPostsByCriteria(relation, id, page, function(response) {
+	self.getTopicPosts = function(path, page) {
+		PostFactory.getTopicPosts(path, page, function(response) {
 			if (response.success) {
 				self.posts = response.data;
 			} else {
@@ -26,8 +26,8 @@ app.controller('PostController', ['$scope', '$state', 'STATE', 'PostFactory', 'T
 		});
 	};
 
-	self.getFeedPosts = function(userId, page) {
-		PostFactory.getFeedPosts(userId, page, function(response) {
+	self.getFeedPosts = function(page) {
+		PostFactory.getFeedPosts(page, function(response) {
 			if (response.success) {
 				self.posts = response.data;
 			} else {

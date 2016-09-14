@@ -1,8 +1,8 @@
 'use strict';
 app.factory('PostFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE, REST) {
 
-	function createPost(text, creatorId, topicId, parentPostId, callback) {
-		$http.post(REST.POSTS + '/create/' + text + '/' + creatorId + '/' + topicId + '/' + parentPostId + REST.JSON_EXT)
+	function createPost(text, topicId, parentPostId, callback) {
+		$http.post(REST.POSTS + '/create/' + text + '/' + topicId + '/' + parentPostId + REST.JSON_EXT)
 		.success(function(response) {
 			var data = {success: true, data: response};
 			callback(data);
@@ -25,8 +25,8 @@ app.factory('PostFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE,
 		});
 	}
 
-	function getPostsByCriteria(relation, id, page, callback) {
-		$http.get(REST.POSTS + '/' + relation + '/' + id + '/' + page + REST.JSON_EXT)
+	function getTopicPosts(path, page, callback) {
+		$http.get(REST.POSTS + '/topic/' + path + '/' + page + REST.JSON_EXT)
 		.success(function(response) {
 			var data = {success: true, data: response};
 			callback(data);
@@ -37,8 +37,8 @@ app.factory('PostFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE,
 		});
 	}
 
-	function getFeedPosts(userId, page, callback) {
-		$http.get(REST.POSTS + '/feed/' + userId + '/' + page + REST.JSON_EXT)
+	function getFeedPosts(page, callback) {
+		$http.get(REST.POSTS + '/feed/' + page + REST.JSON_EXT)
 		.success(function(response) {
 			var data = {success: true, data: response};
 			callback(data);
@@ -52,7 +52,7 @@ app.factory('PostFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE,
 	return {
 		createPost: createPost,
 		updatePost: updatePost,
-		getPostsByCriteria: getPostsByCriteria,
+		getTopicPosts: getTopicPosts,
 		getFeedPosts: getFeedPosts
 	};
 

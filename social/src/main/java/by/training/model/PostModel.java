@@ -18,34 +18,30 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "post")
 public class PostModel extends Model {
 
-    private static final long      serialVersionUID = 7372820574885171442L;
+    private static final long serialVersionUID = 7372820574885171442L;
 
     @Column(name = "text", nullable = false, columnDefinition = "TEXT")
-    private String                 text;
+    private String            text;
 
     @Column(name = "created", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date                   date;
+    private Date              date;
 
     @ManyToOne(targetEntity = UserModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
             CascadeType.REFRESH, CascadeType.PERSIST}, optional = false)
-    private UserModel              creator;
+    private UserModel         creator;
 
     @ManyToOne(targetEntity = TopicModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
             CascadeType.REFRESH, CascadeType.PERSIST}, optional = false)
-    private TopicModel             topic;
+    private TopicModel        topic;
 
     @ManyToOne(targetEntity = PostModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
             CascadeType.REFRESH, CascadeType.PERSIST})
-    private PostModel              parentPost;
+    private PostModel         parentPost;
 
     @JsonIgnore
     @OneToMany(mappedBy = "parentPost")
-    private Set<PostModel>         posts;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "topic")
-    private Set<NotificationModel> notifications;
+    private Set<PostModel>    posts;
 
     public PostModel() {
         super();
@@ -107,14 +103,6 @@ public class PostModel extends Model {
 
     public void setPosts(final Set<PostModel> posts) {
         this.posts = posts;
-    }
-
-    public Set<NotificationModel> getNotifications() {
-        return notifications;
-    }
-
-    public void setNotifications(final Set<NotificationModel> notifications) {
-        this.notifications = notifications;
     }
 
     @Override

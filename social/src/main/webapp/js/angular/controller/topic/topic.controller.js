@@ -9,14 +9,14 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 	self.init = function(state, page) {
 		switch (state) {
 			case STATE.TOPIC:
-				self.checkMember($state.params.path, $scope.user.id);
+				self.checkMember($state.params.path);
 				self.getTopicByPath($state.params.path);
 				break;
 			case STATE.TOPICS:
-				self.getTopicsByCriteria('user', $scope.user.id, page);
+				self.getUserTopics(page);
 				break;
 			case STATE.SEARCH:
-				self.getTopicsByValue($state.params.value, $scope.user.id, $state.params.page);
+				self.getTopicsByValue($state.params.value, $state.params.page);
 				break;
 		}
 		PaginationService.getPages(page, state);
@@ -36,8 +36,8 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 		});
 	};
 
-	self.getTopicsByCriteria = function(relation, id, page) {
-		TopicFactory.getTopicsByCriteria(relation, id, page, function(response) {
+	self.getUserTopics = function(page) {
+		TopicFactory.getUserTopics(page, function(response) {
 			if (response.success) {
 				self.topics = response.data;
 			} else {
@@ -46,8 +46,8 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 		});
 	};
 
-	self.getTopicsByValue = function(value, userId, page) {
-		TopicFactory.getTopicsByValue(value, userId, page, function(response) {
+	self.getTopicsByValue = function(value, page) {
+		TopicFactory.getTopicsByValue(value, page, function(response) {
 			if (response.success) {
 				self.topics = response.data;
 			} else {
@@ -57,7 +57,7 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 	};
 
 	self.joinTopic = function() {
-		TopicFactory.joinTopic($state.params.path, $scope.user.id, function(response) {
+		TopicFactory.joinTopic($state.params.path, function(response) {
 			if (response.success) {
 				self.member = true;
 			} else {
@@ -67,7 +67,7 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 	};
 
 	self.leaveTopic = function() {
-		TopicFactory.leaveTopic($state.params.path, $scope.user.id, function(response) {
+		TopicFactory.leaveTopic($state.params.path, function(response) {
 			if (response.success) {
 				self.member = false;
 			} else {
@@ -76,8 +76,8 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 		});
 	};
 
-	self.checkMember = function(topicPath, userId) {
-		TopicFactory.checkMember(topicPath, userId, function(response) {
+	self.checkMember = function(path) {
+		TopicFactory.checkMember(path, function(response) {
 			if (response.success) {
 				self.member = response.data;
 			} else {

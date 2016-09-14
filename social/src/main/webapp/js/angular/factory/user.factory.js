@@ -42,7 +42,7 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'CookieService', functio
 	function getUser(callback) {
 		$http.get(REST.USERS + '/auth' + REST.JSON_EXT, {})
 		.success(function(response) {
-			if (response.username) {
+			if (response) {
 				callback(response);
 			} else {
 				callback(null);

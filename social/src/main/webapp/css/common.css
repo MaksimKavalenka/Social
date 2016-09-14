@@ -5,8 +5,8 @@ body {
 	margin: 0;
 	width: 100%;
 }
-hr.footer {
-	background-color: #575757;
+hr.common {
+	background-color: #292929;
 	border: none;
 	height: 1px;
 }

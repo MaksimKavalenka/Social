@@ -1,8 +1,8 @@
 'use strict';
 app.factory('TopicFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE, REST) {
 
-	function createTopic(name, path, description, access, creatorId, callback) {
-		$http.post(REST.TOPICS + '/create/' + name + '/' + path + '/' + description + '/' + access + '/' + creatorId + REST.JSON_EXT)
+	function createTopic(name, path, description, access, callback) {
+		$http.post(REST.TOPICS + '/create/' + name + '/' + path + '/' + description + '/' + access + REST.JSON_EXT)
 		.success(function(response) {
 			var data = {success: true, data: response};
 			callback(data);
@@ -25,8 +25,8 @@ app.factory('TopicFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE
 		});
 	}
 
-	function getTopicsByCriteria(relation, id, page, callback) {
-		$http.get(REST.TOPICS + '/' + relation + '/' + id + '/' + page + REST.JSON_EXT)
+	function getUserTopics(page, callback) {
+		$http.get(REST.TOPICS + '/user/' + page + REST.JSON_EXT)
 		.success(function(response) {
 			var data = {success: true, data: response};
 			callback(data);
@@ -37,8 +37,8 @@ app.factory('TopicFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE
 		});
 	}
 
-	function getTopicsByValue(value, userId, page, callback) {
-		$http.get(REST.TOPICS + '/search/' + value + '/' + userId + '/' + page + REST.JSON_EXT)
+	function getTopicsByValue(value, page, callback) {
+		$http.get(REST.TOPICS + '/search/' + value + '/' + page + REST.JSON_EXT)
 		.success(function(response) {
 			var data = {success: true, data: response};
 			callback(data);
@@ -49,8 +49,8 @@ app.factory('TopicFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE
 		});
 	}
 
-	function joinTopic(topicPath, userId, callback) {
-		$http.post(REST.TOPICS + '/join/' + topicPath + '/' + userId + REST.JSON_EXT)
+	function joinTopic(path, callback) {
+		$http.post(REST.TOPICS + '/join/' + path + REST.JSON_EXT)
 		.success(function(response) {
 			response = {success: true};
 			callback(response);
@@ -61,8 +61,8 @@ app.factory('TopicFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE
 		});
 	}
 
-	function leaveTopic(topicPath, userId, callback) {
-		$http.post(REST.TOPICS + '/leave/' + topicPath + '/' + userId + REST.JSON_EXT)
+	function leaveTopic(path, callback) {
+		$http.post(REST.TOPICS + '/leave/' + path + REST.JSON_EXT)
 		.success(function(response) {
 			response = {success: true};
 			callback(response);
@@ -89,8 +89,8 @@ app.factory('TopicFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE
 		});
 	}
 
-	function checkMember(topicPath, userId, callback) {
-		$http.post(REST.TOPICS + '/check_member/' + topicPath + '/' + userId + REST.JSON_EXT)
+	function checkMember(path, callback) {
+		$http.post(REST.TOPICS + '/check_member/' + path + REST.JSON_EXT)
 		.success(function(response) {
 			var data = {success: true, data: response};
 			callback(data);
@@ -104,7 +104,7 @@ app.factory('TopicFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE
 	return {
 		createTopic: createTopic,
 		getTopicByPath: getTopicByPath,
-		getTopicsByCriteria: getTopicsByCriteria,
+		getUserTopics: getUserTopics,
 		getTopicsByValue: getTopicsByValue,
 		joinTopic: joinTopic,
 		leaveTopic: leaveTopic,
