@@ -31,9 +31,7 @@ public class UserDatabaseEditor extends DatabaseEditor implements UserDAO {
     public UserModel createUser(final String login, final String password,
             final Set<GrantedAuthority> roles) throws ValidationException {
         try {
-            UserModel checkUserLogin = getUniqueResultByCriteria(UserModel.class,
-                    Restrictions.eq(UserFields.LOGIN, login));
-            if (checkUserLogin == null) {
+            if (!checkLogin(login)) {
                 UserModel user = new UserModel(login, SecureData.secureBySha(password, login),
                         roles);
                 sessionFactory.getCurrentSession().save(user);

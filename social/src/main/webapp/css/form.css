@@ -1,3 +1,11 @@
+form {
+	margin: 0;
+}
+textarea {
+	height: 300px;
+	margin-top: 15px;
+	width: 100%;
+}
 .form-search {
 	margin: 10px 0;
 }
@@ -51,8 +59,13 @@
 	width: initial;
 }
 .form-submit .field span {
-	color: #ff0000;
 	font-size: 13px;
+}
+.form-submit .field span.valid {
+	color: #00ff00;
+}
+.form-submit .field span.invalid {
+	color: #ff0000;
 }
 .form-validation label.required:after {
 	color: #ff0000;
@@ -62,14 +75,6 @@
 .form-validation input.ng-invalid.ng-touched {
 	border-color: #ff0000;
 }
-.form-validation input.ng-invalid.ng-touched:focus {
-	outline: #ffff00;
-}
 .form-validation input.ng-valid {
 	border-color: none;
-}
-textarea {
-	height: 300px;
-	margin-top: 15px;
-	width: 100%;
 }

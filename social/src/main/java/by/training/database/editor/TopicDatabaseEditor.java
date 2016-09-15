@@ -26,14 +26,32 @@ public class TopicDatabaseEditor extends DatabaseEditor implements TopicDAO {
     @Transactional(rollbackFor = ValidationException.class)
     public TopicModel createTopic(final String name, final String path, final String description,
             final boolean access, final UserModel creator) throws ValidationException {
-        TopicModel checkTopicUrlName = getUniqueResultByCriteria(TopicModel.class,
-                Restrictions.eq(TopicFields.PATH, path));
-        if (checkTopicUrlName == null) {
+        if (!checkPath(path)) {
             TopicModel topic = new TopicModel(name, path, description, access, creator);
             if (path == null) {
                 topic.setPath(String.valueOf(topic.getId()));
             }
             sessionFactory.getCurrentSession().save(topic);
+            return topic;
+        } else {
+            throw new ValidationException(TAKEN_PATH_ERROR);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = ValidationException.class)
+    public TopicModel updateTopic(final long id, final String name, final String path,
+            final String description, final boolean access) throws ValidationException {
+        if (!checkPath(path)) {
+            TopicModel topic = getTopicById(id);
+            topic.setName(name);
+            topic.setPath(path);
+            topic.setDescription(description);
+            topic.setAccess(access);
+            if (path == null) {
+                topic.setPath(String.valueOf(topic.getId()));
+            }
+            sessionFactory.getCurrentSession().update(topic);
             return topic;
         } else {
             throw new ValidationException(TAKEN_PATH_ERROR);

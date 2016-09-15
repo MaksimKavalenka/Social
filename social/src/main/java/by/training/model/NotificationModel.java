@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -20,16 +21,14 @@ public class NotificationModel extends Model {
     @Temporal(TemporalType.TIMESTAMP)
     private Date              date;
 
-    @ManyToOne(targetEntity = UserModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.REFRESH, CascadeType.PERSIST}, optional = false)
+    @ManyToOne(targetEntity = UserModel.class, cascade = {
+            CascadeType.DETACH}, fetch = FetchType.LAZY, optional = false)
     private UserModel         user;
 
-    @ManyToOne(targetEntity = UserModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.REFRESH, CascadeType.PERSIST}, optional = false)
+    @ManyToOne(targetEntity = UserModel.class, cascade = {CascadeType.DETACH}, optional = false)
     private UserModel         inviter;
 
-    @ManyToOne(targetEntity = TopicModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.REFRESH, CascadeType.PERSIST}, optional = false)
+    @ManyToOne(targetEntity = TopicModel.class, cascade = {CascadeType.DETACH}, optional = false)
     private TopicModel        topic;
 
     public NotificationModel() {

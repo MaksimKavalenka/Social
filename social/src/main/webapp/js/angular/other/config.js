@@ -49,7 +49,19 @@ app.config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'CONTRO
 		views: {
 			header: header,
 			content: {
-				controller: CONTROLLER.TOPIC_EDIT_CONTROLLER,
+				controller: CONTROLLER.TOPIC_CONTROLLER,
+				controllerAs: CONTROLLER.CTRL,
+				templateUrl: PATH.TOPIC_EDIT_FORM
+			},
+			footer: footer
+		}
+	})
+	.state(STATE.TOPIC_EDIT, {
+		url: URL.TOPIC_EDIT,
+		views: {
+			header: header,
+			content: {
+				controller: CONTROLLER.TOPIC_CONTROLLER,
 				controllerAs: CONTROLLER.CTRL,
 				templateUrl: PATH.TOPIC_EDIT_FORM
 			},

@@ -3,9 +3,7 @@ app.constant('CONTROLLER', (function() {
 	return {
 		CTRL: 'ctrl',
 		POST_CONTROLLER: 'PostController',
-		POST_EDIT_CONTROLLER: 'PostEditController',
 		TOPIC_CONTROLLER: 'TopicController',
-		TOPIC_EDIT_CONTROLLER: 'TopicEditController',
 		USER_EDIT_CONTROLLER: 'UserEditController'
 	}
 })());
@@ -69,10 +67,12 @@ app.constant('REST', (function() {
 app.constant('STATE', (function() {
 	var topic = 'topic';
 	var addOperation = '_add';
+	var editOperation = '_edit';
 	return {
 		LOGIN: 'login',
 		REGISTER: 'register',
 		TOPIC_ADD: topic + addOperation,
+		TOPIC_EDIT: topic + editOperation,
 		FEED: 'feed',
 		TOPIC: topic,
 		TOPICS: 'topics',
@@ -96,6 +96,7 @@ app.constant('URL', (function() {
 	var topicUrl = '/topic';
 	var topicsUrl = '/topics';
 	var addOperation = '/add';
+	var editOperation = '/edit';
 	var idKey = '{id:[0-9]{1,}}';
 	var pageKey = '{page:[0-9]{1,}}';
 	var pathKey = '{path:[a-z0-9._]{1,}}';
@@ -105,6 +106,7 @@ app.constant('URL', (function() {
 		LOGIN: url + '/login',
 		REGISTER: url + '/register',
 		TOPIC_ADD: url + topicUrl + addOperation,
+		TOPIC_EDIT: url + topicUrl + '/' + pathKey + editOperation,
 		FEED: url + feedUrl + '?' + pageKey,
 		TOPIC: url + topicUrl + '/' + pathKey + '?' + pageKey,
 		TOPICS: url + topicsUrl + '?' + pageKey,

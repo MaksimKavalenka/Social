@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -33,21 +34,19 @@ public class TopicModel extends Model {
     @Column(name = "access", nullable = false)
     private boolean                access;
 
-    @ManyToOne(targetEntity = UserModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.REFRESH, CascadeType.PERSIST}, optional = false)
+    @ManyToOne(targetEntity = UserModel.class, cascade = {CascadeType.DETACH}, optional = false)
     private UserModel              creator;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "topic")
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.DETACH}, mappedBy = "topic")
     private Set<NotificationModel> notifications;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "topic")
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.DETACH}, mappedBy = "topic")
     private Set<PostModel>         posts;
 
     @JsonIgnore
-    @ManyToMany(targetEntity = UserModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.REFRESH, CascadeType.PERSIST})
+    @ManyToMany(targetEntity = UserModel.class, fetch = FetchType.EAGER)
     @JoinTable(name = "topic_user", joinColumns = @JoinColumn(name = "topic_id", nullable = false, updatable = false), inverseJoinColumns = @JoinColumn(name = "user_id", nullable = false, updatable = false))
     private Set<UserModel>         users;
 

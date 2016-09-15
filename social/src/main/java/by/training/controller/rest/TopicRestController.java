@@ -34,6 +34,23 @@ public class TopicRestController extends by.training.controller.rest.RestControl
         }
     }
 
+    @RequestMapping(value = "/update/{id}/{name}/{path}/{description}/{access}"
+            + JSON_EXT, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<TopicModel> updateTopic(@PathVariable("id") final long id,
+            @PathVariable("name") final String name, @PathVariable("path") final String path,
+            @PathVariable("description") final String description,
+            @PathVariable("access") final boolean access) {
+        try {
+            if (topicDAO.getTopicById(id).getCreator().getId() == getLoggedUser().getId()) {
+                TopicModel topic = topicDAO.updateTopic(id, name, path, description, access);
+                return new ResponseEntity<TopicModel>(topic, HttpStatus.CREATED);
+            }
+            return new ResponseEntity<TopicModel>(HttpStatus.CONFLICT);
+        } catch (ValidationException e) {
+            return new ResponseEntity<TopicModel>(HttpStatus.CONFLICT);
+        }
+    }
+
     @RequestMapping(value = "/{path}"
             + JSON_EXT, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TopicModel> getTopicByUrlName(@PathVariable("path") final String path) {
@@ -96,10 +113,10 @@ public class TopicRestController extends by.training.controller.rest.RestControl
 
     @RequestMapping(value = "/check_member/{path}"
             + JSON_EXT, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Boolean> checkMember(@PathVariable("path") final String topicPath) {
-        TopicModel topic = topicDAO.getTopicByPath(topicPath);
+    public ResponseEntity<Boolean> checkMember(@PathVariable("path") final String path) {
+        TopicModel topic = topicDAO.getTopicByPath(path);
         UserModel user = getLoggedUser();
-        boolean exists = user.getTopics().contains(topic);
+        boolean exists = topic.getUsers().contains(user);
         return new ResponseEntity<Boolean>(exists, HttpStatus.OK);
     }
 

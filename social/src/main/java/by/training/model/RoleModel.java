@@ -24,8 +24,7 @@ public class RoleModel extends Model implements GrantedAuthority {
     private String            name;
 
     @JsonIgnore
-    @ManyToMany(targetEntity = UserModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.REFRESH, CascadeType.PERSIST})
+    @ManyToMany(targetEntity = UserModel.class, cascade = {CascadeType.DETACH})
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "role_id", nullable = false, updatable = false), inverseJoinColumns = @JoinColumn(name = "user_id", nullable = false, updatable = false))
     private Set<UserModel>    users;
 

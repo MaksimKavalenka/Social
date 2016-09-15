@@ -30,8 +30,8 @@ public class PageController {
         return REDIRECT + SEARCH_URL + "?" + DEFAULT_VALUE + "&" + DEFAULT_PAGE;
     }
 
-    @RequestMapping(value = {LOGIN_URL, REGISTRATION_URL,
-            TOPIC_ADD_URL}, method = RequestMethod.GET)
+    @RequestMapping(value = {LOGIN_URL, REGISTRATION_URL, TOPIC_ADD_URL,
+            TOPIC_EDIT_URL}, method = RequestMethod.GET)
     public String editPages() {
         return DEFAULT_PATH;
     }

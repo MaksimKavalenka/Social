@@ -13,8 +13,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -43,28 +41,26 @@ public class UserModel extends Model implements UserDetails {
     private String                 password;
 
     @JsonIgnore
-    @ManyToMany(targetEntity = RoleModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.REFRESH, CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = RoleModel.class, cascade = {
+            CascadeType.DETACH}, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", nullable = false, updatable = false), inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false, updatable = false))
     private Set<GrantedAuthority>  roles;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user")
-    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = {CascadeType.REMOVE,
+            CascadeType.DETACH}, fetch = FetchType.EAGER, mappedBy = "user")
     private Set<NotificationModel> notifications;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "inviter")
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.DETACH}, mappedBy = "inviter")
     private Set<NotificationModel> sentNotifications;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "creator")
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.DETACH}, mappedBy = "creator")
     private Set<PostModel>         posts;
 
     @JsonIgnore
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToMany(targetEntity = TopicModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.REFRESH, CascadeType.PERSIST})
+    @ManyToMany(targetEntity = TopicModel.class, cascade = {CascadeType.REMOVE, CascadeType.DETACH})
     @JoinTable(name = "topic_user", joinColumns = @JoinColumn(name = "user_id", nullable = false, updatable = false), inverseJoinColumns = @JoinColumn(name = "topic_id", nullable = false, updatable = false))
     private Set<TopicModel>        topics;
 

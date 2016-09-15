@@ -5,22 +5,31 @@ body {
 	margin: 0;
 	width: 100%;
 }
-hr.common {
+hr.hr-common {
 	background-color: #292929;
 	border: none;
 	height: 1px;
 }
-hr.header-menu {
+hr.hr-dropdown {
+	background-color: #292929;
+	border: none;
+	height: 1px;
+	margin: 0 8px;
+}
+hr.hr-header-menu {
 	background-color: #eb0606;
 	border: none;
 	height: 5px;
 	margin: 0;
 }
-hr.header-user {
+hr.hr-header-user {
 	background-color: #292929;
 	border: none;
 	height: 5px;
 	margin: 0;
+}
+.align-right {
+	text-align: right;
 }
 .container {
 	margin: 0 auto;

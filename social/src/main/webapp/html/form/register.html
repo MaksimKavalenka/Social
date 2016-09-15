@@ -4,19 +4,19 @@
 		<div class="field">
 			<label class="required" for="login">Login</label>
 			<input type="text" id="login" name="login" maxlength="255" ng-model="ctrl.user.login" ng-login-exist required/>
-			<span ng-show="form.login.$pending.ngLoginExist">Checking if this login is available...</span>
-			<span ng-show="form.login.$error.ngLoginExist">This login is already taken</span>
+			<span class="invalid" ng-show="form.login.$pending.ngLoginExist">Checking if this login is available...</span>
+			<span class="invalid" ng-show="form.login.$error.ngLoginExist">This login is already taken</span>
 		</div>
 		<div class="field">
 			<label class="required" for="password">Password</label>
 			<input type="password" id="password" name="password" maxlength="255" ng-model="ctrl.user.password" ng-minlength="3" required/>
-			<span ng-show="form.password.$error.required || form.password.$error.minlength">Minimal count of symbols is 3</span>
+			<span class="invalid" ng-show="form.password.$error.required || form.password.$error.minlength">Minimal count of symbols is 3</span>
 		</div>
 		<div class="field">
 			<label class="required" for="confirm_password">Confirm password</label>
 			<input type="password" id="confirm_password" name="confirm_password" maxlength="255" ng-model="user.confirm_password" ng-match="ctrl.user.password" ng-minlength="3" required/>
-			<span ng-show="form.confirm_password.$error.required || form.confirm_password.$error.minlength">Minimal count of symbols is 3</span>
-			<span ng-show="form.confirm_password.$error.ngMatch && !form.confirm_password.$error.required && !form.confirm_password.$error.minlength">Passwords do not match</span>
+			<span class="invalid" ng-show="form.confirm_password.$error.required || form.confirm_password.$error.minlength">Minimal count of symbols is 3</span>
+			<span class="invalid" ng-show="form.confirm_password.$error.ngMatch && !form.confirm_password.$error.required && !form.confirm_password.$error.minlength">Passwords do not match</span>
 		</div>
 		<div class="field simple">
 			<label for="remember">Remember</label>

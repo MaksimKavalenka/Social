@@ -13,6 +13,18 @@ app.factory('TopicFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE
 		});
 	}
 
+	function updateTopic(id, name, path, description, access, callback) {
+		$http.post(REST.TOPICS + '/update/' + id + '/' + name + '/' + path + '/' + description + '/' + access + REST.JSON_EXT)
+		.success(function(response) {
+			var data = {success: true, data: response};
+			callback(data);
+		})
+		.error(function(response) {
+			response = {success: false, message: MESSAGE.UPDATING_TOPIC_ERROR};
+			callback(response);
+		});
+	}
+
 	function getTopicByPath(path, callback) {
 		$http.get(REST.TOPICS + '/' + path + REST.JSON_EXT)
 		.success(function(response) {
@@ -103,6 +115,7 @@ app.factory('TopicFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE
 
 	return {
 		createTopic: createTopic,
+		updateTopic: updateTopic,
 		getTopicByPath: getTopicByPath,
 		getUserTopics: getUserTopics,
 		getTopicsByValue: getTopicsByValue,

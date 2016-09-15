@@ -26,8 +26,7 @@
 	text-decoration: underline;
 }
 .post {
+	max-height: 300px;
+	overflow: auto;
 	text-align: justify;
-}
-.edit {
-	text-align: right;
 }

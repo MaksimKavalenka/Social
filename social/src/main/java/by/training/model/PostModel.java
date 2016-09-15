@@ -27,20 +27,17 @@ public class PostModel extends Model {
     @Temporal(TemporalType.TIMESTAMP)
     private Date              date;
 
-    @ManyToOne(targetEntity = UserModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.REFRESH, CascadeType.PERSIST}, optional = false)
+    @ManyToOne(targetEntity = UserModel.class, cascade = {CascadeType.DETACH}, optional = false)
     private UserModel         creator;
 
-    @ManyToOne(targetEntity = TopicModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.REFRESH, CascadeType.PERSIST}, optional = false)
+    @ManyToOne(targetEntity = TopicModel.class, cascade = {CascadeType.DETACH}, optional = false)
     private TopicModel        topic;
 
-    @ManyToOne(targetEntity = PostModel.class, cascade = {CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.REFRESH, CascadeType.PERSIST})
+    @ManyToOne(targetEntity = PostModel.class, cascade = {CascadeType.DETACH})
     private PostModel         parentPost;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "parentPost")
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.DETACH}, mappedBy = "parentPost")
     private Set<PostModel>    posts;
 
     public PostModel() {

@@ -1,19 +1,28 @@
-<div class="content ct-content" ng-repeat="post in ctrl.posts">
+<div class="content ct-content" ng-repeat="post in ctrl.posts" ng-controller="PostController as postCtrl">
 	<div class="justify">
 		<a class="link-topic" ui-sref="topic({path: post.topic.path})">{{post.topic.name}}</a>
-		<div>Created by {{post.creator.login}} ({{post.date | date: 'dd MMMM yyyy HH:mm:ss'}})</div>
-	</div>
-	<hr class="common">
-	<div ng-controller="PostEditController as postCtrl">
-		<div class="edit" ng-click="postCtrl.editionForm(post)" ng-show="(user.id === post.creator.id) && !postCtrl.form">Edit</div>
-		<div class="post" ng-show="!postCtrl.form">{{post.text}}</div>
-		<div class="form-validation" ng-show="postCtrl.form">
-			<textarea id="text" name="text" ng-model="postCtrl.post.text" required></textarea>
-			<div>
-				<button class="btn btn-primary" ng-click="postCtrl.updatePost(post.id)" ng-disabled="form.$invalid || postCtrl.dataLoading">Submit</button>
-				<button class="btn btn-danger" ng-click="postCtrl.hideForm()">Cancel</button>
-				<img ng-if="postCtrl.dataLoading" src="/social/img/load.gif"/>
+		<div class="align-right">
+			<div class="dropdown">
+				<div class="drp-button"></div>
+				<div class="drp-menu">
+					<a class="drp-option" ui-sref="#">Post page</a>
+					<div ng-show="user.id === post.creator.id">
+						<hr class="hr-dropdown">
+						<div class="drp-option" ng-click="postCtrl.editionForm(post)">Edit</div>
+					</div>
+				</div>
 			</div>
+			<div>Created by {{post.creator.login}} ({{post.date | date: 'dd MMMM yyyy HH:mm:ss'}})</div>
 		</div>
 	</div>
+	<hr class="hr-common">
+	<div class="post" ng-show="!postCtrl.form">{{post.text}}</div>
+	<form method="POST" ng-show="postCtrl.form" name="form" novalidate>
+		<textarea id="text" name="text" ng-model="postCtrl.post.text" required></textarea>
+		<div>
+			<button class="btn btn-primary" ng-click="postCtrl.updatePost(post.id)" ng-disabled="form.$invalid || postCtrl.dataLoading">Submit</button>
+			<button class="btn btn-danger" ng-click="postCtrl.hideForm()">Cancel</button>
+			<img ng-if="postCtrl.dataLoading" src="/social/img/load.gif"/>
+		</div>
+	</form>
 </div>

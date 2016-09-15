@@ -74,11 +74,4 @@ public class PostRestController extends by.training.controller.rest.RestControll
         return new ResponseEntity<List<PostModel>>(posts, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/get/{id}"
-            + JSON_EXT, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PostModel> get(@PathVariable("id") final long id) {
-        PostModel post = postDAO.getPostById(id);
-        return new ResponseEntity<PostModel>(post, HttpStatus.OK);
-    }
-
 }

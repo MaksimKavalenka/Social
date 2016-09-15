@@ -9,6 +9,9 @@ public interface TopicDAO {
     TopicModel createTopic(String name, String path, String description, boolean access,
             UserModel creator) throws ValidationException;
 
+    TopicModel updateTopic(long id, String name, String path, String description, boolean access)
+            throws ValidationException;
+
     TopicModel getTopicById(long id);
 
     TopicModel getTopicByPath(String path);
