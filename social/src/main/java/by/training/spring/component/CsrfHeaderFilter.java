@@ -1,4 +1,4 @@
-package by.training.spring.security;
+package by.training.spring.component;
 
 import java.io.IOException;
 

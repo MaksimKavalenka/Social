@@ -1,15 +1,25 @@
 'use strict';
 app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'CookieService', function($http, MESSAGE, REST, CookieService) {
 
-	function createUser(login, password, callback) {
-		$http.post(REST.USERS + '/create/' + login + '/' + password + REST.JSON_EXT)
+	function createUser(login, password, confirmPassword, callback) {
+		if (!login || !password || !confirmPassword) {
+			var response = {success: false, message: MESSAGE.FORM_ERROR};
+			callback(response);
+			return;
+		}
+		if (password !== confirmPassword) {
+			var response = {success: false, message: MESSAGE.PASSWORDS_ERROR};
+			callback(response);
+			return;
+		}
+		$http.post(REST.USERS + '/create/' + login + '/' + password + '/' + confirmPassword + REST.JSON_EXT)
 		.success(function(response) {
 			var data = {success: true, data: response};
 			callback(data);
 		})
-		.error(function() {
-			var response = {success: false, message: MESSAGE.CREATING_USER_ERROR};
-			callback(response);
+		.error(function(response) {
+			var data = {success: false, message: response.message};
+			callback(data);
 		});
 	}
 
@@ -33,8 +43,8 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'CookieService', functio
 				callback(response);
 			}
 		})
-		.error(function() {
-			var response = {success: false, message: MESSAGE.GETTING_USER_ERROR};
+		.error(function(response) {
+			response = {success: false, message: MESSAGE.GETTING_USER_ERROR};
 			callback(response);
 		});
 	}

@@ -1,5 +1,7 @@
 package by.training.utility;
 
+import static by.training.constants.CountElementsConstants.*;
+
 import by.training.constants.ModelStructureConstants.ModelFields;
 import by.training.constants.ModelStructureConstants.Models;
 import by.training.constants.ModelStructureConstants.NotificationFields;
@@ -12,6 +14,17 @@ import by.training.model.PostModel;
 import by.training.model.TopicModel;
 
 public abstract class CriteriaHelper {
+
+    public static <T extends Model> int getCountElements(final Class<T> clazz) {
+        if (clazz == NotificationModel.class) {
+            return NOTIFICATION_COUNT_ELEMENTS;
+        } else if (clazz == PostModel.class) {
+            return POST_COUNT_ELEMENTS;
+        } else if (clazz == TopicModel.class) {
+            return TOPIC_COUNT_ELEMENTS;
+        }
+        return 0;
+    }
 
     public static <T extends Model> String getSearchField(final Class<T> clazz,
             final String relation) {

@@ -1,5 +1,7 @@
 package by.training.controller.rest;
 
+import static by.training.constants.MessageConstants.PASSWORDS_ERROR;
+
 import java.security.Principal;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,24 +20,47 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import by.training.bean.ErrorMessage;
+import by.training.constants.RoleConstants;
+import by.training.database.dao.RoleDAO;
+import by.training.database.dao.UserDAO;
 import by.training.exception.ValidationException;
 import by.training.model.UserModel;
+import by.training.utility.Validator;
 
 @RestController
 @RequestMapping("/users")
 public class UserRestController extends by.training.controller.rest.RestController {
 
-    @RequestMapping(value = "/create/{login}/{password}"
-            + JSON_EXT, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> createUser(@PathVariable("login") final String login,
-            @PathVariable("password") final String password) {
+    private RoleDAO roleDAO;
+    private UserDAO userDAO;
+
+    public UserRestController(final RoleDAO roleDAO, final UserDAO userDAO) {
+        this.roleDAO = roleDAO;
+        this.userDAO = userDAO;
+    }
+
+    @RequestMapping(value = "/create/{login}/{password}/{confirmPassword}"
+            + JSON_EXT, method = RequestMethod.POST)
+    public ResponseEntity<Object> createUser(@PathVariable("login") final String login,
+            @PathVariable("password") final String password,
+            @PathVariable("confirmPassword") final String confirmPassword) {
         try {
+            Validator.allNotNull(login, password, confirmPassword);
+
+            if (!password.equals(confirmPassword)) {
+                return new ResponseEntity<Object>(new ErrorMessage(PASSWORDS_ERROR),
+                        HttpStatus.CONFLICT);
+            }
+
             Set<GrantedAuthority> roles = new HashSet<>();
-            roles.add(roleDAO.getRoleById(1));
+            roles.add(roleDAO.getRoleByName(RoleConstants.ROLE_USER.toString()));
             userDAO.createUser(login, password, roles);
-            return new ResponseEntity<Void>(HttpStatus.CREATED);
+            return new ResponseEntity<Object>(HttpStatus.CREATED);
+
         } catch (ValidationException e) {
-            return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+            return new ResponseEntity<Object>(new ErrorMessage(e.getMessage()),
+                    HttpStatus.CONFLICT);
         }
     }
 
@@ -58,8 +83,7 @@ public class UserRestController extends by.training.controller.rest.RestControll
         securityContextLogoutHandler.logout(rq, rs, null);
     }
 
-    @RequestMapping(value = "/check_login/{login}"
-            + JSON_EXT, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/check_login/{login}" + JSON_EXT, method = RequestMethod.POST)
     public ResponseEntity<Boolean> checkLogin(@PathVariable("login") final String login) {
         boolean exists = userDAO.checkLogin(login);
         return new ResponseEntity<Boolean>(exists, HttpStatus.OK);

@@ -2,31 +2,26 @@
 app.constant('CONTROLLER', (function() {
 	return {
 		CTRL: 'ctrl',
+		INFO_CONTROLLER: 'InfoController',
+		PAGINATION_CONTROLLER: 'PaginationController',
 		POST_CONTROLLER: 'PostController',
 		TOPIC_CONTROLLER: 'TopicController',
-		USER_EDIT_CONTROLLER: 'UserEditController'
+		USER_CONTROLLER: 'UserController'
 	}
 })());
 
 app.constant('MESSAGE', (function() {
-	var creatingError = 'Error while creating ';
-	var updatingError = 'Error while updating ';
 	var gettingError = 'Error while getting ';
 	return {
-		FORM_ERROR: 'Required fields must be filled',
 		AUTHENTICATION_ERROR: 'Login or password is wrong',
-		TAKEN_LOGIN_ERROR: 'This login is already taken',
-		TAKEN_PATH_ERROR: 'This path is already taken',
-		SAVING_FILE_ERROR: 'Error while saving file',
-		CREATING_POST_ERROR: creatingError + 'post',
-		CREATING_TOPIC_ERROR: creatingError + 'topic',
-		CREATING_USER_ERROR: creatingError + 'user',
-		UPDATING_POST_ERROR: updatingError + 'post',
-		UPDATING_TOPIC_ERROR: updatingError + 'topic',
-		UPDATING_USER_ERROR: updatingError + 'user',
+		FORM_ERROR: 'Required fields must be filled',
 		GETTING_POST_ERROR: gettingError + 'post',
 		GETTING_TOPIC_ERROR: gettingError + 'topic',
-		GETTING_USER_ERROR: gettingError + 'user'
+		GETTING_USER_ERROR: gettingError + 'user',
+		PASSWORDS_ERROR: 'Passwords do not match',
+		SAVING_FILE_ERROR: 'Error while saving file',
+		TAKEN_LOGIN_ERROR: 'This login is already taken',
+		TAKEN_PATH_ERROR: 'This path is already taken',
 	}
 })());
 
@@ -100,7 +95,7 @@ app.constant('URL', (function() {
 	var idKey = '{id:[0-9]{1,}}';
 	var pageKey = '{page:[0-9]{1,}}';
 	var pathKey = '{path:[a-z0-9._]{1,}}';
-	var valueKey = '{value:(.){1,}}';
+	var valueKey = '{value}';
 	return {
 		HOME: url + feedUrl + '?page=1',
 		LOGIN: url + '/login',

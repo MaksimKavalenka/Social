@@ -1,5 +1,6 @@
 'use strict';
 app.config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'CONTROLLER', 'PATH', 'STATE', 'TITLE', 'URL', function($locationProvider, $stateProvider, $urlRouterProvider, CONTROLLER, PATH, STATE, TITLE, URL) {
+
 	var footer = {
 		templateUrl: PATH.FOOTER
 	}
@@ -10,9 +11,12 @@ app.config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'CONTRO
 		templateUrl: PATH.WELCOME_HEADER
 	}
 	var search = {
-		controller: CONTROLLER.TOPIC_CONTROLLER,
-		controllerAs: CONTROLLER.CTRL,
 		templateUrl: PATH.SEARCH_TOOL
+	}
+	var pagination = {
+		controller: CONTROLLER.PAGINATION_CONTROLLER,
+		controllerAs: CONTROLLER.CTRL,
+		templateUrl: PATH.PAGINATION_TOOL
 	}
 
 	$locationProvider.html5Mode(true);
@@ -24,7 +28,7 @@ app.config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'CONTRO
 		views: {
 			header: welcomeHeader,
 			content: {
-				controller: CONTROLLER.USER_EDIT_CONTROLLER,
+				controller: CONTROLLER.USER_CONTROLLER,
 				controllerAs: CONTROLLER.CTRL,
 				templateUrl: PATH.LOGIN_FORM
 			}
@@ -37,7 +41,7 @@ app.config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'CONTRO
 		views: {
 			header: welcomeHeader,
 			content: {
-				controller: CONTROLLER.USER_EDIT_CONTROLLER,
+				controller: CONTROLLER.USER_CONTROLLER,
 				controllerAs: CONTROLLER.CTRL,
 				templateUrl: PATH.REGISTER_FORM
 			}
@@ -76,11 +80,7 @@ app.config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'CONTRO
 		},
 		views: {
 			header: header,
-			pagination: {
-				controller: CONTROLLER.POST_CONTROLLER,
-				controllerAs: CONTROLLER.CTRL,
-				templateUrl: PATH.PAGINATION_TOOL
-			},
+			pagination: pagination,
 			content: {
 				controller: CONTROLLER.POST_CONTROLLER,
 				controllerAs: CONTROLLER.CTRL,
@@ -99,11 +99,7 @@ app.config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'CONTRO
 		},
 		views: {
 			header: header,
-			pagination: {
-				controller: CONTROLLER.POST_CONTROLLER,
-				controllerAs: CONTROLLER.CTRL,
-				templateUrl: PATH.PAGINATION_TOOL
-			},
+			pagination: pagination,
 			info: {
 				controller: CONTROLLER.TOPIC_CONTROLLER,
 				controllerAs: CONTROLLER.CTRL,
@@ -125,13 +121,9 @@ app.config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'CONTRO
 		},
 		views: {
 			header: header,
-			pagination: {
-				controller: CONTROLLER.TOPIC_CONTROLLER,
-				controllerAs: CONTROLLER.CTRL,
-				templateUrl: PATH.PAGINATION_TOOL
-			},
+			pagination: pagination,
 			info: {
-				controller: CONTROLLER.TOPIC_CONTROLLER,
+				controller: CONTROLLER.INFO_CONTROLLER,
 				controllerAs: CONTROLLER.CTRL,
 				templateUrl: PATH.TOPICS_INFO
 			},
@@ -148,16 +140,12 @@ app.config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'CONTRO
 		url: URL.SEARCH,
 		params: {
 			page: '1',
-			value: ' '
+			value: null
 		},
 		views: {
 			header: header,
 			search: search,
-			pagination: {
-				controller: CONTROLLER.TOPIC_CONTROLLER,
-				controllerAs: CONTROLLER.CTRL,
-				templateUrl: PATH.PAGINATION_TOOL
-			},
+			pagination: pagination,
 			content: {
 				controller: CONTROLLER.TOPIC_CONTROLLER,
 				controllerAs: CONTROLLER.CTRL,
@@ -168,4 +156,5 @@ app.config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'CONTRO
 	});
 
 	$urlRouterProvider.otherwise(URL.HOME);
+
 }]);

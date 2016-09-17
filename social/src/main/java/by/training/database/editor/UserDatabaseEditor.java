@@ -1,6 +1,6 @@
 package by.training.database.editor;
 
-import static by.training.constants.ExceptionConstants.TAKEN_LOGIN_ERROR;
+import static by.training.constants.MessageConstants.TAKEN_LOGIN_ERROR;
 import static by.training.constants.ModelStructureConstants.UserFields;
 
 import java.security.NoSuchAlgorithmException;

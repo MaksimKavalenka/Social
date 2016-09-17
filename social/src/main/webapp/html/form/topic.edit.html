@@ -8,9 +8,9 @@
 		<div class="field">
 			<label class="required" for="path">Path</label>
 			<input type="text" id="path" name="path" maxlength="255" ng-model="ctrl.topic.path" ng-path-exist required/>
-			<span class="invalid" ng-show="form.path.$pending.ngPathExist && !ctrl.editValidatePath()">Checking if this path is available...</span>
+			<span class="invalid" ng-show="form.path.$pending.ngPathExist">Checking if this path is available...</span>
 			<span class="invalid" ng-show="form.path.$error.ngPathExist && !ctrl.editValidatePath()">This path is already taken</span>
-			<span class="valid" ng-show="ctrl.editValidatePath()">This is current path</span>
+			<span class="valid" ng-show="!form.path.$pending.ngPathExist && ctrl.editValidatePath()">This is current path</span>
 		</div>
 		<div class="field">
 			<label class="required" for="description">Description</label>

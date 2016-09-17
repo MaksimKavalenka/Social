@@ -15,4 +15,12 @@ public interface RelationDAO {
 
     List<TopicModel> getTopicsByValue(String value, long userId, int page);
 
+    <T extends Model> long getElementsByCriteriaCount(Class<T> clazz, String relation, long id);
+
+    <T extends Model> long getElementsByCriteriaPageCount(Class<T> clazz, String relation, long id);
+
+    long getFeedPostsPageCount(long userId);
+
+    long getTopicsByValuePageCount(String value, long userId);
+
 }

@@ -1,4 +1,4 @@
-<div class="content ct-content" ng-repeat="post in ctrl.posts" ng-controller="PostController as postCtrl">
+<div class="content ct-content" ng-repeat="post in ctrl.posts" ng-controller="PostEditController as postCtrl">
 	<div class="justify">
 		<a class="link-topic" ui-sref="topic({path: post.topic.path})">{{post.topic.name}}</a>
 		<div class="align-right">

@@ -1,6 +1,6 @@
 package by.training.database.editor;
 
-import static by.training.constants.ExceptionConstants.TAKEN_PATH_ERROR;
+import static by.training.constants.MessageConstants.TAKEN_PATH_ERROR;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -42,8 +42,8 @@ public class TopicDatabaseEditor extends DatabaseEditor implements TopicDAO {
     @Transactional(rollbackFor = ValidationException.class)
     public TopicModel updateTopic(final long id, final String name, final String path,
             final String description, final boolean access) throws ValidationException {
-        if (!checkPath(path)) {
-            TopicModel topic = getTopicById(id);
+        TopicModel topic = getTopicById(id);
+        if (!checkPath(path) || topic.getPath().equals(path)) {
             topic.setName(name);
             topic.setPath(path);
             topic.setDescription(description);

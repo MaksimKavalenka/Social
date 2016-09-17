@@ -1,5 +1,5 @@
 'use strict';
-app.controller('UserEditController', ['$rootScope', '$state', 'STATE', 'UserFactory', 'CookieService', 'FlashService', function($rootScope, $state, STATE, UserFactory, CookieService, FlashService) {
+app.controller('UserController', ['$rootScope', '$state', 'STATE', 'UserFactory', 'CookieService', 'FlashService', function($rootScope, $state, STATE, UserFactory, CookieService, FlashService) {
 
 	var self = this;
 
