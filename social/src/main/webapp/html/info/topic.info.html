@@ -1,4 +1,5 @@
 <div class="content ct-title" ng-controller="PostEditController as postCtrl">
+	<modal handler="invite" modal-body="body" modal-footer="footer" modal-header="header" data-ng-click-right-button="myRightButton()"></modal>
 	<div class="justify">
 		<div>
 			<div class="topic">{{ctrl.topic.name}}</div>
@@ -17,7 +18,7 @@
 					</div>
 					<div ng-show="user.id === ctrl.topic.creator.id">
 						<a class="drp-option" ui-sref="topic_edit({path: ctrl.topic.path})">Edit topic</a>
-						<a class="drp-option" ui-sref="#">Invite</a>
+						<a class="drp-option" ng-href="#{{invite}}" ng-click="init(ctrl.topic.creator.id)" data-toggle="modal">Invite</a>
 					</div>
 				</div>
 			</div>

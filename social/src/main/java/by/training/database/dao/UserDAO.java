@@ -1,5 +1,6 @@
 package by.training.database.dao;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -15,6 +16,8 @@ public interface UserDAO {
     UserModel getUserById(long id);
 
     UserModel getUserByLogin(String login);
+
+    List<UserModel> getAllUsers();
 
     boolean checkLogin(String login);
 

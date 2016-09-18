@@ -4,6 +4,7 @@ import static by.training.constants.MessageConstants.PASSWORDS_ERROR;
 
 import java.security.Principal;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -81,6 +82,15 @@ public class UserRestController extends by.training.controller.rest.RestControll
     public void logout(final HttpServletRequest rq, final HttpServletResponse rs) {
         SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
         securityContextLogoutHandler.logout(rq, rs, null);
+    }
+
+    @RequestMapping(value = "/all" + JSON_EXT, method = RequestMethod.POST)
+    public ResponseEntity<List<UserModel>> getAllArtists() {
+        List<UserModel> users = userDAO.getAllUsers();
+        if (users == null) {
+            return new ResponseEntity<List<UserModel>>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<List<UserModel>>(users, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/check_login/{login}" + JSON_EXT, method = RequestMethod.POST)

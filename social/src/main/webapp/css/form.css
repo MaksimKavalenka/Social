@@ -8,13 +8,14 @@ textarea {
 }
 .form-search {
 	margin: 10px 0;
+	position: relative;
 }
 .form-search * {
 	display: inline;
 }
 .form-search .input-search {
 	padding: 9px;
-	width: 914px;
+	width: 100%;
 }
 .form-submit {
 	margin: 50px 0;

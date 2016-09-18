@@ -59,7 +59,8 @@ public class PostRestController extends by.training.controller.rest.RestControll
                 PostModel post = postDAO.createPost(text, user, topic, parentPost);
                 return new ResponseEntity<Object>(post, HttpStatus.CREATED);
             }
-            throw new ValidationException(PERMISSIONS_ERROR);
+            return new ResponseEntity<Object>(new ErrorMessage(PERMISSIONS_ERROR),
+                    HttpStatus.CONFLICT);
 
         } catch (ValidationException e) {
             return new ResponseEntity<Object>(new ErrorMessage(e.getMessage()),
@@ -77,7 +78,8 @@ public class PostRestController extends by.training.controller.rest.RestControll
                 PostModel post = postDAO.updatePost(id, text);
                 return new ResponseEntity<Object>(post, HttpStatus.CREATED);
             }
-            throw new ValidationException(PERMISSIONS_ERROR);
+            return new ResponseEntity<Object>(new ErrorMessage(PERMISSIONS_ERROR),
+                    HttpStatus.CONFLICT);
 
         } catch (ValidationException e) {
             return new ResponseEntity<Object>(new ErrorMessage(e.getMessage()),

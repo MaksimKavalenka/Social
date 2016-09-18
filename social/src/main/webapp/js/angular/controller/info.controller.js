@@ -10,7 +10,7 @@ app.controller('InfoController', ['$state', 'STATE', 'TopicFactory', 'FlashServi
 				getUserTopicsCount();
 				break;
 		}
-	};
+	}
 
 	function getUserTopicsCount() {
 		TopicFactory.getUserTopicsCount(function(response) {
@@ -20,7 +20,7 @@ app.controller('InfoController', ['$state', 'STATE', 'TopicFactory', 'FlashServi
 				FlashService.error(response.message);
 			}
 		});
-	};
+	}
 
 	init($state.current.name);
 

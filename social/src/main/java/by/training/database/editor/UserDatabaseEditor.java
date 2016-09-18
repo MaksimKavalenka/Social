@@ -4,13 +4,17 @@ import static by.training.constants.MessageConstants.TAKEN_LOGIN_ERROR;
 import static by.training.constants.ModelStructureConstants.UserFields;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Set;
 
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.transaction.annotation.Transactional;
 
+import by.training.constants.ModelStructureConstants;
 import by.training.database.dao.UserDAO;
 import by.training.exception.ValidationException;
 import by.training.model.UserModel;
@@ -54,6 +58,15 @@ public class UserDatabaseEditor extends DatabaseEditor implements UserDAO {
     @Transactional
     public UserModel getUserByLogin(final String login) {
         return getUniqueResultByCriteria(UserModel.class, Restrictions.eq(UserFields.LOGIN, login));
+    }
+
+    @Override
+    @Transactional
+    @SuppressWarnings("unchecked")
+    public List<UserModel> getAllUsers() {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserModel.class);
+        criteria.addOrder(Order.asc(ModelStructureConstants.UserFields.LOGIN));
+        return criteria.list();
     }
 
     @Override

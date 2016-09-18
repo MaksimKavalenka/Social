@@ -5,7 +5,7 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 	self.topic = {};
 	self.topics = [];
 	self.member = false;
-	self.currentPath = "";
+	var currentPath = "";
 
 	self.editTopic = function() {
 		switch ($state.current.name) {
@@ -19,27 +19,31 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 	};
 
 	self.joinTopic = function() {
-		TopicFactory.joinTopic($state.params.path, function(response) {
-			if (response.success) {
-				self.member = true;
-			} else {
-				FlashService.error(response.message);
-			}
-		});
+		if (self.topic.access && !self.member) {
+			TopicFactory.joinTopic($state.params.path, function(response) {
+				if (response.success) {
+					self.member = true;
+				} else {
+					FlashService.error(response.message);
+				}
+			});
+		}
 	};
 
 	self.leaveTopic = function() {
-		TopicFactory.leaveTopic($state.params.path, function(response) {
-			if (response.success) {
-				self.member = false;
-			} else {
-				FlashService.error(response.message);
-			}
-		});
+		if (self.member) {
+			TopicFactory.leaveTopic($state.params.path, function(response) {
+				if (response.success) {
+					self.member = false;
+				} else {
+					FlashService.error(response.message);
+				}
+			});
+		}
 	};
 
 	self.editValidatePath = function() {
-		var flag = ($state.current.name === STATE.TOPIC_EDIT) && (self.currentPath === document.getElementById("path").value);
+		var flag = ($state.current.name === STATE.TOPIC_EDIT) && (currentPath === document.getElementById("path").value);
 		if (flag) {
 			document.getElementById("path").className = "ng-valid";
 		}
@@ -54,7 +58,7 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 		switch (state) {
 			case STATE.TOPIC_EDIT:
 				var path = $state.params.path;
-				self.currentPath = path;
+				currentPath = path;
 				getTopicByPath(path);
 				break;
 			case STATE.TOPIC:
@@ -73,7 +77,7 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 				getTopicsByValue(value, page);
 				break;
 		}
-	};
+	}
 
 	function createTopic() {
 		self.dataLoading = true;
@@ -85,7 +89,7 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 			}
 			self.dataLoading = false;
 		});
-	};
+	}
 
 	function updateTopic() {
 		self.dataLoading = true;
@@ -97,7 +101,7 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 			}
 			self.dataLoading = false;
 		});
-	};
+	}
 
 	function getTopicByPath(path) {
 		TopicFactory.getTopicByPath(path, function(response) {
@@ -107,7 +111,7 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 				FlashService.error(response.message);
 			}
 		});
-	};
+	}
 
 	function getUserTopics(page) {
 		TopicFactory.getUserTopics(page, function(response) {
@@ -117,7 +121,7 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 				FlashService.error(response.message);
 			}
 		});
-	};
+	}
 
 	function getTopicsByValue(value, page) {
 		TopicFactory.getTopicsByValue(value, page, function(response) {
@@ -127,7 +131,7 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 				FlashService.error(response.message);
 			}
 		});
-	};
+	}
 
 	function checkMember(path) {
 		TopicFactory.checkMember(path, function(response) {
@@ -137,7 +141,7 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 				FlashService.error(response.message);
 			}
 		});
-	};
+	}
 
 	init($state.current.name);
 

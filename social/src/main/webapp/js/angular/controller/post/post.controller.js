@@ -16,7 +16,7 @@ app.controller('PostController', ['$state', 'STATE', 'PostFactory', 'FlashServic
 				getTopicPosts(path, page);
 				break;
 		}
-	};
+	}
 
 	function getTopicPosts(path, page) {
 		PostFactory.getTopicPosts(path, page, function(response) {
@@ -26,7 +26,7 @@ app.controller('PostController', ['$state', 'STATE', 'PostFactory', 'FlashServic
 				FlashService.error(response.message);
 			}
 		});
-	};
+	}
 
 	function getFeedPosts(page) {
 		PostFactory.getFeedPosts(page, function(response) {
@@ -36,7 +36,7 @@ app.controller('PostController', ['$state', 'STATE', 'PostFactory', 'FlashServic
 				FlashService.error(response.message);
 			}
 		});
-	};
+	}
 
 	init($state.current.name);
 

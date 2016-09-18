@@ -1,2 +1,2 @@
 'use strict';
-var app = angular.module('app.social', ['ngCookies', 'ui.router']);
+var app = angular.module('app.social', ['localytics.directives', 'ngCookies', 'ui.router']);

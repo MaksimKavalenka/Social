@@ -27,7 +27,7 @@ app.controller('PaginationController', ['$rootScope', '$state', 'STATE', 'PostFa
 				}
 				break;
 		}
-	};
+	}
 
 	function setPages(state, page, amount) {
 		$rootScope.pages = [];

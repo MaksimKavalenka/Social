@@ -81,7 +81,7 @@ public class TopicRestController extends by.training.controller.rest.RestControl
     }
 
     @RequestMapping(value = "/" + PATH_KEY + JSON_EXT, method = RequestMethod.GET)
-    public ResponseEntity<TopicModel> getTopicByUrlName(@PathVariable("path") final String path) {
+    public ResponseEntity<TopicModel> getTopicByPath(@PathVariable("path") final String path) {
         TopicModel topic = topicDAO.getTopicByPath(path);
         if (topic == null) {
             return new ResponseEntity<TopicModel>(HttpStatus.NO_CONTENT);
@@ -137,7 +137,7 @@ public class TopicRestController extends by.training.controller.rest.RestControl
     public ResponseEntity<Void> joinTopic(@PathVariable("path") final String path) {
         TopicModel topic = topicDAO.getTopicByPath(path);
         UserModel user = getLoggedUser();
-        if (topic.isAccess() || notificationDAO.isInvited(topic.getId(), user.getId())) {
+        if (topic.isAccess() || notificationDAO.isInvited(topic, user)) {
             topicDAO.joinTopic(topic, user);
         }
         return new ResponseEntity<Void>(HttpStatus.OK);

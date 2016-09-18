@@ -15,6 +15,7 @@ app.constant('MESSAGE', (function() {
 	return {
 		AUTHENTICATION_ERROR: 'Login or password is wrong',
 		FORM_ERROR: 'Required fields must be filled',
+		GETTING_NOTIFICATION_ERROR: gettingError + 'notification',
 		GETTING_POST_ERROR: gettingError + 'post',
 		GETTING_TOPIC_ERROR: gettingError + 'topic',
 		GETTING_USER_ERROR: gettingError + 'user',
@@ -36,6 +37,7 @@ app.constant('PATH', (function() {
 	return {
 		POST_CONTENT: contentPath + '/post' + htmlExt,
 		TOPIC_CONTENT: contentPath + '/topic' + htmlExt,
+		INVITE_FORM: formPath + '/invite' + htmlExt,
 		LOGIN_FORM: formPath + '/login' + htmlExt,
 		REGISTER_FORM: formPath + '/register' + htmlExt,
 		TOPIC_EDIT_FORM: formPath + '/topic.edit' + htmlExt,
@@ -53,6 +55,7 @@ app.constant('REST', (function() {
 	var url = '/social';
 	return {
 		JSON_EXT: '.json',
+		NOTIFICATIONS: url + '/notifications',
 		POSTS: url + '/posts',
 		TOPICS: url + '/topics',
 		USERS: url + '/users'

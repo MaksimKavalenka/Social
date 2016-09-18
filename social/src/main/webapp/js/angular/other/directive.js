@@ -69,20 +69,6 @@ app.directive(ngMatch, function() {
 	};
 });
 
-app.directive(fileRequired, function() {
-	return {
-		require: ngModel,
-		link: function(scope, element, attributes, controller) {
-			element.bind('change', function() {
-				scope.$apply(function() {
-					controller.$setViewValue(element.val());
-					controller.$render();
-				});
-			});
-		}
-	}
-});
-
 app.directive(fileModel, ['$parse', function($parse) {
 	return {
 		restrict: 'A',
@@ -94,6 +80,26 @@ app.directive(fileModel, ['$parse', function($parse) {
 					modelSetter(scope, element[0].files[0]);
 				});
 			});
+		}
+	};
+}]);
+
+app.directive('modal', ['PATH', function(PATH) {
+	return {
+		restrict: 'EA',
+		scope: {
+			title: '=modalTitle',
+			header: '=modalHeader',
+			body: '=modalBody',
+			footer: '=modalFooter',
+			callbackbuttonleft: '&ngClickLeftButton',
+			callbackbuttonright: '&ngClickRightButton',
+			handler: '=handler'
+		},
+		templateUrl: PATH.INVITE_FORM,
+		transclude: true,
+		controller: function($scope) {
+			$scope.handler = 'invite'; 
 		}
 	};
 }]);

@@ -47,8 +47,7 @@ public class UserModel extends Model implements UserDetails {
     private Set<GrantedAuthority>  roles;
 
     @JsonIgnore
-    @OneToMany(cascade = {CascadeType.REMOVE,
-            CascadeType.DETACH}, fetch = FetchType.EAGER, mappedBy = "user")
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.DETACH}, mappedBy = "user")
     private Set<NotificationModel> notifications;
 
     @JsonIgnore

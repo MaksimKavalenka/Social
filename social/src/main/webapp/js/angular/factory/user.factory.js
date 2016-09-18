@@ -68,6 +68,18 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'CookieService', functio
 		$http.post(REST.USERS + '/logout' + REST.JSON_EXT, {});
 	}
 
+	function getAllUsers(callback) {
+		$http.post(REST.USERS + '/all' + REST.JSON_EXT)
+		.success(function(response) {
+			var data = {success: true, data:response};
+			callback(data);
+		})
+		.error(function() {
+			var response = {success: false, message: MESSAGE.GETTING_USER_ERROR};
+			callback(response);
+		});
+	}
+
 	function checkLogin(login, callback) {
 		$http.post(REST.USERS + '/check_login/' + login + REST.JSON_EXT)
 		.success(function(response) {
@@ -89,6 +101,7 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'CookieService', functio
 		authentication: authentication,
 		getUser: getUser,
 		logout: logout,
+		getAllUsers: getAllUsers,
 		checkLogin: checkLogin
 	};
 
