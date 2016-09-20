@@ -29,14 +29,14 @@ import by.training.utility.Validator;
 public class TopicRestController extends by.training.controller.rest.RestController {
 
     private NotificationDAO notificationDAO;
-    private TopicDAO        topicDAO;
     private RelationDAO     relationDAO;
+    private TopicDAO        topicDAO;
 
-    public TopicRestController(final NotificationDAO notificationDAO, final TopicDAO topicDAO,
-            final RelationDAO relationDAO) {
+    public TopicRestController(final NotificationDAO notificationDAO, final RelationDAO relationDAO,
+            final TopicDAO topicDAO) {
         this.notificationDAO = notificationDAO;
-        this.topicDAO = topicDAO;
         this.relationDAO = relationDAO;
+        this.topicDAO = topicDAO;
     }
 
     @RequestMapping(value = "/create/{name}/" + PATH_KEY + "/{description}/{access}"

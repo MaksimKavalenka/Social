@@ -13,10 +13,10 @@
 			<span class="invalid" ng-show="form.password.$error.required || form.password.$error.minlength">Minimal count of symbols is 3</span>
 		</div>
 		<div class="field">
-			<label class="required" for="confirm_password">Confirm password</label>
-			<input type="password" id="confirm_password" name="confirm_password" maxlength="255" ng-model="user.confirm_password" ng-match="ctrl.user.password" ng-minlength="3" required/>
-			<span class="invalid" ng-show="form.confirm_password.$error.required || form.confirm_password.$error.minlength">Minimal count of symbols is 3</span>
-			<span class="invalid" ng-show="form.confirm_password.$error.ngMatch && !form.confirm_password.$error.required && !form.confirm_password.$error.minlength">Passwords do not match</span>
+			<label class="required" for="confirmPassword">Confirm password</label>
+			<input type="password" id="confirmPassword" name="confirmPassword" maxlength="255" ng-model="ctrl.user.confirmPassword" ng-match="ctrl.user.password" ng-minlength="3" required/>
+			<span class="invalid" ng-show="form.confirmPassword.$error.required || form.confirmPassword.$error.minlength">Minimal count of symbols is 3</span>
+			<span class="invalid" ng-show="form.confirmPassword.$error.ngMatch && !form.confirmPassword.$error.required && !form.confirmPassword.$error.minlength">Passwords do not match</span>
 		</div>
 		<div class="field simple">
 			<label for="remember">Remember</label>

@@ -11,7 +11,6 @@ body.modal-open,
 	display: none;
 	left: 0;
 	overflow: auto;
-	overflow-y: scroll;
 	position: fixed;
 	right: 0;
 	top: 0;
@@ -66,7 +65,7 @@ body.modal-open,
 	opacity: 0.5;
 }
 .modal-header {
-	border-bottom: 1px solid #e5e5e5;
+	border-bottom: 1px solid #cccccc;
 	min-height: 16.428571429px;
 	padding: 15px;
 }
@@ -78,8 +77,21 @@ body.modal-open,
 	margin: 0;
 }
 .modal-body {
-	padding: 20px;
+	padding: 10px 20px;
+}
+.modal-list {
 	position: relative;
+}
+.modal-list .modal-element {
+	border: 1px solid #292929;
+	margin: 5px 0;
+	padding: 15px;
+}
+.modal-list .modal-action {
+	height: 100%;
+	position: absolute;
+	right: 0;
+	top: 0;
 }
 .modal-footer {
 	border-top: 1px solid #cccccc;

@@ -12,7 +12,8 @@
 					</div>
 				</div>
 			</div>
-			<div>Created by {{post.creator.login}} ({{post.date | date: 'dd MMMM yyyy HH:mm:ss'}})</div>
+			<div>Created by {{post.creator.login}}</div>
+			<div>{{post.date | date: 'dd.MM.yyyy (HH:mm:ss)'}}</div>
 		</div>
 	</div>
 	<hr class="hr-common">
@@ -20,7 +21,7 @@
 	<form method="POST" ng-show="postCtrl.form" name="form" novalidate>
 		<textarea id="text" name="text" ng-model="postCtrl.post.text" required></textarea>
 		<div>
-			<button class="btn btn-primary" ng-click="postCtrl.updatePost(post.id)" ng-disabled="form.$invalid || postCtrl.dataLoading">Submit</button>
+			<button class="btn btn-success" ng-click="postCtrl.updatePost(post.id)" ng-disabled="form.$invalid || postCtrl.dataLoading">Post</button>
 			<button class="btn btn-danger" ng-click="postCtrl.hideForm()">Cancel</button>
 			<img ng-if="postCtrl.dataLoading" src="/social/img/load.gif"/>
 		</div>

@@ -13,11 +13,8 @@ import by.training.model.UserModel;
 
 public class NotificationDatabaseEditor extends DatabaseEditor implements NotificationDAO {
 
-    public NotificationDatabaseEditor() {
-    }
-
     public NotificationDatabaseEditor(final SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+        super(sessionFactory);
     }
 
     @Override
@@ -25,8 +22,22 @@ public class NotificationDatabaseEditor extends DatabaseEditor implements Notifi
     public NotificationModel createNotification(final UserModel user, final UserModel inviter,
             final TopicModel topic) {
         NotificationModel notification = new NotificationModel(user, inviter, topic);
-        sessionFactory.getCurrentSession().save(notification);
+        getSessionFactory().getCurrentSession().save(notification);
         return notification;
+    }
+
+    @Override
+    @Transactional
+    public void deleteNotification(final long id) {
+        NotificationModel notification = getNotificationById(id);
+        getSessionFactory().getCurrentSession().delete(notification);
+    }
+
+    @Override
+    @Transactional
+    public NotificationModel getNotificationById(final long id) {
+        return (NotificationModel) getSessionFactory().getCurrentSession()
+                .get(NotificationModel.class, id);
     }
 
     @Override

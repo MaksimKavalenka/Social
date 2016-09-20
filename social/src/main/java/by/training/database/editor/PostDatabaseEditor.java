@@ -10,10 +10,6 @@ import by.training.model.UserModel;
 
 public class PostDatabaseEditor extends DatabaseEditor implements PostDAO {
 
-    public PostDatabaseEditor() {
-        super();
-    }
-
     public PostDatabaseEditor(final SessionFactory sessionFactory) {
         super(sessionFactory);
     }
@@ -23,7 +19,7 @@ public class PostDatabaseEditor extends DatabaseEditor implements PostDAO {
     public PostModel createPost(final String text, final UserModel creator, final TopicModel topic,
             final PostModel parentPost) {
         PostModel post = new PostModel(text, creator, topic, parentPost);
-        sessionFactory.getCurrentSession().save(post);
+        getSessionFactory().getCurrentSession().save(post);
         return post;
     }
 
@@ -32,14 +28,14 @@ public class PostDatabaseEditor extends DatabaseEditor implements PostDAO {
     public PostModel updatePost(final long id, final String text) {
         PostModel post = getPostById(id);
         post.setText(text);
-        sessionFactory.getCurrentSession().update(post);
+        getSessionFactory().getCurrentSession().update(post);
         return post;
     }
 
     @Override
     @Transactional
     public PostModel getPostById(final long id) {
-        return (PostModel) sessionFactory.getCurrentSession().get(PostModel.class, id);
+        return (PostModel) getSessionFactory().getCurrentSession().get(PostModel.class, id);
     }
 
 }

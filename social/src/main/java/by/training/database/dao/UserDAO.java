@@ -17,7 +17,7 @@ public interface UserDAO {
 
     UserModel getUserByLogin(String login);
 
-    List<UserModel> getAllUsers();
+    List<UserModel> getUsersForInvitation(String topicPath);
 
     boolean checkLogin(String login);
 

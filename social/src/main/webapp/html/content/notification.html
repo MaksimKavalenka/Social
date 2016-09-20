@@ -1,0 +1,11 @@
+<div class="content ct-content" ng-repeat="notification in ctrl.notifications">
+	<div class="justify">
+		<a class="link-topic" ui-sref="topic({path: notification.topic.path})">{{notification.topic.name}}</a>
+		<div class="align-right">
+			<div>Invited by {{notification.inviter.login}}</div>
+			<div>{{notification.date | date: 'dd.MM.yyyy (HH:mm:ss)'}}</div>
+			<button class="btn btn-success" ng-controller="TopicController as tpcCtrl" ng-click="tpcCtrl.joinTopic(notification.topic.path); ctrl.deleteNotification(notification.id)">Accept</button>
+			<button class="btn btn-danger" ng-click="ctrl.deleteNotification(notification.id)">Decline</button>
+		</div>
+	</div>
+</div>

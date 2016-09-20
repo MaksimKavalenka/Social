@@ -8,6 +8,10 @@ public interface NotificationDAO {
 
     NotificationModel createNotification(UserModel user, UserModel inviter, TopicModel topic);
 
+    void deleteNotification(long id);
+
+    NotificationModel getNotificationById(long id);
+
     boolean isInvited(TopicModel topic, UserModel user);
 
 }

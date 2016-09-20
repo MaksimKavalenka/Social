@@ -3,6 +3,7 @@ app.constant('CONTROLLER', (function() {
 	return {
 		CTRL: 'ctrl',
 		INFO_CONTROLLER: 'InfoController',
+		NOTIFICATION_CONTROLLER: 'NotificationController',
 		PAGINATION_CONTROLLER: 'PaginationController',
 		POST_CONTROLLER: 'PostController',
 		TOPIC_CONTROLLER: 'TopicController',
@@ -11,10 +12,12 @@ app.constant('CONTROLLER', (function() {
 })());
 
 app.constant('MESSAGE', (function() {
+	var deletingError = 'Error while deleting ';
 	var gettingError = 'Error while getting ';
 	return {
 		AUTHENTICATION_ERROR: 'Login or password is wrong',
 		FORM_ERROR: 'Required fields must be filled',
+		DELETING_NOTIFICATION_ERROR: deletingError + 'notification',
 		GETTING_NOTIFICATION_ERROR: gettingError + 'notification',
 		GETTING_POST_ERROR: gettingError + 'post',
 		GETTING_TOPIC_ERROR: gettingError + 'topic',
@@ -22,7 +25,7 @@ app.constant('MESSAGE', (function() {
 		PASSWORDS_ERROR: 'Passwords do not match',
 		SAVING_FILE_ERROR: 'Error while saving file',
 		TAKEN_LOGIN_ERROR: 'This login is already taken',
-		TAKEN_PATH_ERROR: 'This path is already taken',
+		TAKEN_PATH_ERROR: 'This path is already taken'
 	}
 })());
 
@@ -35,6 +38,7 @@ app.constant('PATH', (function() {
 	var toolPath = path + '/tool';
 	var htmlExt = '.html';
 	return {
+		NOTIFICATION_CONTENT: contentPath + '/notification' + htmlExt,
 		POST_CONTENT: contentPath + '/post' + htmlExt,
 		TOPIC_CONTENT: contentPath + '/topic' + htmlExt,
 		INVITE_FORM: formPath + '/invite' + htmlExt,
@@ -74,6 +78,7 @@ app.constant('STATE', (function() {
 		FEED: 'feed',
 		TOPIC: topic,
 		TOPICS: 'topics',
+		NOTIFICATIONS: 'notifications',
 		SEARCH: 'search',
 	}
 })());
@@ -82,15 +87,21 @@ app.constant('TITLE', (function() {
 	return {
 		LOGIN: 'Login',
 		REGISTER: 'Register',
+		TOPIC_ADD: 'Create topic',
 		FEED: 'Feed',
 		TOPICS: 'Topics',
+		NOTIFICATIONS: 'Notifications',
 		SEARCH: 'Search'
 	}
 })());
 
 app.constant('URL', (function() {
 	var url = '/social';
+	var loginUrl = '/login';
+	var registerUrl = '/register';
 	var feedUrl = '/feed';
+	var notificationsUrl = '/notifications';
+	var searchUrl = '/search';
 	var topicUrl = '/topic';
 	var topicsUrl = '/topics';
 	var addOperation = '/add';
@@ -101,13 +112,14 @@ app.constant('URL', (function() {
 	var valueKey = '{value}';
 	return {
 		HOME: url + feedUrl + '?page=1',
-		LOGIN: url + '/login',
-		REGISTER: url + '/register',
+		LOGIN: url + loginUrl,
+		REGISTER: url + registerUrl,
 		TOPIC_ADD: url + topicUrl + addOperation,
 		TOPIC_EDIT: url + topicUrl + '/' + pathKey + editOperation,
 		FEED: url + feedUrl + '?' + pageKey,
 		TOPIC: url + topicUrl + '/' + pathKey + '?' + pageKey,
 		TOPICS: url + topicsUrl + '?' + pageKey,
-		SEARCH: url + '/search' + '?' + valueKey + '&' + pageKey
+		NOTIFICATIONS: url + notificationsUrl + '?' + pageKey,
+		SEARCH: url + searchUrl + '?' + valueKey + '&' + pageKey
 	}
 })());

@@ -14,10 +14,6 @@ import by.training.model.UserModel;
 
 public class TopicDatabaseEditor extends DatabaseEditor implements TopicDAO {
 
-    public TopicDatabaseEditor() {
-        super();
-    }
-
     public TopicDatabaseEditor(final SessionFactory sessionFactory) {
         super(sessionFactory);
     }
@@ -31,7 +27,7 @@ public class TopicDatabaseEditor extends DatabaseEditor implements TopicDAO {
             if (path == null) {
                 topic.setPath(String.valueOf(topic.getId()));
             }
-            sessionFactory.getCurrentSession().save(topic);
+            getSessionFactory().getCurrentSession().save(topic);
             return topic;
         } else {
             throw new ValidationException(TAKEN_PATH_ERROR);
@@ -51,7 +47,7 @@ public class TopicDatabaseEditor extends DatabaseEditor implements TopicDAO {
             if (path == null) {
                 topic.setPath(String.valueOf(topic.getId()));
             }
-            sessionFactory.getCurrentSession().update(topic);
+            getSessionFactory().getCurrentSession().update(topic);
             return topic;
         } else {
             throw new ValidationException(TAKEN_PATH_ERROR);
@@ -61,7 +57,7 @@ public class TopicDatabaseEditor extends DatabaseEditor implements TopicDAO {
     @Override
     @Transactional
     public TopicModel getTopicById(final long id) {
-        return (TopicModel) sessionFactory.getCurrentSession().get(TopicModel.class, id);
+        return (TopicModel) getSessionFactory().getCurrentSession().get(TopicModel.class, id);
     }
 
     @Override
@@ -74,14 +70,14 @@ public class TopicDatabaseEditor extends DatabaseEditor implements TopicDAO {
     @Transactional
     public void joinTopic(final TopicModel topic, final UserModel user) {
         topic.getUsers().add(user);
-        sessionFactory.getCurrentSession().update(topic);
+        getSessionFactory().getCurrentSession().update(topic);
     }
 
     @Override
     @Transactional
     public void leaveTopic(final TopicModel topic, final UserModel user) {
         topic.getUsers().remove(user);
-        sessionFactory.getCurrentSession().update(topic);
+        getSessionFactory().getCurrentSession().update(topic);
     }
 
     @Override

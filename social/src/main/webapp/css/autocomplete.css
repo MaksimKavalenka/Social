@@ -1,0 +1,27 @@
+.ac-container .ac-menu {
+	left: 50%;
+	margin-left: -284px;
+	padding: 0;
+	position: fixed;
+	top: 77px;
+	width: 91.7%;
+	z-index: 2;
+}
+.ac-container .ac-menu .ac-user {
+	background: #ffffff;
+	border: 1px solid #cccccc;
+	color: #000000;
+	display: block;
+	margin-top: -1px;
+	padding: 9px 15px;
+	text-decoration: none;
+	vertical-align: middle;
+}
+.ac-container .ac-menu .ac-user:hover {
+	background: #292929;
+	color: #ffffff;
+}
+.ac-highlight {
+	font-weight: 600;
+	text-decoration: underline;
+}

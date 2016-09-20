@@ -11,6 +11,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "notification")
 public class NotificationModel extends Model {
@@ -21,6 +23,7 @@ public class NotificationModel extends Model {
     @Temporal(TemporalType.TIMESTAMP)
     private Date              date;
 
+    @JsonIgnore
     @ManyToOne(targetEntity = UserModel.class, cascade = {
             CascadeType.DETACH}, fetch = FetchType.LAZY, optional = false)
     private UserModel         user;
@@ -78,8 +81,8 @@ public class NotificationModel extends Model {
 
     @Override
     public String toString() {
-        return "Notification [id=" + super.getId() + ", date=" + date + ", user=" + user
-                + ", inviter=" + inviter + ", topic=" + topic + "]";
+        return "Notification [id=" + super.getId() + ", date=" + date + ", inviter=" + inviter
+                + ", topic=" + topic + "]";
     }
 
 }

@@ -1,12 +1,22 @@
 <div id="{{handler}}" class="modal fade">
 	<div class="modal-dialog">
-		<div class="modal-content">
+		<div class="modal-content" ng-controller="AutocompleteController">
+			<div class="modal-header">
+				<form class="form-search" id="search" role="search">
+					<div mass-autocomplete>
+						<input type="text" class="input-search form-control ng-isolate-scope ng-valid ng-dirty" ng-model="dirty.state_simple" placeholder="Username" mass-autocomplete-item="options" autocomplete="off">
+					</div>
+				</form>
+			</div>
 			<div class="modal-body">
-				<select ng-controller="ChosenController as ctrl" chosen multiple options="users" ng-model="ctrl.usersId" ng-options="user.id as user.login for user in users"></select>
+				<div class="modal-list" ng-repeat="user in global.users">
+					<div class="modal-element">{{user.login}}</div>
+					<button type="button" class="btn btn-danger modal-action" ng-click="remove(user)">Remove</button>
+				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" ng-click="">Invite</button>
-				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+				<button type="button" class="btn btn-primary" ng-controller="NotificationController as ctrl" ng-click="ctrl.sendInvitations(); clearModels()" data-dismiss="modal">Invite</button>
+				<button type="button" class="btn btn-danger" ng-click="clearModels()" data-dismiss="modal">Cancel</button>
 			</div>
 		</div>
 	</div>

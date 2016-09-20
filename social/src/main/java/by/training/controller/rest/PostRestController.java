@@ -29,14 +29,14 @@ import by.training.utility.Validator;
 public class PostRestController extends by.training.controller.rest.RestController {
 
     private PostDAO     postDAO;
-    private TopicDAO    topicDAO;
     private RelationDAO relationDAO;
+    private TopicDAO    topicDAO;
 
-    public PostRestController(final PostDAO postDAO, final TopicDAO topicDAO,
-            final RelationDAO relationDAO) {
+    public PostRestController(final PostDAO postDAO, final RelationDAO relationDAO,
+            final TopicDAO topicDAO) {
         this.postDAO = postDAO;
-        this.topicDAO = topicDAO;
         this.relationDAO = relationDAO;
+        this.topicDAO = topicDAO;
     }
 
     @RequestMapping(value = "/create/{text}/{topicId}/{parentPostId}"

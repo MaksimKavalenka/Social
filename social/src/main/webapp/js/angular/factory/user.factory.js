@@ -68,8 +68,8 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'CookieService', functio
 		$http.post(REST.USERS + '/logout' + REST.JSON_EXT, {});
 	}
 
-	function getAllUsers(callback) {
-		$http.post(REST.USERS + '/all' + REST.JSON_EXT)
+	function getUsersForInvitation(path, callback) {
+		$http.post(REST.USERS + '/' + path + '/for_invitation' + REST.JSON_EXT)
 		.success(function(response) {
 			var data = {success: true, data:response};
 			callback(data);
@@ -101,7 +101,7 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'CookieService', functio
 		authentication: authentication,
 		getUser: getUser,
 		logout: logout,
-		getAllUsers: getAllUsers,
+		getUsersForInvitation: getUsersForInvitation,
 		checkLogin: checkLogin
 	};
 

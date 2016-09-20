@@ -24,11 +24,8 @@ public class RelationDatabaseEditor extends DatabaseEditor implements RelationDA
 
     private CriteriaEdit criteriaEdit;
 
-    public RelationDatabaseEditor() {
-    }
-
     public RelationDatabaseEditor(final SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+        super(sessionFactory);
         criteriaEdit = new CriteriaEdit();
     }
 
@@ -36,7 +33,7 @@ public class RelationDatabaseEditor extends DatabaseEditor implements RelationDA
 
         public <T extends Model> Criteria getCriteriaForElements(final Class<T> clazz,
                 final String relation, final long id) {
-            Criteria criteria = sessionFactory.getCurrentSession().createCriteria(clazz)
+            Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(clazz)
                     .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
             criteria.createAlias(getSearchField(clazz, relation), "alias");
             criteria.add(Restrictions.eq("alias." + ModelFields.ID, id));
@@ -47,9 +44,11 @@ public class RelationDatabaseEditor extends DatabaseEditor implements RelationDA
             Class<PostModel> postClass = PostModel.class;
             Class<TopicModel> topicClass = TopicModel.class;
 
-            Criteria postCriteria = sessionFactory.getCurrentSession().createCriteria(postClass)
+            Criteria postCriteria = getSessionFactory().getCurrentSession()
+                    .createCriteria(postClass)
                     .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-            Criteria topicCriteria = sessionFactory.getCurrentSession().createCriteria(topicClass)
+            Criteria topicCriteria = getSessionFactory().getCurrentSession()
+                    .createCriteria(topicClass)
                     .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
             topicCriteria.createAlias(getSearchField(topicClass, Models.USER), "alias");
@@ -67,7 +66,7 @@ public class RelationDatabaseEditor extends DatabaseEditor implements RelationDA
         public Criteria getCriteriaForTopicsByValue(final String value, final long userId) {
             Class<TopicModel> clazz = TopicModel.class;
 
-            Criteria criteria = sessionFactory.getCurrentSession().createCriteria(clazz)
+            Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(clazz)
                     .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
             criteria.createAlias(getSearchField(clazz, Models.USER), "alias");
             criteria.add(Restrictions.or(Restrictions.eq("alias." + ModelFields.ID, userId),

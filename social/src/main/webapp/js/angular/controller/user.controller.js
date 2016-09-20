@@ -23,7 +23,7 @@ app.controller('UserController', ['$rootScope', '$state', 'STATE', 'UserFactory'
 
 	self.register = function() {
 		self.dataLoading = true;
-		UserFactory.createUser(self.user.login, self.user.password, function(response) {
+		UserFactory.createUser(self.user.login, self.user.password, self.user.confirmPassword, function(response) {
 			if (response.success) {
 				self.login();
 			} else {

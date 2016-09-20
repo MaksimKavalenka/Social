@@ -11,10 +11,6 @@ import by.training.model.RoleModel;
 
 public class RoleDatabaseEditor extends DatabaseEditor implements RoleDAO {
 
-    public RoleDatabaseEditor() {
-        super();
-    }
-
     public RoleDatabaseEditor(final SessionFactory sessionFactory) {
         super(sessionFactory);
     }
@@ -23,14 +19,14 @@ public class RoleDatabaseEditor extends DatabaseEditor implements RoleDAO {
     @Transactional(rollbackFor = ValidationException.class)
     public RoleModel createRole(final String name) {
         RoleModel role = new RoleModel(name);
-        sessionFactory.getCurrentSession().save(role);
+        getSessionFactory().getCurrentSession().save(role);
         return role;
     }
 
     @Override
     @Transactional
     public RoleModel getRoleById(final long id) {
-        return (RoleModel) sessionFactory.getCurrentSession().get(RoleModel.class, id);
+        return (RoleModel) getSessionFactory().getCurrentSession().get(RoleModel.class, id);
     }
 
     @Override

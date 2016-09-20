@@ -8,13 +8,14 @@ import by.training.model.Model;
 
 public abstract class DatabaseEditor {
 
-    protected SessionFactory sessionFactory;
-
-    public DatabaseEditor() {
-    }
+    private SessionFactory sessionFactory;
 
     public DatabaseEditor(final SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
+    }
+
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
     }
 
     @SuppressWarnings("unchecked")

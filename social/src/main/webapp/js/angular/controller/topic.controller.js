@@ -18,9 +18,9 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 		}
 	};
 
-	self.joinTopic = function() {
+	self.joinTopic = function(path) {
 		if (self.topic.access && !self.member) {
-			TopicFactory.joinTopic($state.params.path, function(response) {
+			TopicFactory.joinTopic(path, function(response) {
 				if (response.success) {
 					self.member = true;
 				} else {
@@ -43,9 +43,9 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 	};
 
 	self.editValidatePath = function() {
-		var flag = ($state.current.name === STATE.TOPIC_EDIT) && (currentPath === document.getElementById("path").value);
+		var flag = ($state.current.name === STATE.TOPIC_EDIT) && (currentPath === document.getElementById('path').value);
 		if (flag) {
-			document.getElementById("path").className = "ng-valid";
+			document.getElementById('path').className = 'ng-valid';
 		}
 		return flag;
 	};
@@ -106,6 +106,7 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 	function getTopicByPath(path) {
 		TopicFactory.getTopicByPath(path, function(response) {
 			if (response.success) {
+				$state.current.title = response.data.name;
 				self.topic = response.data;
 			} else {
 				FlashService.error(response.message);

@@ -49,6 +49,7 @@ app.config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'CONTRO
 		footer: footer
 	})
 	.state(STATE.TOPIC_ADD, {
+		title: TITLE.TOPIC_ADD,
 		url: URL.TOPIC_ADD,
 		views: {
 			header: header,
@@ -90,9 +91,6 @@ app.config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'CONTRO
 		}
 	})
 	.state(STATE.TOPIC, {
-		title: function($state) {
-			return $state.params.path;
-		},
 		url: URL.TOPIC,
 		params: {
 			page: '1'
@@ -131,6 +129,23 @@ app.config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'CONTRO
 				controller: CONTROLLER.TOPIC_CONTROLLER,
 				controllerAs: CONTROLLER.CTRL,
 				templateUrl: PATH.TOPIC_CONTENT
+			},
+			footer: footer
+		}
+	})
+	.state(STATE.NOTIFICATIONS, {
+		title: TITLE.NOTIFICATIONS,
+		url: URL.NOTIFICATIONS,
+		params: {
+			page: '1'
+		},
+		views: {
+			header: header,
+			pagination: pagination,
+			content: {
+				controller: CONTROLLER.NOTIFICATION_CONTROLLER,
+				controllerAs: CONTROLLER.CTRL,
+				templateUrl: PATH.NOTIFICATION_CONTENT
 			},
 			footer: footer
 		}

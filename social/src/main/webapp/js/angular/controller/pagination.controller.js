@@ -1,5 +1,5 @@
 'use strict';
-app.controller('PaginationController', ['$rootScope', '$state', 'STATE', 'PostFactory', 'TopicFactory', 'FlashService', function($rootScope, $state, STATE, PostFactory, TopicFactory, FlashService) {
+app.controller('PaginationController', ['$rootScope', '$state', 'STATE', 'NotificationFactory', 'PostFactory', 'TopicFactory', 'FlashService', function($rootScope, $state, STATE, NotificationFactory, PostFactory, TopicFactory, FlashService) {
 
 	function init(state, page) {
 		var callback = function(response) {
@@ -19,21 +19,23 @@ app.controller('PaginationController', ['$rootScope', '$state', 'STATE', 'PostFa
 			case STATE.TOPICS:
 				TopicFactory.getUserTopicsPageCount(callback);
 				break;
+			case STATE.NOTIFICATIONS:
+				NotificationFactory.getUserNotificationsPageCount(callback);
+				break;
 			case STATE.SEARCH:
-				if (!$state.params.value) {
-					setPages(state, 1, 0);
-				} else {
-					TopicFactory.getTopicsByValuePageCount($state.params.value, callback);
-				}
+				TopicFactory.getTopicsByValuePageCount($state.params.value, callback);
 				break;
 		}
 	}
 
-	function setPages(state, page, amount) {
+	function setPages(state, page, count) {
 		$rootScope.pages = [];
-		var from = ((page <= 3) || (amount < 5)) ? 1 : (page - 2);
-		var to = ((from + 5) > amount) ? (amount + 1) : (from + 5);
-		to = (page <= amount) ? to : (from + 5);
+		if (count === 0) {
+			count = 1;
+		}
+		var from = ((page <= 3) || (count < 5)) ? 1 : (page - 2);
+		var to = ((from + 5) > count) ? (count + 1) : (from + 5);
+		to = (page <= count) ? to : (from + 5);
 		for (var i = from; i < to; i++) {
 			var type = 'default';
 			if (page == i) {
@@ -45,7 +47,7 @@ app.controller('PaginationController', ['$rootScope', '$state', 'STATE', 'PostFa
 				type: type
 			});
 		}
-		if (amount == 1) {
+		if (count === 1) {
 			$rootScope.pages = [];
 		}
 	}

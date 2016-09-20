@@ -1,6 +1,7 @@
 package by.training.controller.rest;
 
 import static by.training.constants.MessageConstants.PASSWORDS_ERROR;
+import static by.training.constants.UrlConstants.PATH_KEY;
 
 import java.security.Principal;
 import java.util.HashSet;
@@ -84,12 +85,15 @@ public class UserRestController extends by.training.controller.rest.RestControll
         securityContextLogoutHandler.logout(rq, rs, null);
     }
 
-    @RequestMapping(value = "/all" + JSON_EXT, method = RequestMethod.POST)
-    public ResponseEntity<List<UserModel>> getAllArtists() {
-        List<UserModel> users = userDAO.getAllUsers();
+    @RequestMapping(value = "/" + PATH_KEY + "/for_invitation"
+            + JSON_EXT, method = RequestMethod.POST)
+    public ResponseEntity<List<UserModel>> getUsersForInvitation(
+            @PathVariable("path") final String path) {
+        List<UserModel> users = userDAO.getUsersForInvitation(path);
         if (users == null) {
             return new ResponseEntity<List<UserModel>>(HttpStatus.NO_CONTENT);
         }
+        users.remove(getLoggedUser());
         return new ResponseEntity<List<UserModel>>(users, HttpStatus.OK);
     }
 
