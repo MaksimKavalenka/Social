@@ -133,6 +133,23 @@ app.config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'CONTRO
 			footer: footer
 		}
 	})
+	.state(STATE.POST, {
+		url: URL.POST,
+		views: {
+			header: header,
+			info: {
+				controller: CONTROLLER.POST_CONTROLLER,
+				controllerAs: CONTROLLER.CTRL,
+				templateUrl: PATH.POST_CONTENT
+			},
+			content: {
+				controller: CONTROLLER.POST_CONTROLLER,
+				controllerAs: CONTROLLER.CTRL,
+				templateUrl: PATH.COMMENT_CONTENT
+			},
+			footer: footer
+		}
+	})
 	.state(STATE.NOTIFICATIONS, {
 		title: TITLE.NOTIFICATIONS,
 		url: URL.NOTIFICATIONS,

@@ -93,7 +93,6 @@ public class UserRestController extends by.training.controller.rest.RestControll
         if (users == null) {
             return new ResponseEntity<List<UserModel>>(HttpStatus.NO_CONTENT);
         }
-        users.remove(getLoggedUser());
         return new ResponseEntity<List<UserModel>>(users, HttpStatus.OK);
     }
 

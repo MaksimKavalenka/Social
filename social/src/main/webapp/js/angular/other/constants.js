@@ -38,6 +38,7 @@ app.constant('PATH', (function() {
 	var toolPath = path + '/tool';
 	var htmlExt = '.html';
 	return {
+		COMMENT_CONTENT: contentPath + '/comment' + htmlExt,
 		NOTIFICATION_CONTENT: contentPath + '/notification' + htmlExt,
 		POST_CONTENT: contentPath + '/post' + htmlExt,
 		TOPIC_CONTENT: contentPath + '/topic' + htmlExt,
@@ -78,8 +79,9 @@ app.constant('STATE', (function() {
 		FEED: 'feed',
 		TOPIC: topic,
 		TOPICS: 'topics',
+		POST: 'post',
 		NOTIFICATIONS: 'notifications',
-		SEARCH: 'search',
+		SEARCH: 'search'
 	}
 })());
 
@@ -106,9 +108,9 @@ app.constant('URL', (function() {
 	var topicsUrl = '/topics';
 	var addOperation = '/add';
 	var editOperation = '/edit';
-	var idKey = '{id:[0-9]{1,}}';
 	var pageKey = '{page:[0-9]{1,}}';
 	var pathKey = '{path:[a-z0-9._]{1,}}';
+	var postKey = '{post:[0-9]{1,}}';
 	var valueKey = '{value}';
 	return {
 		HOME: url + feedUrl + '?page=1',
@@ -119,6 +121,7 @@ app.constant('URL', (function() {
 		FEED: url + feedUrl + '?' + pageKey,
 		TOPIC: url + topicUrl + '/' + pathKey + '?' + pageKey,
 		TOPICS: url + topicsUrl + '?' + pageKey,
+		POST: url + topicsUrl + '?' + postKey,
 		NOTIFICATIONS: url + notificationsUrl + '?' + pageKey,
 		SEARCH: url + searchUrl + '?' + valueKey + '&' + pageKey
 	}

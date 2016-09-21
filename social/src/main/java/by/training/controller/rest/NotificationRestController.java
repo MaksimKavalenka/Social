@@ -1,6 +1,5 @@
 package by.training.controller.rest;
 
-import static by.training.constants.UrlConstants.ID_KEY;
 import static by.training.constants.UrlConstants.PAGE_KEY;
 import static by.training.constants.UrlConstants.PATH_KEY;
 
@@ -63,7 +62,7 @@ public class NotificationRestController extends by.training.controller.rest.Rest
         }
     }
 
-    @RequestMapping(value = "/delete/" + ID_KEY + JSON_EXT, method = RequestMethod.POST)
+    @RequestMapping(value = "/delete/{id}" + JSON_EXT, method = RequestMethod.POST)
     public ResponseEntity<Void> deleteNotification(@PathVariable("id") final int id) {
         notificationDAO.deleteNotification(id);
         return new ResponseEntity<Void>(HttpStatus.OK);

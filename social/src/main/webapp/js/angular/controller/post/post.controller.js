@@ -15,7 +15,21 @@ app.controller('PostController', ['$state', 'STATE', 'PostFactory', 'FlashServic
 				var path = $state.params.path;
 				getTopicPosts(path, page);
 				break;
+			case STATE.POST:
+				var post = $state.params.post;
+				getPostById(post);
+				break;
 		}
+	}
+
+	function getPostById(id) {
+		PostFactory.getPostById(id, function(response) {
+			if (response.success) {
+				self.posts = response.data;
+			} else {
+				FlashService.error(response.message);
+			}
+		});
 	}
 
 	function getTopicPosts(path, page) {

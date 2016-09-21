@@ -65,7 +65,6 @@ body.modal-open,
 	opacity: 0.5;
 }
 .modal-header {
-	border-bottom: 1px solid #cccccc;
 	min-height: 16.428571429px;
 	padding: 15px;
 }

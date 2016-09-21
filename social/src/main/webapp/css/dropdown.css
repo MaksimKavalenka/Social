@@ -22,6 +22,7 @@
 	display: block;
 	padding: 8px 16px;
 	text-decoration: none;
+	z-index: 2;
 }
 .drp-menu .drp-option:hover {
 	background: #292929;

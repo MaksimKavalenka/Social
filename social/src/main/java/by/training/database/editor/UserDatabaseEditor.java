@@ -1,7 +1,6 @@
 package by.training.database.editor;
 
 import static by.training.constants.MessageConstants.TAKEN_LOGIN_ERROR;
-import static by.training.constants.ModelStructureConstants.UserFields;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -10,14 +9,18 @@ import java.util.Set;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Subqueries;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.transaction.annotation.Transactional;
 
-import by.training.constants.ModelStructureConstants;
+import by.training.constants.ModelStructureConstants.ModelFields;
 import by.training.constants.ModelStructureConstants.RelationFields;
 import by.training.constants.ModelStructureConstants.TopicFields;
+import by.training.constants.ModelStructureConstants.UserFields;
 import by.training.database.dao.UserDAO;
 import by.training.exception.ValidationException;
 import by.training.model.UserModel;
@@ -63,11 +66,16 @@ public class UserDatabaseEditor extends DatabaseEditor implements UserDAO {
     @Transactional
     @SuppressWarnings("unchecked")
     public List<UserModel> getUsersForInvitation(final String topicPath) {
-        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(UserModel.class)
+        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserModel.class)
                 .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-        criteria.createAlias(RelationFields.TOPICS, "alias");
-        criteria.add(Restrictions.ne("alias." + TopicFields.PATH, topicPath));
-        criteria.addOrder(Order.asc(ModelStructureConstants.UserFields.LOGIN));
+        detachedCriteria.createAlias(RelationFields.TOPICS, "alias");
+        detachedCriteria.add(Restrictions.eq("alias." + TopicFields.PATH, topicPath));
+        detachedCriteria.setProjection(Projections.property(ModelFields.ID));
+
+        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(UserModel.class);
+        criteria.add(Restrictions.or(Restrictions.isEmpty(RelationFields.TOPICS),
+                Subqueries.notExists(detachedCriteria)));
+        criteria.addOrder(Order.asc(UserFields.LOGIN));
         return criteria.list();
     }
 

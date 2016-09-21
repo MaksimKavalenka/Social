@@ -5,7 +5,7 @@
 			<div class="dropdown">
 				<div class="drp-button"></div>
 				<div class="drp-menu">
-					<a class="drp-option" ui-sref="#">Post page</a>
+					<a class="drp-option" ui-sref="post({post: post.id})">Post page</a>
 					<div ng-show="user.id === post.creator.id">
 						<hr class="hr-dropdown">
 						<div class="drp-option" ng-click="postCtrl.editionForm(post)">Edit</div>
@@ -21,7 +21,7 @@
 	<form method="POST" ng-show="postCtrl.form" name="form" novalidate>
 		<textarea id="text" name="text" ng-model="postCtrl.post.text" required></textarea>
 		<div>
-			<button class="btn btn-success" ng-click="postCtrl.updatePost(post.id)" ng-disabled="form.$invalid || postCtrl.dataLoading">Post</button>
+			<button class="btn btn-primary" ng-click="postCtrl.updatePost(post.id)" ng-disabled="form.$invalid || postCtrl.dataLoading">Submit</button>
 			<button class="btn btn-danger" ng-click="postCtrl.hideForm()">Cancel</button>
 			<img ng-if="postCtrl.dataLoading" src="/social/img/load.gif"/>
 		</div>

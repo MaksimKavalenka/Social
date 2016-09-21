@@ -1,5 +1,5 @@
 'use strict';
-app.controller('NotificationController', ['$rootScope', '$state', 'STATE', 'NotificationFactory', 'FlashService', function($rootScope, $state, STATE, NotificationFactory, FlashService) {
+app.controller('NotificationController', ['$rootScope', '$state', 'STATE', 'NotificationFactory', 'TopicFactory', 'FlashService', function($rootScope, $state, STATE, NotificationFactory, TopicFactory, FlashService) {
 
 	var self = this;
 	self.notifications = [];
@@ -13,6 +13,14 @@ app.controller('NotificationController', ['$rootScope', '$state', 'STATE', 'Noti
 			if (response.success) {
 				self.count = response.data;
 			} else {
+				FlashService.error(response.message);
+			}
+		});
+	};
+
+	self.joinTopic = function(path) {
+		TopicFactory.joinTopic(path, function(response) {
+			if (!response.success) {
 				FlashService.error(response.message);
 			}
 		});

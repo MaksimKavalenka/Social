@@ -18,9 +18,9 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 		}
 	};
 
-	self.joinTopic = function(path) {
+	self.joinTopic = function() {
 		if (self.topic.access && !self.member) {
-			TopicFactory.joinTopic(path, function(response) {
+			TopicFactory.joinTopic($state.params.path, function(response) {
 				if (response.success) {
 					self.member = true;
 				} else {

@@ -3,6 +3,7 @@ package by.training.controller.rest;
 import static by.training.constants.MessageConstants.PERMISSIONS_ERROR;
 import static by.training.constants.UrlConstants.PAGE_KEY;
 import static by.training.constants.UrlConstants.PATH_KEY;
+import static by.training.constants.UrlConstants.POST_KEY;
 
 import java.util.List;
 
@@ -85,6 +86,15 @@ public class PostRestController extends by.training.controller.rest.RestControll
             return new ResponseEntity<Object>(new ErrorMessage(e.getMessage()),
                     HttpStatus.CONFLICT);
         }
+    }
+
+    @RequestMapping(value = "/" + POST_KEY + JSON_EXT, method = RequestMethod.GET)
+    public ResponseEntity<PostModel> getPostById(@PathVariable("post") final long post) {
+        PostModel postModel = postDAO.getPostById(post);
+        if (postModel == null) {
+            return new ResponseEntity<PostModel>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<PostModel>(postModel, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/topic/" + PATH_KEY + "/" + PAGE_KEY
