@@ -19,7 +19,8 @@ http://www.springframework.org/schema/security/spring-security-4.1.xsd">
   <import resource="config/Hibernate.xml"/>
 
   <context:component-scan base-package="by.training"/>
-  <mvc:resources mapping="/**" location="/"/>
+  <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
+  <mvc:resources mapping="/**" location="/static/"/>
   <mvc:annotation-driven/>
   <tx:annotation-driven/>
 
@@ -34,7 +35,6 @@ http://www.springframework.org/schema/security/spring-security-4.1.xsd">
 
   <bean id="notificationDAO" class="by.training.database.editor.NotificationDatabaseEditor"/>
   <bean id="postDAO" class="by.training.database.editor.PostDatabaseEditor"/>
-  <bean id="relationDAO" class="by.training.database.editor.RelationDatabaseEditor"/>
   <bean id="roleDAO" class="by.training.database.editor.RoleDatabaseEditor"/>
   <bean id="topicDAO" class="by.training.database.editor.TopicDatabaseEditor"/>
   <bean id="userDAO" class="by.training.database.editor.UserDatabaseEditor"/>

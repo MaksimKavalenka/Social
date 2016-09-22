@@ -28,6 +28,8 @@ import by.training.utility.SecureData;
 
 public class UserDatabaseEditor extends DatabaseEditor implements UserDAO {
 
+    private static final Class<UserModel> clazz = UserModel.class;
+
     public UserDatabaseEditor(final SessionFactory sessionFactory) {
         super(sessionFactory);
     }
@@ -53,26 +55,26 @@ public class UserDatabaseEditor extends DatabaseEditor implements UserDAO {
     @Override
     @Transactional
     public UserModel getUserById(final long id) {
-        return (UserModel) getSessionFactory().getCurrentSession().get(UserModel.class, id);
+        return (UserModel) getSessionFactory().getCurrentSession().get(clazz, id);
     }
 
     @Override
     @Transactional
     public UserModel getUserByLogin(final String login) {
-        return getUniqueResultByCriteria(UserModel.class, Restrictions.eq(UserFields.LOGIN, login));
+        return getUniqueResultByCriteria(clazz, Restrictions.eq(UserFields.LOGIN, login));
     }
 
     @Override
     @Transactional
     @SuppressWarnings("unchecked")
     public List<UserModel> getUsersForInvitation(final String topicPath) {
-        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserModel.class)
+        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(clazz)
                 .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
         detachedCriteria.createAlias(RelationFields.TOPICS, "alias");
         detachedCriteria.add(Restrictions.eq("alias." + TopicFields.PATH, topicPath));
         detachedCriteria.setProjection(Projections.property(ModelFields.ID));
 
-        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(UserModel.class);
+        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(clazz);
         criteria.add(Restrictions.or(Restrictions.isEmpty(RelationFields.TOPICS),
                 Subqueries.notExists(detachedCriteria)));
         criteria.addOrder(Order.asc(UserFields.LOGIN));
@@ -82,8 +84,7 @@ public class UserDatabaseEditor extends DatabaseEditor implements UserDAO {
     @Override
     @Transactional
     public boolean checkLogin(final String login) {
-        return getUniqueResultByCriteria(UserModel.class,
-                Restrictions.eq(UserFields.LOGIN, login)) != null;
+        return getUniqueResultByCriteria(clazz, Restrictions.eq(UserFields.LOGIN, login)) != null;
     }
 
 }

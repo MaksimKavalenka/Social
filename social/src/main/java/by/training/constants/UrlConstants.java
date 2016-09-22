@@ -7,9 +7,9 @@ public abstract class UrlConstants {
 
     private static final String TOPIC_PATH       = "/topic";
 
+    public static final String  ID_KEY           = "{id:[0-9]{1,}}";
     public static final String  PAGE_KEY         = "{page:[0-9]{1,}}";
     public static final String  PATH_KEY         = "{path:[a-z0-9._]{1,}}";
-    public static final String  POST_KEY         = "{post:[0-9]{1,}}";
     public static final String  VALUE_KEY        = "{value}";
 
     public static final String  LOGIN_URL        = "/login";

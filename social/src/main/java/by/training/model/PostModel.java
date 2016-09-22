@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -33,11 +34,12 @@ public class PostModel extends Model {
     @ManyToOne(targetEntity = TopicModel.class, cascade = {CascadeType.DETACH}, optional = false)
     private TopicModel        topic;
 
+    @JsonIgnore
     @ManyToOne(targetEntity = PostModel.class, cascade = {CascadeType.DETACH})
     private PostModel         parentPost;
 
-    @JsonIgnore
-    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.DETACH}, mappedBy = "parentPost")
+    @OneToMany(cascade = {CascadeType.REMOVE,
+            CascadeType.DETACH}, fetch = FetchType.EAGER, mappedBy = "parentPost")
     private Set<PostModel>    posts;
 
     public PostModel() {

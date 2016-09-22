@@ -5,10 +5,13 @@ import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import by.training.constants.ModelStructureConstants.ModelFields;
+import by.training.model.Model;
 import by.training.model.UserModel;
 
 public class RestController {
@@ -30,6 +33,20 @@ public class RestController {
             ids.add(id);
         }
         return ids;
+    }
+
+    public <T extends Model> ResponseEntity<T> checkEntity(final T entity) {
+        if (entity == null) {
+            return new ResponseEntity<T>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<T>(entity, HttpStatus.OK);
+    }
+
+    public <T extends Model> ResponseEntity<List<T>> checkEntity(final List<T> entity) {
+        if (entity == null) {
+            return new ResponseEntity<List<T>>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<List<T>>(entity, HttpStatus.OK);
     }
 
 }

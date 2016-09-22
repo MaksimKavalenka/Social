@@ -11,6 +11,8 @@ import by.training.model.RoleModel;
 
 public class RoleDatabaseEditor extends DatabaseEditor implements RoleDAO {
 
+    private static final Class<RoleModel> clazz = RoleModel.class;
+
     public RoleDatabaseEditor(final SessionFactory sessionFactory) {
         super(sessionFactory);
     }
@@ -26,13 +28,13 @@ public class RoleDatabaseEditor extends DatabaseEditor implements RoleDAO {
     @Override
     @Transactional
     public RoleModel getRoleById(final long id) {
-        return (RoleModel) getSessionFactory().getCurrentSession().get(RoleModel.class, id);
+        return (RoleModel) getSessionFactory().getCurrentSession().get(clazz, id);
     }
 
     @Override
     @Transactional
     public RoleModel getRoleByName(final String name) {
-        return getUniqueResultByCriteria(RoleModel.class, Restrictions.eq(RoleFields.NAME, name));
+        return getUniqueResultByCriteria(clazz, Restrictions.eq(RoleFields.NAME, name));
     }
 
 }

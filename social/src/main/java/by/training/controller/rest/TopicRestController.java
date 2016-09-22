@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import by.training.bean.ErrorMessage;
-import by.training.constants.ModelStructureConstants.Models;
 import by.training.database.dao.NotificationDAO;
-import by.training.database.dao.RelationDAO;
 import by.training.database.dao.TopicDAO;
 import by.training.exception.ValidationException;
 import by.training.model.TopicModel;
@@ -29,13 +27,10 @@ import by.training.utility.Validator;
 public class TopicRestController extends by.training.controller.rest.RestController {
 
     private NotificationDAO notificationDAO;
-    private RelationDAO     relationDAO;
     private TopicDAO        topicDAO;
 
-    public TopicRestController(final NotificationDAO notificationDAO, final RelationDAO relationDAO,
-            final TopicDAO topicDAO) {
+    public TopicRestController(final NotificationDAO notificationDAO, final TopicDAO topicDAO) {
         this.notificationDAO = notificationDAO;
-        this.relationDAO = relationDAO;
         this.topicDAO = topicDAO;
     }
 
@@ -83,45 +78,32 @@ public class TopicRestController extends by.training.controller.rest.RestControl
     @RequestMapping(value = "/" + PATH_KEY + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<TopicModel> getTopicByPath(@PathVariable("path") final String path) {
         TopicModel topic = topicDAO.getTopicByPath(path);
-        if (topic == null) {
-            return new ResponseEntity<TopicModel>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<TopicModel>(topic, HttpStatus.OK);
+        return checkEntity(topic);
     }
 
     @RequestMapping(value = "/user/" + PAGE_KEY + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<List<TopicModel>> getUserTopics(@PathVariable("page") final int page) {
-        List<TopicModel> topics = relationDAO.getElementsByCriteria(TopicModel.class, Models.USER,
-                getLoggedUser().getId(), page);
-        if (topics == null) {
-            return new ResponseEntity<List<TopicModel>>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<List<TopicModel>>(topics, HttpStatus.OK);
+        List<TopicModel> topics = topicDAO.getUserTopics(getLoggedUser().getId(), page);
+        return checkEntity(topics);
     }
 
     @RequestMapping(value = "/search/" + VALUE_KEY + "/" + PAGE_KEY
             + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<List<TopicModel>> getTopicsByValue(
             @PathVariable("value") final String value, @PathVariable("page") final int page) {
-        List<TopicModel> topics = relationDAO.getTopicsByValue(value, getLoggedUser().getId(),
-                page);
-        if (topics == null) {
-            return new ResponseEntity<List<TopicModel>>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<List<TopicModel>>(topics, HttpStatus.OK);
+        List<TopicModel> topics = topicDAO.getTopicsByValue(value, getLoggedUser().getId(), page);
+        return checkEntity(topics);
     }
 
     @RequestMapping(value = "/user/count" + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<Long> getUserTopicsCount() {
-        long pageCount = relationDAO.getElementsByCriteriaCount(TopicModel.class, Models.USER,
-                getLoggedUser().getId());
+        long pageCount = topicDAO.getUserTopicsCount(getLoggedUser().getId());
         return new ResponseEntity<Long>(pageCount, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/user/page_count" + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<Long> getUserTopicsPageCount() {
-        long pageCount = relationDAO.getElementsByCriteriaPageCount(TopicModel.class, Models.USER,
-                getLoggedUser().getId());
+        long pageCount = topicDAO.getUserTopicsPageCount(getLoggedUser().getId());
         return new ResponseEntity<Long>(pageCount, HttpStatus.OK);
     }
 
@@ -129,7 +111,7 @@ public class TopicRestController extends by.training.controller.rest.RestControl
             + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<Long> getTopicsByValuePageCount(
             @PathVariable("value") final String value) {
-        long pageCount = relationDAO.getTopicsByValuePageCount(value, getLoggedUser().getId());
+        long pageCount = topicDAO.getTopicsByValuePageCount(value, getLoggedUser().getId());
         return new ResponseEntity<Long>(pageCount, HttpStatus.OK);
     }
 

@@ -90,10 +90,7 @@ public class UserRestController extends by.training.controller.rest.RestControll
     public ResponseEntity<List<UserModel>> getUsersForInvitation(
             @PathVariable("path") final String path) {
         List<UserModel> users = userDAO.getUsersForInvitation(path);
-        if (users == null) {
-            return new ResponseEntity<List<UserModel>>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<List<UserModel>>(users, HttpStatus.OK);
+        return checkEntity(users);
     }
 
     @RequestMapping(value = "/check_login/{login}" + JSON_EXT, method = RequestMethod.POST)
