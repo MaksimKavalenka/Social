@@ -24,8 +24,8 @@
 		</div>
 		<div>
 			<button class="btn btn-primary" ng-click="ctrl.register()" ng-disabled="form.$invalid || ctrl.dataLoading">Register</button>
-			<button class="btn btn-primary" ui-sref="login">Login</button>
-			<img class="img-load" ng-if="ctrl.dataLoading"/>
+			<button class="btn btn-default" ui-sref="login">Login</button>
+			<div class="img-load" ng-if="ctrl.dataLoading"></div>
 		</div>
 	</fieldset>
 </form>

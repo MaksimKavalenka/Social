@@ -1,5 +1,5 @@
 'use strict';
-app.run(['$cookies', '$rootScope', '$state', 'UserFactory', 'FlashService', function($cookies, $rootScope, $state, UserFactory, FlashService) {
+app.run(['$cookies', '$rootScope', '$state', 'STATE', 'UserFactory', 'FlashService', function($cookies, $rootScope, $state, STATE, UserFactory, FlashService) {
 
 	$rootScope.$state = $state;
 
@@ -8,8 +8,12 @@ app.run(['$cookies', '$rootScope', '$state', 'UserFactory', 'FlashService', func
 	});
 
 	UserFactory.getUser(function(response) {
-		if (response !== null) {
-			$rootScope.user = {id: response.id};
+		if (response.success) {
+			if (response.data !== null) {
+				$rootScope.user = {id: response.data.id};
+			} else {
+				$state.go(STATE.LOGIN);
+			}
 		}
 	});
 

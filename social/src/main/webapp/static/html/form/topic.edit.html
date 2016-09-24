@@ -16,14 +16,17 @@
 			<label class="required" for="description">Description</label>
 			<input type="text" id="description" name="description" maxlength="255" ng-model="ctrl.topic.description" required/>
 		</div>
-		<div class="field">
-			<label class="required" for="access">Access</label>
-			Public topic<input type="radio" id="access" name="access" ng-model="ctrl.topic.access" value="true">
-			Private topic<input type="radio" id="access" name="access" ng-model="ctrl.topic.access" value="false">
+		<div class="field simple">
+			<label for="publicAccess">Public topic</label>
+			<input type="radio" id="publicAccess" name="publicAccess" ng-model="ctrl.topic.access" ng-value="true">
+		</div>
+		<div class="field simple">
+			<label for="privateAccess">Private topic</label>
+			<input type="radio" id="privateAccess" name="privateAccess" ng-model="ctrl.topic.access" ng-value="false">
 		</div>
 		<div>
 			<button class="btn btn-primary" ng-click="ctrl.editTopic()" ng-disabled="(form.$invalid && !ctrl.validatePath()) || ctrl.dataLoading || !ctrl.permissions()">Submit</button>
-			<img class="img-load" ng-if="ctrl.dataLoading"/>
+			<div class="img-load" ng-if="ctrl.dataLoading"></div>
 		</div>
 	</fieldset>
 </form>

@@ -61,6 +61,19 @@ app.config(['$locationProvider', '$stateProvider', '$urlRouterProvider', 'CONTRO
 		},
 		footer: footer
 	})
+	.state(STATE.PROFILE_PHOTO, {
+		title: TITLE.PROFILE,
+		url: URL.PROFILE_PHOTO,
+		views: {
+			header: header,
+			content: {
+				controller: CONTROLLER.USER_CONTROLLER,
+				controllerAs: CONTROLLER.CTRL,
+				templateUrl: PATH.PROFILE_PHOTO_FORM
+			}
+		},
+		footer: footer
+	})
 	.state(STATE.TOPIC_ADD, {
 		title: TITLE.TOPIC_ADD,
 		url: URL.TOPIC_ADD,

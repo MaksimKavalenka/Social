@@ -45,6 +45,7 @@ app.constant('PATH', (function() {
 		INVITE_FORM: formPath + '/invite' + htmlExt,
 		LOGIN_FORM: formPath + '/login' + htmlExt,
 		PROFILE_FORM: formPath + '/profile' + htmlExt,
+		PROFILE_PHOTO_FORM: formPath + '/profile.photo' + htmlExt,
 		REGISTER_FORM: formPath + '/register' + htmlExt,
 		TOPIC_EDIT_FORM: formPath + '/topic.edit' + htmlExt,
 		TOPIC_INFO: infoPath + '/topic.info' + htmlExt,
@@ -64,20 +65,21 @@ app.constant('REST', (function() {
 		NOTIFICATIONS: url + '/notifications',
 		POSTS: url + '/posts',
 		TOPICS: url + '/topics',
+		UPLOAD: url + '/upload',
 		USERS: url + '/users'
 	}
 })());
 
 app.constant('STATE', (function() {
+	var profile = 'profile';
 	var topic = 'topic';
-	var addOperation = '_add';
-	var editOperation = '_edit';
 	return {
 		LOGIN: 'login',
 		REGISTER: 'register',
-		PROFILE: 'profile',
-		TOPIC_ADD: topic + addOperation,
-		TOPIC_EDIT: topic + editOperation,
+		PROFILE: profile,
+		PROFILE_PHOTO: profile + '_photo',
+		TOPIC_ADD: topic + '_add',
+		TOPIC_EDIT: topic + '_edit',
 		FEED: 'feed',
 		TOPIC: topic,
 		TOPICS: 'topics',
@@ -106,28 +108,31 @@ app.constant('URL', (function() {
 	var loginUrl = url + '/login';
 	var registerUrl = url + '/register';
 	var profileUrl = url + '/profile';
+	var profilePhotoUrl = profileUrl + '/photo';
 	var feedUrl = url + '/feed';
 	var notificationsUrl = url + '/notifications';
 	var searchUrl = url + '/search';
 	var topicUrl = url + '/topic';
 	var topicsUrl = url + '/topics';
+	var postUrl = url + '/post';
 	var addOperation = '/add';
 	var editOperation = '/edit';
 	var idKey = '{id:[0-9]{1,}}';
 	var pageKey = '{page:[0-9]{1,}}';
-	var pathKey = '{path:[a-z0-9._]{1,}}';
+	var pathKey = '{path:[a-z0-9_]{1,}}';
 	var valueKey = '{value}';
 	return {
 		HOME: feedUrl + '?page=1',
 		LOGIN: loginUrl,
 		REGISTER: registerUrl,
 		PROFILE: profileUrl,
+		PROFILE_PHOTO: profilePhotoUrl,
 		TOPIC_ADD: topicUrl + addOperation,
 		TOPIC_EDIT: topicUrl + '/' + pathKey + editOperation,
 		FEED: feedUrl + '?' + pageKey,
 		TOPIC: topicUrl + '/' + pathKey + '?' + pageKey,
 		TOPICS: topicsUrl + '?' + pageKey,
-		POST: topicUrl + '/' + pathKey + '/' + '?' + idKey,
+		POST: postUrl + '/' + pathKey + '?' + idKey,
 		NOTIFICATIONS: notificationsUrl + '?' + pageKey,
 		SEARCH: searchUrl + '?' + valueKey + '&' + pageKey
 	}

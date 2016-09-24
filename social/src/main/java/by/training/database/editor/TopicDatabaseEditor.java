@@ -95,6 +95,7 @@ public class TopicDatabaseEditor extends DatabaseEditor implements TopicDAO {
     }
 
     @Override
+    @Transactional
     public long getTopicsByValuePageCount(final String value, final long userId) {
         Criteria criteria = getTopicsByValueCriteria(value, userId);
         return (long) Math.ceil((long) criteria.setProjection(Projections.rowCount()).uniqueResult()

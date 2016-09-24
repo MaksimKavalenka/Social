@@ -26,10 +26,13 @@ public class UserModel extends Model implements UserDetails {
 
     @JsonIgnore
     private boolean                accountNonExpired;
+
     @JsonIgnore
     private boolean                accountNonLocked;
+
     @JsonIgnore
     private boolean                credentialsNonExpired;
+
     @JsonIgnore
     private boolean                enabled;
 
@@ -39,6 +42,9 @@ public class UserModel extends Model implements UserDetails {
     @JsonIgnore
     @Column(name = "password", nullable = false, length = 255)
     private String                 password;
+
+    @Column(name = "photo", length = 255)
+    private String                 photo;
 
     @JsonIgnore
     @ManyToMany(targetEntity = RoleModel.class, cascade = {
@@ -68,12 +74,12 @@ public class UserModel extends Model implements UserDetails {
     }
 
     public UserModel(final String login, final String password, final Set<GrantedAuthority> roles) {
-        this(true, true, true, true, login, password, roles);
+        this(true, true, true, true, login, password, null, roles);
     }
 
     public UserModel(final boolean accountNonExpired, final boolean accountNonLocked,
             final boolean credentialsNonExpired, final boolean enabled, final String login,
-            final String password, final Set<GrantedAuthority> roles) {
+            final String password, final String photo, final Set<GrantedAuthority> roles) {
         super();
         this.accountNonExpired = accountNonExpired;
         this.accountNonLocked = accountNonLocked;
@@ -81,6 +87,7 @@ public class UserModel extends Model implements UserDetails {
         this.enabled = enabled;
         this.login = login;
         this.password = password;
+        this.photo = photo;
         this.roles = roles;
     }
 
@@ -131,6 +138,14 @@ public class UserModel extends Model implements UserDetails {
 
     public void setPassword(final String password) {
         this.password = password;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(final String photo) {
+        this.photo = photo;
     }
 
     public Set<GrantedAuthority> getRoles() {

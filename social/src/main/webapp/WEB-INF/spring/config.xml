@@ -33,6 +33,8 @@ http://www.springframework.org/schema/security/spring-security-4.1.xsd">
     <property name="sessionFactory" ref="sessionFactory"/>
   </bean>
 
+  <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>
+
   <bean id="notificationDAO" class="by.training.database.editor.NotificationDatabaseEditor"/>
   <bean id="postDAO" class="by.training.database.editor.PostDatabaseEditor"/>
   <bean id="roleDAO" class="by.training.database.editor.RoleDatabaseEditor"/>

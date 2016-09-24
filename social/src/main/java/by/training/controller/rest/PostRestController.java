@@ -1,6 +1,7 @@
 package by.training.controller.rest;
 
-import static by.training.constants.MessageConstants.PERMISSIONS_ERROR;
+import static by.training.constants.MessageConstants.OPERATION_PERMISSIONS_ERROR;
+import static by.training.constants.MessageConstants.PAGE_PERMISSIONS_ERROR;
 import static by.training.constants.UrlConstants.ID_KEY;
 import static by.training.constants.UrlConstants.PAGE_KEY;
 import static by.training.constants.UrlConstants.PATH_KEY;
@@ -35,7 +36,7 @@ public class PostRestController extends by.training.controller.rest.RestControll
         this.topicDAO = topicDAO;
     }
 
-    @RequestMapping(value = "/create/{text}/" + PATH_KEY + "/{parentPostId}"
+    @RequestMapping(value = "/create/{text}" + PATH_KEY + "/{parentPostId}"
             + JSON_EXT, method = RequestMethod.POST)
     public ResponseEntity<Object> createPost(@PathVariable("text") final String text,
             @PathVariable("path") final String path,
@@ -47,7 +48,7 @@ public class PostRestController extends by.training.controller.rest.RestControll
             UserModel user = getLoggedUser();
 
             if (!topic.getUsers().contains(user)) {
-                return new ResponseEntity<Object>(new ErrorMessage(PERMISSIONS_ERROR),
+                return new ResponseEntity<Object>(new ErrorMessage(OPERATION_PERMISSIONS_ERROR),
                         HttpStatus.CONFLICT);
             }
 
@@ -71,7 +72,7 @@ public class PostRestController extends by.training.controller.rest.RestControll
             Validator.allNotNull(id, text);
 
             if (postDAO.getPostById(id).getCreator().getId() != getLoggedUser().getId()) {
-                return new ResponseEntity<Object>(new ErrorMessage(PERMISSIONS_ERROR),
+                return new ResponseEntity<Object>(new ErrorMessage(OPERATION_PERMISSIONS_ERROR),
                         HttpStatus.CONFLICT);
             }
 
@@ -84,14 +85,14 @@ public class PostRestController extends by.training.controller.rest.RestControll
         }
     }
 
-    @RequestMapping(value = "/delete/{id}/" + PATH_KEY + JSON_EXT, method = RequestMethod.POST)
+    @RequestMapping(value = "/delete/{id}" + PATH_KEY + JSON_EXT, method = RequestMethod.POST)
     public ResponseEntity<Object> deleteNotification(@PathVariable("id") final long id,
             @PathVariable("path") final String path) {
         try {
             Validator.allNotNull(id);
 
             if (topicDAO.getTopicByPath(path).getCreator().getId() != getLoggedUser().getId()) {
-                return new ResponseEntity<Object>(new ErrorMessage(PERMISSIONS_ERROR),
+                return new ResponseEntity<Object>(new ErrorMessage(OPERATION_PERMISSIONS_ERROR),
                         HttpStatus.CONFLICT);
             }
 
@@ -104,13 +105,20 @@ public class PostRestController extends by.training.controller.rest.RestControll
         }
     }
 
-    @RequestMapping(value = "/" + ID_KEY + JSON_EXT, method = RequestMethod.GET)
-    public ResponseEntity<PostModel> getPostById(@PathVariable("id") final long id) {
+    @RequestMapping(value = PATH_KEY + ID_KEY + JSON_EXT, method = RequestMethod.GET)
+    public ResponseEntity<Object> getPostById(@PathVariable("path") final String path,
+            @PathVariable("id") final long id) {
+        TopicModel topic = topicDAO.getTopicByPath(path);
+        if (!topic.isAccess() && !topic.getUsers().contains(getLoggedUser())) {
+            return new ResponseEntity<Object>(new ErrorMessage(PAGE_PERMISSIONS_ERROR),
+                    HttpStatus.CONFLICT);
+        }
+
         PostModel post = postDAO.getPostById(id);
         return checkEntity(post);
     }
 
-    @RequestMapping(value = "/topic/" + PATH_KEY + "/" + PAGE_KEY
+    @RequestMapping(value = "/topic" + PATH_KEY + "/" + PAGE_KEY
             + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<List<PostModel>> getTopicPosts(@PathVariable("path") final String path,
             @PathVariable("page") final int page) {
@@ -118,13 +126,13 @@ public class PostRestController extends by.training.controller.rest.RestControll
         return checkEntity(posts);
     }
 
-    @RequestMapping(value = "/feed/" + PAGE_KEY + JSON_EXT, method = RequestMethod.GET)
+    @RequestMapping(value = "/feed" + PAGE_KEY + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<List<PostModel>> getFeedPosts(@PathVariable("page") final int page) {
         List<PostModel> posts = postDAO.getFeedPosts(getLoggedUser().getId(), page);
         return checkEntity(posts);
     }
 
-    @RequestMapping(value = "/topic/" + PATH_KEY + "/page_count"
+    @RequestMapping(value = "/topic" + PATH_KEY + "/page_count"
             + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<Long> getTopicPostsPageCount(@PathVariable("path") final String path) {
         long pageCount = postDAO.getTopicPostsPageCount(path);

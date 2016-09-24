@@ -35,11 +35,11 @@ public class RestController {
         return ids;
     }
 
-    public <T extends Model> ResponseEntity<T> checkEntity(final T entity) {
+    public <T extends Model> ResponseEntity<Object> checkEntity(final T entity) {
         if (entity == null) {
-            return new ResponseEntity<T>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<T>(entity, HttpStatus.OK);
+        return new ResponseEntity<Object>(entity, HttpStatus.OK);
     }
 
     public <T extends Model> ResponseEntity<List<T>> checkEntity(final List<T> entity) {

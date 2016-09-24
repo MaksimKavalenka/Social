@@ -52,14 +52,14 @@ app.factory('PostFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE,
 		});
 	}
 
-	function getPostById(id, callback) {
-		$http.get(REST.POSTS + '/' + id + REST.JSON_EXT)
+	function getPostById(path, id, callback) {
+		$http.get(REST.POSTS + '/' + path + '/' + id + REST.JSON_EXT)
 		.success(function(response) {
 			var data = {success: true, data: response};
 			callback(data);
 		})
 		.error(function(response) {
-			response = {success: false, message: MESSAGE.GETTING_POST_ERROR};
+			response = {success: false, message: response.message};
 			callback(response);
 		});
 	}

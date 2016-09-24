@@ -98,12 +98,35 @@ public class UserRestController extends by.training.controller.rest.RestControll
         }
     }
 
-    @RequestMapping(value = "/update/{login}" + JSON_EXT, method = RequestMethod.POST)
-    public ResponseEntity<Object> updateUserLogin(@PathVariable("login") final String login) {
+    @RequestMapping(value = "/update/{login}/{currentPassword}"
+            + JSON_EXT, method = RequestMethod.POST)
+    public ResponseEntity<Object> updateUserLogin(@PathVariable("login") final String login,
+            @PathVariable("currentPassword") final String currentPassword) {
         try {
-            Validator.allNotNull(login);
+            Validator.allNotNull(login, currentPassword);
 
-            userDAO.updateUserLogin(getLoggedUser().getId(), login);
+            if (!SecureData.secureBySha(currentPassword, getLoggedUser().getLogin())
+                    .equals(getLoggedUser().getPassword())) {
+                return new ResponseEntity<Object>(new ErrorMessage(PASSWORD_ERROR),
+                        HttpStatus.CONFLICT);
+            }
+
+            userDAO.updateUser(getLoggedUser().getId(), login,
+                    SecureData.secureBySha(currentPassword, login));
+            return new ResponseEntity<Object>(HttpStatus.CREATED);
+
+        } catch (ValidationException | NoSuchAlgorithmException e) {
+            return new ResponseEntity<Object>(new ErrorMessage(e.getMessage()),
+                    HttpStatus.CONFLICT);
+        }
+    }
+
+    @RequestMapping(value = "/update/{photo}" + JSON_EXT, method = RequestMethod.POST)
+    public ResponseEntity<Object> updateUserPhoto(@PathVariable("photo") final String photo) {
+        try {
+            Validator.allNotNull(photo);
+
+            userDAO.updateUserPhoto(getLoggedUser().getId(), photo);
             return new ResponseEntity<Object>(HttpStatus.CREATED);
 
         } catch (ValidationException e) {
@@ -112,8 +135,7 @@ public class UserRestController extends by.training.controller.rest.RestControll
         }
     }
 
-    @RequestMapping(value = "/" + PATH_KEY + "/for_invitation"
-            + JSON_EXT, method = RequestMethod.POST)
+    @RequestMapping(value = PATH_KEY + "/for_invitation" + JSON_EXT, method = RequestMethod.POST)
     public ResponseEntity<List<UserModel>> getUsersForInvitation(
             @PathVariable("path") final String path) {
         List<UserModel> users = userDAO.getUsersForInvitation(path);

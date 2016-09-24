@@ -37,7 +37,7 @@ public class NotificationRestController extends by.training.controller.rest.Rest
         this.userDAO = userDAO;
     }
 
-    @RequestMapping(value = "/create/{usersId}/" + PATH_KEY + JSON_EXT, method = RequestMethod.POST)
+    @RequestMapping(value = "/create/{usersId}" + PATH_KEY + JSON_EXT, method = RequestMethod.POST)
     public ResponseEntity<Object> createNotification(@PathVariable("usersId") final String usersId,
             @PathVariable("path") final String path) {
         try {
@@ -72,7 +72,7 @@ public class NotificationRestController extends by.training.controller.rest.Rest
         }
     }
 
-    @RequestMapping(value = "/user/" + PAGE_KEY + JSON_EXT, method = RequestMethod.GET)
+    @RequestMapping(value = "/user" + PAGE_KEY + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<List<NotificationModel>> getUserNotifications(
             @PathVariable("page") final int page) {
         List<NotificationModel> notifications = notificationDAO

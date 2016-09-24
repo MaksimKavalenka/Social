@@ -28,8 +28,8 @@
 	<div>{{ctrl.topic.description}}</div>
 	<form method="POST" ng-show="postCtrl.form" name="form" novalidate>
 		<div class="align-right">
-			<img class="img-load" ng-if="postCtrl.dataLoading"/>
-			<div class="action action-save" ng-click="postCtrl.createPost(0)" ng-disabled="form.$invalid || postCtrl.dataLoading"></div>
+			<div class="img-load" ng-if="postCtrl.dataLoading"></div>
+			<div class="action action-save" ng-click="postCtrl.createPost('0')" ng-disabled="form.$invalid || postCtrl.dataLoading"></div>
 			<div class="action action-cancel" ng-click="postCtrl.hideForm()"></div>
 		</div>
 		<textarea class="area-post" id="text" name="text" ng-model="postCtrl.post.text" required></textarea>

@@ -89,6 +89,20 @@ app.directive(ngDisabled, function() {
 	}
 });
 
+app.directive(fileRequired, function() {
+	return {
+		require: ngModel,
+		link: function(scope, element, attributes, controller) {
+			element.bind('change', function() {
+				scope.$apply(function() {
+					controller.$setViewValue(element.val());
+					controller.$render();
+				});
+			});
+		}
+	}
+});
+
 app.directive(fileModel, ['$parse', function($parse) {
 	return {
 		restrict: 'A',

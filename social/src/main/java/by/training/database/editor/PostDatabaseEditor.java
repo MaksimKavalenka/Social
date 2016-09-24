@@ -75,7 +75,9 @@ public class PostDatabaseEditor extends DatabaseEditor implements PostDAO {
     @Transactional
     public List<PostModel> getFeedPosts(final long userId, final int page) {
         Criteria criteria = getFeedPostsCriteria(userId);
-        return getElements(criteria, clazz, getSortField(clazz), getSortOrder(clazz), page);
+        return (criteria != null)
+                ? getElements(criteria, clazz, getSortField(clazz), getSortOrder(clazz), page)
+                : null;
     }
 
     @Override
@@ -90,8 +92,10 @@ public class PostDatabaseEditor extends DatabaseEditor implements PostDAO {
     @Transactional
     public long getFeedPostsPageCount(final long userId) {
         Criteria criteria = getFeedPostsCriteria(userId);
-        return (long) Math.ceil((long) criteria.setProjection(Projections.rowCount()).uniqueResult()
-                / (double) getCountElements(clazz));
+        return (criteria != null) ? (long) Math
+                .ceil((long) criteria.setProjection(Projections.rowCount()).uniqueResult()
+                        / (double) getCountElements(clazz))
+                : 0;
     }
 
     private Criteria getTopicPostsCriteria(final String topicPath) {
@@ -100,6 +104,14 @@ public class PostDatabaseEditor extends DatabaseEditor implements PostDAO {
         criteria.createAlias(PostFields.TOPIC, "alias");
         criteria.add(Restrictions.eq("alias." + TopicFields.PATH, topicPath));
         criteria.add(Restrictions.isNull(PostFields.PARENT_POST));
+        ProjectionList projList = Projections.projectionList();
+        projList.add(Projections.property(PostFields.ID), PostFields.ID);
+        projList.add(Projections.property(PostFields.TEXT), PostFields.TEXT);
+        projList.add(Projections.property(PostFields.DATE), PostFields.DATE);
+        projList.add(Projections.property(PostFields.CREATOR), PostFields.CREATOR);
+        projList.add(Projections.property(PostFields.TOPIC), PostFields.TOPIC);
+        criteria.setProjection(projList);
+        criteria.setResultTransformer(Transformers.aliasToBean(clazz));
         return criteria;
     }
 

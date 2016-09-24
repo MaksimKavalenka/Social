@@ -15,7 +15,7 @@ public interface UserDAO {
 
     UserModel updateUser(long id, String login, String password) throws ValidationException;
 
-    UserModel updateUserLogin(long id, String login) throws ValidationException;
+    UserModel updateUserPhoto(long id, String photo);
 
     UserModel getUserById(long id);
 

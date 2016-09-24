@@ -49,8 +49,8 @@ public class UserDatabaseEditor extends DatabaseEditor implements UserDAO {
     @Transactional(rollbackFor = ValidationException.class)
     public UserModel updateUser(final long id, final String login, final String password)
             throws ValidationException {
-        if (!checkLogin(login)) {
-            UserModel user = getUserById(id);
+        UserModel user = getUserById(id);
+        if (!checkLogin(login) || user.getLogin().equals(login)) {
             user.setLogin(login);
             user.setPassword(password);
             getSessionFactory().getCurrentSession().update(user);
@@ -61,16 +61,12 @@ public class UserDatabaseEditor extends DatabaseEditor implements UserDAO {
     }
 
     @Override
-    @Transactional(rollbackFor = ValidationException.class)
-    public UserModel updateUserLogin(final long id, final String login) throws ValidationException {
-        if (!checkLogin(login)) {
-            UserModel user = getUserById(id);
-            user.setLogin(login);
-            getSessionFactory().getCurrentSession().update(user);
-            return user;
-        } else {
-            throw new ValidationException(TAKEN_LOGIN_ERROR);
-        }
+    @Transactional
+    public UserModel updateUserPhoto(final long id, final String photo) {
+        UserModel user = getUserById(id);
+        user.setPhoto(photo);
+        getSessionFactory().getCurrentSession().update(user);
+        return user;
     }
 
     @Override

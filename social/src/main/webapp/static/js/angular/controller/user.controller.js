@@ -1,5 +1,5 @@
 'use strict';
-app.controller('UserController', ['$rootScope', '$state', 'STATE', 'UserFactory', 'CookieService', 'FlashService', function($rootScope, $state, STATE, UserFactory, CookieService, FlashService) {
+app.controller('UserController', ['$rootScope', '$scope', '$state', 'STATE', 'UserFactory', 'CookieService', 'FileService', 'FlashService', function($rootScope, $scope, $state, STATE, UserFactory, CookieService, FileService, FlashService) {
 
 	var self = this;
 	self.user = {};
@@ -51,10 +51,23 @@ app.controller('UserController', ['$rootScope', '$state', 'STATE', 'UserFactory'
 				FlashService.error(response.message);
 			}
 		}
-		if (self.user.change) {
-			UserFactory.updateUser(self.user.login, self.user.currentPassword, self.user.password, self.user.confirmPassword, callback);
-		} else {
-			UserFactory.updateUserLogin(self.user.login, callback);
+		switch ($state.current.name) {
+			case STATE.PROFILE:
+				if (self.user.change) {
+					UserFactory.updateUser(self.user.login, self.user.currentPassword, self.user.password, self.user.confirmPassword, callback);
+				} else {
+					UserFactory.updateUserLogin(self.user.login, self.user.currentPassword, callback);
+				}
+				break;
+			case STATE.PROFILE_PHOTO:
+				FileService.uploadFile($scope.photoFile, function(response) {
+					if (response.success) {
+						UserFactory.updateUserPhoto(self.user.photo.replace(/^C:\\fakepath\\/i, ''), callback);
+					} else {
+						FlashService.error(response.message);
+					}
+				});
+				break;
 		}
 	};
 

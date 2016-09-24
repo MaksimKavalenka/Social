@@ -1,6 +1,10 @@
 <div class="content ct-content" ng-repeat="topic in ctrl.topics">
 	<div class="justify">
 		<a class="link-topic" ui-sref="topic({path: topic.path})">{{topic.name}}</a>
-		<div>Created by {{topic.creator.login}}</div>
+		<div class="creator">
+			<div class="name">{{topic.creator.login}}</div>
+			<div class="img-photo img-default-photo" ng-if="!topic.creator.photo"></div>
+			<img class="img-photo" ng-if="topic.creator.photo" ng-src="/social/image/photo/{{topic.creator.photo}}"/>
+		</div>
 	</div>
 </div>

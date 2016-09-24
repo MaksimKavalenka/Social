@@ -41,6 +41,16 @@ hr.hr-header-user {
 	margin: 0 auto;
 	width: 1000px;
 }
+.creator > * {
+	display: inline-block;
+	vertical-align: bottom;
+}
+.creator .name {
+	font-weight: 600;
+}
+.creator .date {
+	font-family: monospace;
+}
 .flex {
 	flex: 1;
 }
@@ -48,9 +58,22 @@ hr.hr-header-user {
 	margin-bottom: 20px;
 	text-align: center;
 }
+.img-photo {
+	background-repeat: no-repeat;
+	background-size: 50px;
+	height: 50px;
+	width: 50px;
+}
+.img-default-photo {
+	background-image: url('../img/default-photo.png');
+}
 .img-load {
 	background-image: url('../img/load.gif');
 	background-repeat: no-repeat;
+	background-size: 15px;
+	display: inline-block;
+	height: 15px;
+	width: 15px;
 }
 .justify {
 	display: flex;

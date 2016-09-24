@@ -2,12 +2,13 @@
 	<div class="content ct-content" ng-class="{'ct-level-2': post.level === 2, 'ct-level-3': post.level >= 3}" ng-controller="PostEditController as postCtrl">
 		<div class="justify">
 			<a class="link-topic" ng-show="$first || !ctrl.postPage" ui-sref="topic({path: post.topic.path})">{{post.topic.name}}</a>
+			<div ng-show="!$first && ctrl.postPage"></div>
 			<div class="align-right">
 				<div class="dropdown">
 					<div class="drp-button"></div>
 					<div class="drp-menu">
-						<a class="drp-option" ng-if="!post.parentPost && !ctrl.postPage" ui-sref="post({path: post.topic.path, id: post.id})">Post page</a>
-						<div class="drp-option" ng-click="ansPostCtrl.creationForm('true')" ng-if="ctrl.postPage && (post.level > 0) && (post.level < 3)">Answer</div>
+						<a class="drp-option" ng-if="!ctrl.postPage && (ctrl.member || post.topic.access)" ui-sref="post({path: post.topic.path, id: post.id})">Post page</a>
+						<div class="drp-option" ng-click="ansPostCtrl.creationForm(ctrl.member)" ng-if="ctrl.postPage && (post.level > 0) && (post.level < 3) && ctrl.member">Answer</div>
 						<div ng-if="user.id === post.creator.id">
 							<hr class="hr-dropdown" ng-if="!post.parentPost && !ctrl.postPage">
 							<div class="drp-option" ng-click="postCtrl.editionForm(post)">Edit</div>
@@ -15,15 +16,21 @@
 						<div class="drp-option" ng-click="postCtrl.deletePost(post.id)" ng-if="(user.id === post.topic.creator.id) && (post.level > 0)">Delete</div>
 					</div>
 				</div>
-				<div>Created by {{post.creator.login}}</div>
-				<div>{{post.date | date: 'dd.MM.yyyy (HH:mm:ss)'}}</div>
+				<div class="creator">
+					<div>
+						<div class="name">{{post.creator.login}}</div>
+						<div class="date">{{post.date | date: 'dd.MM.yyyy (HH:mm:ss)'}}</div>
+					</div>
+					<div class="img-photo img-default-photo" ng-if="!post.creator.photo"></div>
+					<img class="img-photo" ng-if="post.creator.photo" ng-src="/social/image/photo/{{post.creator.photo}}"/>
+				</div>
 			</div>
 		</div>
 		<hr class="hr-common">
 		<div class="post" ng-if="!postCtrl.form">{{post.text}}</div>
 		<form method="POST" ng-if="postCtrl.form" name="form" novalidate>
 			<div class="align-right">
-				<img class="img-load" ng-if="postCtrl.dataLoading"/>
+				<div class="img-load" ng-if="postCtrl.dataLoading"></div>
 				<div class="action action-save" ng-click="postCtrl.updatePost(post.id)" ng-disabled="form.$invalid || postCtrl.dataLoading"></div>
 				<div class="action action-cancel" ng-click="postCtrl.hideForm()"></div>
 			</div>
@@ -37,7 +44,7 @@
 	<div ng-if="($first || ansPostCtrl.form) && ctrl.postPage">
 		<form method="POST" name="form" novalidate>
 			<div class="align-right">
-				<img class="img-load" ng-if="ansPostCtrl.dataLoading"/>
+				<div class="img-load" ng-if="ansPostCtrl.dataLoading"></div>
 				<div class="action action-save" ng-click="ansPostCtrl.createPost(post.id)" ng-disabled="form.$invalid || ansPostCtrl.dataLoading"></div>
 				<div class="action action-cancel" ng-if="!$first" ng-click="ansPostCtrl.hideForm()"></div>
 			</div>

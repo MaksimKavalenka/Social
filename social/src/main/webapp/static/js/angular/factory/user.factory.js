@@ -45,13 +45,30 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'CookieService', functio
 		});
 	}
 
-	function updateUserLogin(login, callback) {
-		if (!login) {
+	function updateUserLogin(login, currentPassword, callback) {
+		if (!login || !currentPassword) {
 			var response = {success: false, message: MESSAGE.FORM_ERROR};
 			callback(response);
 			return;
 		}
-		$http.post(REST.USERS + '/update/' + login + REST.JSON_EXT)
+		$http.post(REST.USERS + '/update/' + login + '/' + currentPassword + REST.JSON_EXT)
+		.success(function(response) {
+			var data = {success: true, data: response};
+			callback(data);
+		})
+		.error(function(response) {
+			var data = {success: false, message: response.message};
+			callback(data);
+		});
+	}
+
+	function updateUserPhoto(photo, callback) {
+		if (!photo) {
+			var response = {success: false, message: MESSAGE.FORM_ERROR};
+			callback(response);
+			return;
+		}
+		$http.post(REST.USERS + '/update/' + photo + REST.JSON_EXT)
 		.success(function(response) {
 			var data = {success: true, data: response};
 			callback(data);
@@ -107,7 +124,7 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'CookieService', functio
 			}
 		})
 		.error(function(response) {
-			response = {success: false, message: MESSAGE.GETTING_USER_ERROR};
+			response = {success: false, message: MESSAGE.AUTHENTICATION_ERROR};
 			callback(response);
 		});
 	}
@@ -137,6 +154,7 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'CookieService', functio
 		createUser: createUser,
 		updateUser: updateUser,
 		updateUserLogin: updateUserLogin,
+		updateUserPhoto: updateUserPhoto,
 		getUser: getUser,
 		getUsersForInvitation: getUsersForInvitation,
 		authentication: authentication,

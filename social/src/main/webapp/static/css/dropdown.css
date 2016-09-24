@@ -1,5 +1,6 @@
 .dropdown {
 	display: inline-block;
+	margin: 0 5px 5px;
 	position: relative;
 	text-align: left;
 }
