@@ -3,6 +3,7 @@ package by.training.constants;
 public abstract class MessageConstants {
 
     public static final String FORM_ERROR        = "Required fields must be filled";
+    public static final String PASSWORD_ERROR    = "Password is wrong";
     public static final String PASSWORDS_ERROR   = "Passwords do not match";
     public static final String PERMISSIONS_ERROR = "You have not permissions for this operation";
     public static final String TAKEN_LOGIN_ERROR = "This login is already taken";

@@ -1,6 +1,7 @@
 'use strict';
 var fileRequired = 'fileRequired';
 var fileModel = 'fileModel';
+var ngDisabled = 'ngDisabled';
 var ngMatch = 'ngMatch';
 var ngModel = 'ngModel';
 var ngLoginExist = 'ngLoginExist';
@@ -67,6 +68,25 @@ app.directive(ngMatch, function() {
 			});
 		}
 	};
+});
+
+app.directive(ngDisabled, function() {
+	return {
+		restrict: 'A', 
+		scope: {
+			disabled: '@'
+		},
+		link: function(scope, element, attrs) {
+			scope.$parent.$watch(attrs.ngDisabled, function(newVal) {
+				if (newVal) {
+					$(element).css('pointerEvents', 'none');
+				}
+				else {
+					$(element).css('pointerEvents', 'all');
+				}
+			});
+		}
+	}
 });
 
 app.directive(fileModel, ['$parse', function($parse) {

@@ -29,6 +29,16 @@ app.controller('PostEditController', ['$scope', '$state', 'PostFactory', 'FlashS
 		});
 	};
 
+	self.deletePost = function(id) {
+		PostFactory.deletePost(id, $state.params.path, function(response) {
+			if (response.success) {
+				$state.reload();
+			} else {
+				FlashService.error(response.message);
+			}
+		});
+	};
+
 	self.creationForm = function(access) {
 		if (!access) {
 			return;

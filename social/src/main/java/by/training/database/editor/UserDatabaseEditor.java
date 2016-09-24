@@ -2,7 +2,6 @@ package by.training.database.editor;
 
 import static by.training.constants.MessageConstants.TAKEN_LOGIN_ERROR;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Set;
 
@@ -24,7 +23,6 @@ import by.training.constants.ModelStructureConstants.UserFields;
 import by.training.database.dao.UserDAO;
 import by.training.exception.ValidationException;
 import by.training.model.UserModel;
-import by.training.utility.SecureData;
 
 public class UserDatabaseEditor extends DatabaseEditor implements UserDAO {
 
@@ -38,17 +36,40 @@ public class UserDatabaseEditor extends DatabaseEditor implements UserDAO {
     @Transactional(rollbackFor = ValidationException.class)
     public UserModel createUser(final String login, final String password,
             final Set<GrantedAuthority> roles) throws ValidationException {
-        try {
-            if (!checkLogin(login)) {
-                UserModel user = new UserModel(login, SecureData.secureBySha(password, login),
-                        roles);
-                getSessionFactory().getCurrentSession().save(user);
-                return user;
-            } else {
-                throw new ValidationException(TAKEN_LOGIN_ERROR);
-            }
-        } catch (NoSuchAlgorithmException e) {
-            throw new ValidationException(e.getMessage());
+        if (!checkLogin(login)) {
+            UserModel user = new UserModel(login, password, roles);
+            getSessionFactory().getCurrentSession().save(user);
+            return user;
+        } else {
+            throw new ValidationException(TAKEN_LOGIN_ERROR);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = ValidationException.class)
+    public UserModel updateUser(final long id, final String login, final String password)
+            throws ValidationException {
+        if (!checkLogin(login)) {
+            UserModel user = getUserById(id);
+            user.setLogin(login);
+            user.setPassword(password);
+            getSessionFactory().getCurrentSession().update(user);
+            return user;
+        } else {
+            throw new ValidationException(TAKEN_LOGIN_ERROR);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = ValidationException.class)
+    public UserModel updateUserLogin(final long id, final String login) throws ValidationException {
+        if (!checkLogin(login)) {
+            UserModel user = getUserById(id);
+            user.setLogin(login);
+            getSessionFactory().getCurrentSession().update(user);
+            return user;
+        } else {
+            throw new ValidationException(TAKEN_LOGIN_ERROR);
         }
     }
 

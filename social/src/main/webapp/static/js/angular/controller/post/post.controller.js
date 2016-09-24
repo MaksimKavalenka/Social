@@ -1,5 +1,5 @@
 'use strict';
-app.controller('PostController', ['$state', 'STATE', 'PostFactory', 'FlashService', function($state, STATE, PostFactory, FlashService) {
+app.controller('PostController', ['$state', 'STATE', 'PostFactory', 'FlashService', 'TransformService', function($state, STATE, PostFactory, FlashService, TransformService) {
 
 	var self = this;
 	self.posts = [];
@@ -27,7 +27,9 @@ app.controller('PostController', ['$state', 'STATE', 'PostFactory', 'FlashServic
 	function getPostById(id) {
 		PostFactory.getPostById(id, function(response) {
 			if (response.success) {
-				self.posts.push(response.data);
+				var array = [];
+				array.push(response.data);
+				self.posts = TransformService.transformPostArray(array, 0);
 			} else {
 				FlashService.error(response.message);
 			}

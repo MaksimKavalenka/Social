@@ -59,9 +59,17 @@ public class NotificationRestController extends by.training.controller.rest.Rest
     }
 
     @RequestMapping(value = "/delete/{id}" + JSON_EXT, method = RequestMethod.POST)
-    public ResponseEntity<Void> deleteNotification(@PathVariable("id") final long id) {
-        notificationDAO.deleteNotification(id);
-        return new ResponseEntity<Void>(HttpStatus.OK);
+    public ResponseEntity<Object> deleteNotification(@PathVariable("id") final long id) {
+        try {
+            Validator.allNotNull(id);
+
+            notificationDAO.deleteNotification(id);
+            return new ResponseEntity<Object>(HttpStatus.OK);
+
+        } catch (ValidationException e) {
+            return new ResponseEntity<Object>(new ErrorMessage(e.getMessage()),
+                    HttpStatus.CONFLICT);
+        }
     }
 
     @RequestMapping(value = "/user/" + PAGE_KEY + JSON_EXT, method = RequestMethod.GET)

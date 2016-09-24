@@ -53,6 +53,13 @@ public class PostDatabaseEditor extends DatabaseEditor implements PostDAO {
 
     @Override
     @Transactional
+    public void deletePost(final long id) {
+        PostModel post = getPostById(id);
+        getSessionFactory().getCurrentSession().delete(post);
+    }
+
+    @Override
+    @Transactional
     public PostModel getPostById(final long id) {
         return (PostModel) getSessionFactory().getCurrentSession().get(clazz, id);
     }

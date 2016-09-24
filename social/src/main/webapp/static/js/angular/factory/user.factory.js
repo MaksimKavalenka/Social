@@ -23,6 +23,69 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'CookieService', functio
 		});
 	}
 
+	function updateUser(login, currentPassword, password, confirmPassword, callback) {
+		if (!login || !currentPassword || !password || !confirmPassword) {
+			var response = {success: false, message: MESSAGE.FORM_ERROR};
+			callback(response);
+			return;
+		}
+		if (password !== confirmPassword) {
+			var response = {success: false, message: MESSAGE.PASSWORDS_ERROR};
+			callback(response);
+			return;
+		}
+		$http.post(REST.USERS + '/update/' + login + '/' + currentPassword + '/' + password + '/' + confirmPassword + REST.JSON_EXT)
+		.success(function(response) {
+			var data = {success: true, data: response};
+			callback(data);
+		})
+		.error(function(response) {
+			var data = {success: false, message: response.message};
+			callback(data);
+		});
+	}
+
+	function updateUserLogin(login, callback) {
+		if (!login) {
+			var response = {success: false, message: MESSAGE.FORM_ERROR};
+			callback(response);
+			return;
+		}
+		$http.post(REST.USERS + '/update/' + login + REST.JSON_EXT)
+		.success(function(response) {
+			var data = {success: true, data: response};
+			callback(data);
+		})
+		.error(function(response) {
+			var data = {success: false, message: response.message};
+			callback(data);
+		});
+	}
+
+	function getUser(callback) {
+		$http.get(REST.USERS + '/auth' + REST.JSON_EXT, {})
+		.success(function(response) {
+			var data = {success: true, data: response};
+			callback(data);
+		})
+		.error(function(response) {
+			response = {success: false, message: MESSAGE.GETTING_USER_ERROR};
+			callback(response);
+		});
+	}
+
+	function getUsersForInvitation(path, callback) {
+		$http.post(REST.USERS + '/' + path + '/for_invitation' + REST.JSON_EXT)
+		.success(function(response) {
+			var data = {success: true, data:response};
+			callback(data);
+		})
+		.error(function() {
+			var response = {success: false, message: MESSAGE.GETTING_USER_ERROR};
+			callback(response);
+		});
+	}
+
 	function authentication(login, password, remember, callback) {
 		if (!login || !password) {
 			var response = {success: false, message: MESSAGE.FORM_ERROR};
@@ -49,35 +112,9 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'CookieService', functio
 		});
 	}
 
-	function getUser(callback) {
-		$http.get(REST.USERS + '/auth' + REST.JSON_EXT, {})
-		.success(function(response) {
-			if (response) {
-				callback(response);
-			} else {
-				callback(null);
-			}
-		})
-		.error(function() {
-			callback(null);
-		});
-	}
-
 	function logout() {
 		CookieService.removeRememberMeCookie();
 		$http.post(REST.USERS + '/logout' + REST.JSON_EXT, {});
-	}
-
-	function getUsersForInvitation(path, callback) {
-		$http.post(REST.USERS + '/' + path + '/for_invitation' + REST.JSON_EXT)
-		.success(function(response) {
-			var data = {success: true, data:response};
-			callback(data);
-		})
-		.error(function() {
-			var response = {success: false, message: MESSAGE.GETTING_USER_ERROR};
-			callback(response);
-		});
 	}
 
 	function checkLogin(login, callback) {
@@ -98,10 +135,12 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'CookieService', functio
 
 	return {
 		createUser: createUser,
-		authentication: authentication,
+		updateUser: updateUser,
+		updateUserLogin: updateUserLogin,
 		getUser: getUser,
-		logout: logout,
 		getUsersForInvitation: getUsersForInvitation,
+		authentication: authentication,
+		logout: logout,
 		checkLogin: checkLogin
 	};
 

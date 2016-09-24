@@ -35,6 +35,23 @@ app.factory('PostFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE,
 		});
 	}
 
+	function deletePost(id, path, callback) {
+		if (!id) {
+			var response = {success: false, message: MESSAGE.FORM_ERROR};
+			callback(response);
+			return;
+		}
+		$http.post(REST.POSTS + '/delete/' + id + '/' + path + REST.JSON_EXT)
+		.success(function(response) {
+			var data = {success: true};
+			callback(data);
+		})
+		.error(function(response) {
+			var data = {success: false, message: MESSAGE.DELETING_POST_ERROR};
+			callback(data);
+		});
+	}
+
 	function getPostById(id, callback) {
 		$http.get(REST.POSTS + '/' + id + REST.JSON_EXT)
 		.success(function(response) {
@@ -98,6 +115,7 @@ app.factory('PostFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE,
 	return {
 		createPost: createPost,
 		updatePost: updatePost,
+		deletePost: deletePost,
 		getPostById: getPostById,
 		getTopicPosts: getTopicPosts,
 		getFeedPosts: getFeedPosts,

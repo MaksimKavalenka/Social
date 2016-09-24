@@ -18,6 +18,7 @@ app.constant('MESSAGE', (function() {
 		AUTHENTICATION_ERROR: 'Login or password is wrong',
 		FORM_ERROR: 'Required fields must be filled',
 		DELETING_NOTIFICATION_ERROR: deletingError + 'notification',
+		DELETING_POST_ERROR: deletingError + 'post',
 		GETTING_NOTIFICATION_ERROR: gettingError + 'notification',
 		GETTING_POST_ERROR: gettingError + 'post',
 		GETTING_TOPIC_ERROR: gettingError + 'topic',
@@ -43,6 +44,7 @@ app.constant('PATH', (function() {
 		TOPIC_CONTENT: contentPath + '/topic' + htmlExt,
 		INVITE_FORM: formPath + '/invite' + htmlExt,
 		LOGIN_FORM: formPath + '/login' + htmlExt,
+		PROFILE_FORM: formPath + '/profile' + htmlExt,
 		REGISTER_FORM: formPath + '/register' + htmlExt,
 		TOPIC_EDIT_FORM: formPath + '/topic.edit' + htmlExt,
 		TOPIC_INFO: infoPath + '/topic.info' + htmlExt,
@@ -73,6 +75,7 @@ app.constant('STATE', (function() {
 	return {
 		LOGIN: 'login',
 		REGISTER: 'register',
+		PROFILE: 'profile',
 		TOPIC_ADD: topic + addOperation,
 		TOPIC_EDIT: topic + editOperation,
 		FEED: 'feed',
@@ -88,7 +91,9 @@ app.constant('TITLE', (function() {
 	return {
 		LOGIN: 'Login',
 		REGISTER: 'Register',
+		PROFILE: 'Profile',
 		TOPIC_ADD: 'Create topic',
+		POST: 'Post',
 		FEED: 'Feed',
 		TOPICS: 'Topics',
 		NOTIFICATIONS: 'Notifications',
@@ -98,13 +103,14 @@ app.constant('TITLE', (function() {
 
 app.constant('URL', (function() {
 	var url = '/social';
-	var loginUrl = '/login';
-	var registerUrl = '/register';
-	var feedUrl = '/feed';
-	var notificationsUrl = '/notifications';
-	var searchUrl = '/search';
-	var topicUrl = '/topic';
-	var topicsUrl = '/topics';
+	var loginUrl = url + '/login';
+	var registerUrl = url + '/register';
+	var profileUrl = url + '/profile';
+	var feedUrl = url + '/feed';
+	var notificationsUrl = url + '/notifications';
+	var searchUrl = url + '/search';
+	var topicUrl = url + '/topic';
+	var topicsUrl = url + '/topics';
 	var addOperation = '/add';
 	var editOperation = '/edit';
 	var idKey = '{id:[0-9]{1,}}';
@@ -112,16 +118,17 @@ app.constant('URL', (function() {
 	var pathKey = '{path:[a-z0-9._]{1,}}';
 	var valueKey = '{value}';
 	return {
-		HOME: url + feedUrl + '?page=1',
-		LOGIN: url + loginUrl,
-		REGISTER: url + registerUrl,
-		TOPIC_ADD: url + topicUrl + addOperation,
-		TOPIC_EDIT: url + topicUrl + '/' + pathKey + editOperation,
-		FEED: url + feedUrl + '?' + pageKey,
-		TOPIC: url + topicUrl + '/' + pathKey + '?' + pageKey,
-		TOPICS: url + topicsUrl + '?' + pageKey,
-		POST: url + topicUrl + '/' + pathKey + '/' + '?' + idKey,
-		NOTIFICATIONS: url + notificationsUrl + '?' + pageKey,
-		SEARCH: url + searchUrl + '?' + valueKey + '&' + pageKey
+		HOME: feedUrl + '?page=1',
+		LOGIN: loginUrl,
+		REGISTER: registerUrl,
+		PROFILE: profileUrl,
+		TOPIC_ADD: topicUrl + addOperation,
+		TOPIC_EDIT: topicUrl + '/' + pathKey + editOperation,
+		FEED: feedUrl + '?' + pageKey,
+		TOPIC: topicUrl + '/' + pathKey + '?' + pageKey,
+		TOPICS: topicsUrl + '?' + pageKey,
+		POST: topicUrl + '/' + pathKey + '/' + '?' + idKey,
+		NOTIFICATIONS: notificationsUrl + '?' + pageKey,
+		SEARCH: searchUrl + '?' + valueKey + '&' + pageKey
 	}
 })());

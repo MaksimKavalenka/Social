@@ -9,8 +9,8 @@
 			<label class="required" for="path">Path</label>
 			<input type="text" id="path" name="path" maxlength="255" ng-model="ctrl.topic.path" ng-path-exist required/>
 			<span class="invalid" ng-show="form.path.$pending.ngPathExist">Checking if this path is available...</span>
-			<span class="invalid" ng-show="form.path.$error.ngPathExist && !ctrl.editValidatePath()">This path is already taken</span>
-			<span class="valid" ng-show="!form.path.$pending.ngPathExist && ctrl.editValidatePath()">This is current path</span>
+			<span class="invalid" ng-show="form.path.$error.ngPathExist && !ctrl.validatePath()">This path is already taken</span>
+			<span class="valid" ng-show="!form.path.$pending.ngPathExist && ctrl.validatePath()">This is current path</span>
 		</div>
 		<div class="field">
 			<label class="required" for="description">Description</label>
@@ -22,7 +22,7 @@
 			Private topic<input type="radio" id="access" name="access" ng-model="ctrl.topic.access" value="false">
 		</div>
 		<div>
-			<button class="btn btn-primary" ng-click="ctrl.editTopic()" ng-disabled="(form.$invalid && !ctrl.editValidatePath()) || ctrl.dataLoading || !ctrl.editPermissions()">Submit</button>
+			<button class="btn btn-primary" ng-click="ctrl.editTopic()" ng-disabled="(form.$invalid && !ctrl.validatePath()) || ctrl.dataLoading || !ctrl.permissions()">Submit</button>
 			<img class="img-load" ng-if="ctrl.dataLoading"/>
 		</div>
 	</fieldset>

@@ -9,6 +9,12 @@
 .ct-content {
 	border: 2px solid #292929;
 }
+.ct-level-2 {
+	margin-left: 50px;
+}
+.ct-level-3 {
+	margin-left: 100px;
+}
 .topic {
 	color: #292929;
 	font-family: sans-serif;

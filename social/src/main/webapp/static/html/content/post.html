@@ -1,16 +1,18 @@
-<div ng-repeat="post in ctrl.posts">
-	<div class="content ct-content" ng-controller="PostEditController as postCtrl">
+<div ng-repeat="post in ctrl.posts" ng-controller="PostEditController as ansPostCtrl">
+	<div class="content ct-content" ng-class="{'ct-level-2': post.level === 2, 'ct-level-3': post.level >= 3}" ng-controller="PostEditController as postCtrl">
 		<div class="justify">
-			<a class="link-topic" ng-if="!post.parentPost" ui-sref="topic({path: post.topic.path})">{{post.topic.name}}</a>
+			<a class="link-topic" ng-show="$first || !ctrl.postPage" ui-sref="topic({path: post.topic.path})">{{post.topic.name}}</a>
 			<div class="align-right">
 				<div class="dropdown">
 					<div class="drp-button"></div>
 					<div class="drp-menu">
 						<a class="drp-option" ng-if="!post.parentPost && !ctrl.postPage" ui-sref="post({path: post.topic.path, id: post.id})">Post page</a>
+						<div class="drp-option" ng-click="ansPostCtrl.creationForm('true')" ng-if="ctrl.postPage && (post.level > 0) && (post.level < 3)">Answer</div>
 						<div ng-if="user.id === post.creator.id">
 							<hr class="hr-dropdown" ng-if="!post.parentPost && !ctrl.postPage">
 							<div class="drp-option" ng-click="postCtrl.editionForm(post)">Edit</div>
 						</div>
+						<div class="drp-option" ng-click="postCtrl.deletePost(post.id)" ng-if="(user.id === post.topic.creator.id) && (post.level > 0)">Delete</div>
 					</div>
 				</div>
 				<div>Created by {{post.creator.login}}</div>
@@ -28,17 +30,18 @@
 			<textarea class="area-post" id="text" name="text" ng-model="postCtrl.post.text" required></textarea>
 		</form>
 	</div>
-	<div ng-if="$first && ctrl.postPage">
-		<form method="POST" ng-controller="PostEditController as postCtrl" name="form" novalidate>
+	<div class="comments-title" ng-if="$first && ctrl.postPage">
+		Comments
+		<hr class="hr-comments">
+	</div>
+	<div ng-if="($first || ansPostCtrl.form) && ctrl.postPage">
+		<form method="POST" name="form" novalidate>
 			<div class="align-right">
-				<img class="img-load" ng-if="postCtrl.dataLoading"/>
-				<div class="action action-save" ng-click="postCtrl.createPost(post.id)" ng-disabled="form.$invalid || postCtrl.dataLoading"></div>
+				<img class="img-load" ng-if="ansPostCtrl.dataLoading"/>
+				<div class="action action-save" ng-click="ansPostCtrl.createPost(post.id)" ng-disabled="form.$invalid || ansPostCtrl.dataLoading"></div>
+				<div class="action action-cancel" ng-if="!$first" ng-click="ansPostCtrl.hideForm()"></div>
 			</div>
-			<textarea class="area-comment" id="text" name="text" ng-model="postCtrl.post.text" required></textarea>
+			<textarea class="area-comment" id="text" name="text" ng-model="ansPostCtrl.post.text" required></textarea>
 		</form>
-		<div class="comments-title">
-			Comments
-			<hr class="hr-comments">
-		</div>
 	</div>
 </div>

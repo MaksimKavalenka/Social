@@ -35,7 +35,8 @@ public class PostModel extends Model {
     private TopicModel        topic;
 
     @JsonIgnore
-    @ManyToOne(targetEntity = PostModel.class, cascade = {CascadeType.DETACH})
+    @ManyToOne(targetEntity = PostModel.class, cascade = {
+            CascadeType.DETACH}, fetch = FetchType.LAZY)
     private PostModel         parentPost;
 
     @OneToMany(cascade = {CascadeType.REMOVE,

@@ -1,0 +1,38 @@
+<form method="POST" class="form-submit form-validation" name="form" novalidate>
+	<fieldset>
+		<legend>Profile</legend>
+		<div class="field">
+			<label class="required" for="login">Login</label>
+			<input type="text" id="login" name="login" maxlength="255" ng-model="ctrl.user.login" ng-login-exist required/>
+			<span class="invalid" ng-show="form.login.$pending.ngLoginExist">Checking if this login is available...</span>
+			<span class="invalid" ng-show="form.login.$error.ngLoginExist && !ctrl.validateLogin()">This login is already taken</span>
+			<span class="valid" ng-show="!form.path.$pending.ngLoginExist && ctrl.validateLogin()">This is current login</span>
+		</div>
+		<div class="field simple">
+			<label for="change">Change password</label>
+			<input type="checkbox" id="change" name="change" ng-model="ctrl.user.change"/>
+		</div>
+		<div ng-show="ctrl.user.change">
+			<div class="field">
+				<label class="required" for="currentPassword">Current password</label>
+				<input type="password" id="currentPassword" name="currentPassword" maxlength="255" ng-model="ctrl.user.currentPassword" ng-minlength="3" required/>
+				<span class="invalid" ng-show="form.currentPassword.$error.required || form.currentPassword.$error.minlength">Minimal count of symbols is 3</span>
+			</div>
+			<div class="field">
+				<label class="required" for="password">New password</label>
+				<input type="password" id="password" name="password" maxlength="255" ng-model="ctrl.user.password" ng-minlength="3" required/>
+				<span class="invalid" ng-show="form.password.$error.required || form.password.$error.minlength">Minimal count of symbols is 3</span>
+			</div>
+			<div class="field">
+				<label class="required" for="confirmPassword">Confirm a new password</label>
+				<input type="password" id="confirmPassword" name="confirmPassword" maxlength="255" ng-model="ctrl.user.confirmPassword" ng-match="ctrl.user.password" ng-minlength="3" required/>
+				<span class="invalid" ng-show="form.confirmPassword.$error.required || form.confirmPassword.$error.minlength">Minimal count of symbols is 3</span>
+				<span class="invalid" ng-show="form.confirmPassword.$error.ngMatch && !form.confirmPassword.$error.required && !form.confirmPassword.$error.minlength">Passwords do not match</span>
+			</div>
+		</div>
+		<div>
+			<button class="btn btn-primary" ng-click="ctrl.update()" ng-disabled="((form.$invalid && ctrl.user.change) && !ctrl.validateLogin()) || ctrl.dataLoading">Submit</button>
+			<img class="img-load" ng-if="ctrl.dataLoading"/>
+		</div>
+	</fieldset>
+</form>

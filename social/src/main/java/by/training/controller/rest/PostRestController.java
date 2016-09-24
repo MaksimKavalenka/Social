@@ -46,17 +46,17 @@ public class PostRestController extends by.training.controller.rest.RestControll
             TopicModel topic = topicDAO.getTopicByPath(path);
             UserModel user = getLoggedUser();
 
-            if (topic.getUsers().contains(user)) {
-                PostModel parentPost = null;
-                if (parentPostId > 0) {
-                    parentPost = postDAO.getPostById(parentPostId);
-                }
-
-                PostModel post = postDAO.createPost(text, user, topic, parentPost);
-                return new ResponseEntity<Object>(post, HttpStatus.CREATED);
+            if (!topic.getUsers().contains(user)) {
+                return new ResponseEntity<Object>(new ErrorMessage(PERMISSIONS_ERROR),
+                        HttpStatus.CONFLICT);
             }
-            return new ResponseEntity<Object>(new ErrorMessage(PERMISSIONS_ERROR),
-                    HttpStatus.CONFLICT);
+
+            PostModel parentPost = null;
+            if (parentPostId > 0) {
+                parentPost = postDAO.getPostById(parentPostId);
+            }
+            PostModel post = postDAO.createPost(text, user, topic, parentPost);
+            return new ResponseEntity<Object>(post, HttpStatus.CREATED);
 
         } catch (ValidationException e) {
             return new ResponseEntity<Object>(new ErrorMessage(e.getMessage()),
@@ -70,12 +70,33 @@ public class PostRestController extends by.training.controller.rest.RestControll
         try {
             Validator.allNotNull(id, text);
 
-            if (postDAO.getPostById(id).getCreator().getId() == getLoggedUser().getId()) {
-                PostModel post = postDAO.updatePost(id, text);
-                return new ResponseEntity<Object>(post, HttpStatus.CREATED);
+            if (postDAO.getPostById(id).getCreator().getId() != getLoggedUser().getId()) {
+                return new ResponseEntity<Object>(new ErrorMessage(PERMISSIONS_ERROR),
+                        HttpStatus.CONFLICT);
             }
-            return new ResponseEntity<Object>(new ErrorMessage(PERMISSIONS_ERROR),
+
+            PostModel post = postDAO.updatePost(id, text);
+            return new ResponseEntity<Object>(post, HttpStatus.CREATED);
+
+        } catch (ValidationException e) {
+            return new ResponseEntity<Object>(new ErrorMessage(e.getMessage()),
                     HttpStatus.CONFLICT);
+        }
+    }
+
+    @RequestMapping(value = "/delete/{id}/" + PATH_KEY + JSON_EXT, method = RequestMethod.POST)
+    public ResponseEntity<Object> deleteNotification(@PathVariable("id") final long id,
+            @PathVariable("path") final String path) {
+        try {
+            Validator.allNotNull(id);
+
+            if (topicDAO.getTopicByPath(path).getCreator().getId() != getLoggedUser().getId()) {
+                return new ResponseEntity<Object>(new ErrorMessage(PERMISSIONS_ERROR),
+                        HttpStatus.CONFLICT);
+            }
+
+            postDAO.deletePost(id);
+            return new ResponseEntity<Object>(HttpStatus.OK);
 
         } catch (ValidationException e) {
             return new ResponseEntity<Object>(new ErrorMessage(e.getMessage()),

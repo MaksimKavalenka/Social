@@ -42,15 +42,16 @@ app.controller('TopicController', ['$scope', '$state', 'STATE', 'TopicFactory', 
 		}
 	};
 
-	self.editValidatePath = function() {
-		var flag = ($state.current.name === STATE.TOPIC_EDIT) && (currentPath === document.getElementById('path').value);
+	self.validatePath = function() {
+		var id = 'path';
+		var flag = ($state.current.name === STATE.TOPIC_EDIT) && (currentPath === document.getElementById(id).value);
 		if (flag) {
-			document.getElementById('path').className = 'ng-valid';
+			document.getElementById(id).className = 'ng-valid';
 		}
 		return flag;
 	};
 
-	self.editPermissions = function() {
+	self.permissions = function() {
 		return (($state.current.name === STATE.TOPIC_EDIT) && ($scope.user.id === self.topic.creator.id)) || $state.current.name === STATE.TOPIC_ADD;
 	};
 

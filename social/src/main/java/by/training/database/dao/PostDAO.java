@@ -12,6 +12,8 @@ public interface PostDAO {
 
     PostModel updatePost(long id, String text);
 
+    void deletePost(long id);
+
     PostModel getPostById(long id);
 
     List<PostModel> getTopicPosts(String topicPath, int page);

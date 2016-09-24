@@ -62,12 +62,13 @@ public class TopicRestController extends by.training.controller.rest.RestControl
         try {
             Validator.allNotNull(id, name, description, access);
 
-            if (topicDAO.getTopicById(id).getCreator().getId() == getLoggedUser().getId()) {
-                TopicModel topic = topicDAO.updateTopic(id, name, path, description, access);
-                return new ResponseEntity<Object>(topic, HttpStatus.CREATED);
+            if (topicDAO.getTopicById(id).getCreator().getId() != getLoggedUser().getId()) {
+                return new ResponseEntity<Object>(new ErrorMessage(PERMISSIONS_ERROR),
+                        HttpStatus.CONFLICT);
             }
-            return new ResponseEntity<Object>(new ErrorMessage(PERMISSIONS_ERROR),
-                    HttpStatus.CONFLICT);
+
+            TopicModel topic = topicDAO.updateTopic(id, name, path, description, access);
+            return new ResponseEntity<Object>(topic, HttpStatus.CREATED);
 
         } catch (ValidationException e) {
             return new ResponseEntity<Object>(new ErrorMessage(e.getMessage()),
