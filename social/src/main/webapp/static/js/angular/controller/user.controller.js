@@ -1,5 +1,5 @@
 'use strict';
-app.controller('UserController', ['$rootScope', '$scope', '$state', 'STATE', 'UserFactory', 'CookieService', 'FileService', 'FlashService', function($rootScope, $scope, $state, STATE, UserFactory, CookieService, FileService, FlashService) {
+app.controller('UserController', ['$rootScope', '$scope', '$state', 'STATE', 'UserFactory', 'FileService', 'FlashService', function($rootScope, $scope, $state, STATE, UserFactory, FileService, FlashService) {
 
 	var self = this;
 	self.user = {};
@@ -15,7 +15,7 @@ app.controller('UserController', ['$rootScope', '$scope', '$state', 'STATE', 'Us
 
 	self.login = function() {
 		self.dataLoading = true;
-		UserFactory.authentication(self.user.login, self.user.password, self.user.remember, function(response) {
+		UserFactory.authentication(self.user.login, self.user.password, function(response) {
 			if (response.success) {
 				$rootScope.user = {id: response.data.id};
 				$state.go(STATE.FEED, {page: 1});

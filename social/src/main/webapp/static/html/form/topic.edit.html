@@ -18,11 +18,11 @@
 		</div>
 		<div class="field simple">
 			<label for="publicAccess">Public topic</label>
-			<input type="radio" id="publicAccess" name="publicAccess" ng-model="ctrl.topic.access" ng-value="true">
+			<input type="radio" id="publicAccess" name="publicAccess" ng-model="ctrl.topic.access" ng-value="'1'">
 		</div>
 		<div class="field simple">
 			<label for="privateAccess">Private topic</label>
-			<input type="radio" id="privateAccess" name="privateAccess" ng-model="ctrl.topic.access" ng-value="false">
+			<input type="radio" id="privateAccess" name="privateAccess" ng-model="ctrl.topic.access" ng-value="'0'">
 		</div>
 		<div>
 			<button class="btn btn-primary" ng-click="ctrl.editTopic()" ng-disabled="(form.$invalid && !ctrl.validatePath()) || ctrl.dataLoading || !ctrl.permissions()">Submit</button>

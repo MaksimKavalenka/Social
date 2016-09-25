@@ -2,7 +2,6 @@ package by.training.database.editor;
 
 import static by.training.constants.MessageConstants.TAKEN_PATH_ERROR;
 import static by.training.utility.CriteriaHelper.getCountElements;
-import static by.training.utility.CriteriaHelper.getSearchField;
 import static by.training.utility.CriteriaHelper.getSortField;
 import static by.training.utility.CriteriaHelper.getSortOrder;
 
@@ -15,9 +14,9 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.transaction.annotation.Transactional;
 
-import by.training.constants.ModelStructureConstants.ModelFields;
-import by.training.constants.ModelStructureConstants.Models;
+import by.training.constants.ModelStructureConstants.RelationFields;
 import by.training.constants.ModelStructureConstants.TopicFields;
+import by.training.constants.ModelStructureConstants.UserFields;
 import by.training.database.dao.TopicDAO;
 import by.training.exception.ValidationException;
 import by.training.model.TopicModel;
@@ -140,16 +139,19 @@ public class TopicDatabaseEditor extends DatabaseEditor implements TopicDAO {
     private Criteria getTopicsByValueCriteria(final String value, final long userId) {
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(clazz)
                 .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-
-        criteria.createAlias(getSearchField(clazz, Models.USER), "alias");
-        criteria.add(Restrictions.or(Restrictions.eq("alias." + ModelFields.ID, userId),
+        criteria.createAlias(RelationFields.USERS, "alias");
+        criteria.add(Restrictions.or(Restrictions.eq("alias." + UserFields.ID, userId),
                 Restrictions.eq(TopicFields.ACCESS, true)));
         criteria.add(Restrictions.ilike(TopicFields.NAME, "%" + value + "%"));
         return criteria;
     }
 
     private Criteria getUserTopicsCriteria(final long userId) {
-        return getDefaultRelationCriteria(clazz, Models.USER, userId);
+        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(clazz)
+                .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+        criteria.createAlias(RelationFields.USERS, "alias");
+        criteria.add(Restrictions.eq("alias." + UserFields.ID, userId));
+        return criteria;
     }
 
 }

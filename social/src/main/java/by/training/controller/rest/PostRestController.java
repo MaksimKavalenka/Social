@@ -1,5 +1,7 @@
 package by.training.controller.rest;
 
+import static by.training.constants.CountConstants.MAX_POST_LEVEL;
+import static by.training.constants.MessageConstants.LEVEL_ERROR;
 import static by.training.constants.MessageConstants.OPERATION_PERMISSIONS_ERROR;
 import static by.training.constants.MessageConstants.PAGE_PERMISSIONS_ERROR;
 import static by.training.constants.UrlConstants.ID_KEY;
@@ -49,6 +51,11 @@ public class PostRestController extends by.training.controller.rest.RestControll
 
             if (!topic.getUsers().contains(user)) {
                 return new ResponseEntity<Object>(new ErrorMessage(OPERATION_PERMISSIONS_ERROR),
+                        HttpStatus.CONFLICT);
+            }
+
+            if ((parentPostId > 0) && (postDAO.getPostLevel(parentPostId) >= MAX_POST_LEVEL)) {
+                return new ResponseEntity<Object>(new ErrorMessage(LEVEL_ERROR),
                         HttpStatus.CONFLICT);
             }
 

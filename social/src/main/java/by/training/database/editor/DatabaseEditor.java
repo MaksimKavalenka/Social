@@ -1,18 +1,14 @@
 package by.training.database.editor;
 
 import static by.training.utility.CriteriaHelper.getCountElements;
-import static by.training.utility.CriteriaHelper.getSearchField;
 
 import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 
-import by.training.constants.ModelStructureConstants.ModelFields;
 import by.training.model.Model;
 
 public abstract class DatabaseEditor {
@@ -35,15 +31,6 @@ public abstract class DatabaseEditor {
             criteria.add(criterion);
         }
         return (T) criteria.uniqueResult();
-    }
-
-    public <T extends Model> Criteria getDefaultRelationCriteria(final Class<T> clazz,
-            final String relation, final long relationId) {
-        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(clazz)
-                .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-        criteria.createAlias(getSearchField(clazz, relation), "alias");
-        criteria.add(Restrictions.eq("alias." + ModelFields.ID, relationId));
-        return criteria;
     }
 
     @SuppressWarnings("unchecked")

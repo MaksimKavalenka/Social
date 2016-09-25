@@ -6,6 +6,7 @@
 	padding: 0;
 }
 .navigation > li {
+	cursor: pointer;
 	display: inline-block;
 	font-family: "Berlin Sans FB";
 }

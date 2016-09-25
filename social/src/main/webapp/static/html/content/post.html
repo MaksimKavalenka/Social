@@ -34,21 +34,21 @@
 				<div class="action action-save" ng-click="postCtrl.updatePost(post.id)" ng-disabled="form.$invalid || postCtrl.dataLoading"></div>
 				<div class="action action-cancel" ng-click="postCtrl.hideForm()"></div>
 			</div>
-			<textarea class="area-post" id="text" name="text" ng-model="postCtrl.post.text" required></textarea>
+			<textarea class="msd-elastic" id="text" name="text" ng-model="postCtrl.post.text" placeholder="Edit the record" required></textarea>
 		</form>
 	</div>
 	<div class="comments-title" ng-if="$first && ctrl.postPage">
 		Comments
 		<hr class="hr-comments">
 	</div>
-	<div ng-if="($first || ansPostCtrl.form) && ctrl.postPage">
+	<div ng-if="($first || ansPostCtrl.form) && ctrl.postPage && ctrl.member">
 		<form method="POST" name="form" novalidate>
 			<div class="align-right">
 				<div class="img-load" ng-if="ansPostCtrl.dataLoading"></div>
 				<div class="action action-save" ng-click="ansPostCtrl.createPost(post.id)" ng-disabled="form.$invalid || ansPostCtrl.dataLoading"></div>
 				<div class="action action-cancel" ng-if="!$first" ng-click="ansPostCtrl.hideForm()"></div>
 			</div>
-			<textarea class="area-comment" id="text" name="text" ng-model="ansPostCtrl.post.text" required></textarea>
+			<textarea class="msd-elastic" id="text" name="text" ng-model="ansPostCtrl.post.text" placeholder="Leave a comment" required></textarea>
 		</form>
 	</div>
 </div>

@@ -1,10 +1,8 @@
 'use strict';
-app.factory('NotificationFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE, REST) {
+app.factory('NotificationFactory', ['$http', 'MESSAGE', 'REST', 'ValidatorService', function($http, MESSAGE, REST, ValidatorService) {
 
 	function sendInvitations(usersId, topicPath, callback) {
-		if (!usersId) {
-			var response = {success: false, message: MESSAGE.FORM_ERROR};
-			callback(response);
+		if (!ValidatorService.allNotEmpty(callback, usersId, topicPath)) {
 			return;
 		}
 		$http.post(REST.NOTIFICATIONS + '/create/' + usersId + '/' + topicPath + REST.JSON_EXT)
@@ -19,6 +17,9 @@ app.factory('NotificationFactory', ['$http', 'MESSAGE', 'REST', function($http, 
 	}
 
 	function deleteNotification(id, callback) {
+		if (!ValidatorService.allNotEmpty(callback, id)) {
+			return;
+		}
 		$http.post(REST.NOTIFICATIONS + '/delete/' + id + REST.JSON_EXT)
 		.success(function(response) {
 			var data = {success: true};
@@ -31,6 +32,9 @@ app.factory('NotificationFactory', ['$http', 'MESSAGE', 'REST', function($http, 
 	}
 
 	function getUserNotifications(page, callback) {
+		if (!ValidatorService.allNotEmpty(callback, page)) {
+			return;
+		}
 		$http.get(REST.NOTIFICATIONS + '/user/' + page + REST.JSON_EXT)
 		.success(function(response) {
 			var data = {success: true, data: response};

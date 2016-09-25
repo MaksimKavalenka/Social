@@ -1,7 +1,6 @@
 package by.training.database.editor;
 
 import static by.training.utility.CriteriaHelper.getCountElements;
-import static by.training.utility.CriteriaHelper.getSearchField;
 import static by.training.utility.CriteriaHelper.getSortField;
 import static by.training.utility.CriteriaHelper.getSortOrder;
 
@@ -16,10 +15,10 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.springframework.transaction.annotation.Transactional;
 
-import by.training.constants.ModelStructureConstants.ModelFields;
-import by.training.constants.ModelStructureConstants.Models;
 import by.training.constants.ModelStructureConstants.PostFields;
+import by.training.constants.ModelStructureConstants.RelationFields;
 import by.training.constants.ModelStructureConstants.TopicFields;
+import by.training.constants.ModelStructureConstants.UserFields;
 import by.training.database.dao.PostDAO;
 import by.training.model.PostModel;
 import by.training.model.TopicModel;
@@ -98,12 +97,37 @@ public class PostDatabaseEditor extends DatabaseEditor implements PostDAO {
                 : 0;
     }
 
+    @Override
+    @Transactional
+    public long getPostLevel(final long id) {
+        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(clazz);
+
+        criteria.add(Restrictions.idEq(id));
+
+        ProjectionList projList = Projections.projectionList();
+        projList.add(Projections.property(PostFields.PARENT_POST), PostFields.PARENT_POST);
+
+        criteria.setProjection(projList);
+        criteria.setResultTransformer(Transformers.aliasToBean(clazz));
+
+        PostModel post = (PostModel) criteria.uniqueResult();
+        long level = 0;
+
+        while (post.getParentPost() != null) {
+            ++level;
+            post = post.getParentPost();
+        }
+        return level;
+    }
+
     private Criteria getTopicPostsCriteria(final String topicPath) {
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(clazz)
                 .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+
         criteria.createAlias(PostFields.TOPIC, "alias");
         criteria.add(Restrictions.eq("alias." + TopicFields.PATH, topicPath));
         criteria.add(Restrictions.isNull(PostFields.PARENT_POST));
+
         ProjectionList projList = Projections.projectionList();
         projList.add(Projections.property(PostFields.ID), PostFields.ID);
         projList.add(Projections.property(PostFields.TEXT), PostFields.TEXT);
@@ -111,6 +135,7 @@ public class PostDatabaseEditor extends DatabaseEditor implements PostDAO {
         projList.add(Projections.property(PostFields.CREATOR), PostFields.CREATOR);
         projList.add(Projections.property(PostFields.TOPIC), PostFields.TOPIC);
         criteria.setProjection(projList);
+
         criteria.setResultTransformer(Transformers.aliasToBean(clazz));
         return criteria;
     }
@@ -123,16 +148,16 @@ public class PostDatabaseEditor extends DatabaseEditor implements PostDAO {
         Criteria topicCriteria = getSessionFactory().getCurrentSession().createCriteria(topicClass)
                 .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
-        topicCriteria.createAlias(getSearchField(topicClass, Models.USER), "alias");
-        topicCriteria.add(Restrictions.eq("alias." + ModelFields.ID, userId));
+        topicCriteria.createAlias(RelationFields.USERS, "alias");
+        topicCriteria.add(Restrictions.eq("alias." + UserFields.ID, userId));
 
         if (topicCriteria.list().isEmpty()) {
             return null;
         }
 
-        postCriteria
-                .add(Restrictions.in(getSearchField(clazz, Models.TOPIC), topicCriteria.list()));
+        postCriteria.add(Restrictions.in(PostFields.TOPIC, topicCriteria.list()));
         postCriteria.add(Restrictions.isNull(PostFields.PARENT_POST));
+
         ProjectionList projList = Projections.projectionList();
         projList.add(Projections.property(PostFields.ID), PostFields.ID);
         projList.add(Projections.property(PostFields.TEXT), PostFields.TEXT);
@@ -140,6 +165,7 @@ public class PostDatabaseEditor extends DatabaseEditor implements PostDAO {
         projList.add(Projections.property(PostFields.CREATOR), PostFields.CREATOR);
         projList.add(Projections.property(PostFields.TOPIC), PostFields.TOPIC);
         postCriteria.setProjection(projList);
+
         postCriteria.setResultTransformer(Transformers.aliasToBean(clazz));
         return postCriteria;
     }

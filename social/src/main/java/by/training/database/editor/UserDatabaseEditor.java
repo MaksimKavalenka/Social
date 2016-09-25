@@ -8,15 +8,13 @@ import java.util.Set;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
-import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.criterion.Subqueries;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.transaction.annotation.Transactional;
 
-import by.training.constants.ModelStructureConstants.ModelFields;
 import by.training.constants.ModelStructureConstants.RelationFields;
 import by.training.constants.ModelStructureConstants.TopicFields;
 import by.training.constants.ModelStructureConstants.UserFields;
@@ -85,17 +83,19 @@ public class UserDatabaseEditor extends DatabaseEditor implements UserDAO {
     @Transactional
     @SuppressWarnings("unchecked")
     public List<UserModel> getUsersForInvitation(final String topicPath) {
-        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(clazz)
+        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(clazz)
                 .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-        detachedCriteria.createAlias(RelationFields.TOPICS, "alias");
-        detachedCriteria.add(Restrictions.eq("alias." + TopicFields.PATH, topicPath));
-        detachedCriteria.setProjection(Projections.property(ModelFields.ID));
+        criteria.createAlias(RelationFields.TOPICS, "alias");
+        criteria.add(Restrictions.eq("alias." + TopicFields.PATH, topicPath));
 
-        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(clazz);
-        criteria.add(Restrictions.or(Restrictions.isEmpty(RelationFields.TOPICS),
-                Subqueries.notExists(detachedCriteria)));
-        criteria.addOrder(Order.asc(UserFields.LOGIN));
-        return criteria.list();
+        ProjectionList projList = Projections.projectionList();
+        projList.add(Projections.property(UserFields.ID), UserFields.ID);
+        criteria.setProjection(projList);
+
+        Criteria negativeCriteria = getSessionFactory().getCurrentSession().createCriteria(clazz);
+        negativeCriteria.add(Restrictions.not(Restrictions.in(UserFields.ID, criteria.list())));
+        negativeCriteria.addOrder(Order.asc(UserFields.LOGIN));
+        return negativeCriteria.list();
     }
 
     @Override

@@ -3,6 +3,7 @@ package by.training.constants;
 public abstract class MessageConstants {
 
     public static final String FORM_ERROR                  = "Required fields must be filled";
+    public static final String LEVEL_ERROR                 = "Post level cannot be more than 3";
     public static final String PASSWORD_ERROR              = "Password is wrong";
     public static final String PASSWORDS_ERROR             = "Passwords do not match";
     public static final String OPERATION_PERMISSIONS_ERROR = "You have not permissions for this operation";

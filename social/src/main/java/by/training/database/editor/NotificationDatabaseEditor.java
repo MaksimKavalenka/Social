@@ -10,11 +10,12 @@ import javax.transaction.Transactional;
 
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
-import by.training.constants.ModelStructureConstants.Models;
 import by.training.constants.ModelStructureConstants.NotificationFields;
+import by.training.constants.ModelStructureConstants.UserFields;
 import by.training.database.dao.NotificationDAO;
 import by.training.model.NotificationModel;
 import by.training.model.TopicModel;
@@ -73,7 +74,11 @@ public class NotificationDatabaseEditor extends DatabaseEditor implements Notifi
     }
 
     private Criteria getUserNotificationsCriteria(final long userId) {
-        return getDefaultRelationCriteria(clazz, Models.USER, userId);
+        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(clazz)
+                .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+        criteria.createAlias(NotificationFields.USER, "alias");
+        criteria.add(Restrictions.eq("alias." + UserFields.ID, userId));
+        return criteria;
     }
 
 }

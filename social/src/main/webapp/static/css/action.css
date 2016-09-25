@@ -1,6 +1,7 @@
 .action {
 	background-repeat: no-repeat;
 	background-size: contain;
+	cursor: pointer;
 	display: inline-block;
 	height: 15px;
 	margin: 5px;

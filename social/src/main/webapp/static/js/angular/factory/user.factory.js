@@ -1,10 +1,8 @@
 'use strict';
-app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'CookieService', function($http, MESSAGE, REST, CookieService) {
+app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'ValidatorService', function($http, MESSAGE, REST, ValidatorService) {
 
 	function createUser(login, password, confirmPassword, callback) {
-		if (!login || !password || !confirmPassword) {
-			var response = {success: false, message: MESSAGE.FORM_ERROR};
-			callback(response);
+		if (!ValidatorService.allNotEmpty(callback, login, password, confirmPassword)) {
 			return;
 		}
 		if (password !== confirmPassword) {
@@ -24,9 +22,7 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'CookieService', functio
 	}
 
 	function updateUser(login, currentPassword, password, confirmPassword, callback) {
-		if (!login || !currentPassword || !password || !confirmPassword) {
-			var response = {success: false, message: MESSAGE.FORM_ERROR};
-			callback(response);
+		if (!ValidatorService.allNotEmpty(callback, login, currentPassword, password, confirmPassword)) {
 			return;
 		}
 		if (password !== confirmPassword) {
@@ -46,9 +42,7 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'CookieService', functio
 	}
 
 	function updateUserLogin(login, currentPassword, callback) {
-		if (!login || !currentPassword) {
-			var response = {success: false, message: MESSAGE.FORM_ERROR};
-			callback(response);
+		if (!ValidatorService.allNotEmpty(callback, login, currentPassword)) {
 			return;
 		}
 		$http.post(REST.USERS + '/update/' + login + '/' + currentPassword + REST.JSON_EXT)
@@ -63,9 +57,7 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'CookieService', functio
 	}
 
 	function updateUserPhoto(photo, callback) {
-		if (!photo) {
-			var response = {success: false, message: MESSAGE.FORM_ERROR};
-			callback(response);
+		if (!ValidatorService.allNotEmpty(callback, photo)) {
 			return;
 		}
 		$http.post(REST.USERS + '/update/' + photo + REST.JSON_EXT)
@@ -92,6 +84,9 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'CookieService', functio
 	}
 
 	function getUsersForInvitation(path, callback) {
+		if (!ValidatorService.allNotEmpty(callback, path)) {
+			return;
+		}
 		$http.post(REST.USERS + '/' + path + '/for_invitation' + REST.JSON_EXT)
 		.success(function(response) {
 			var data = {success: true, data:response};
@@ -103,19 +98,14 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'CookieService', functio
 		});
 	}
 
-	function authentication(login, password, remember, callback) {
-		if (!login || !password) {
-			var response = {success: false, message: MESSAGE.FORM_ERROR};
-			callback(response);
+	function authentication(login, password, callback) {
+		if (!ValidatorService.allNotEmpty(callback, login, password)) {
 			return;
 		}
 		var headers = {authorization : "Basic " + btoa(login + ":" + password)};
 		$http.get(REST.USERS + '/auth' + REST.JSON_EXT, {'headers' : headers})
 		.success(function(response) {
 			if (response) {
-				if (remember) {
-					CookieService.createRememberMeCookie(response);
-				}
 				var data = {success: true, data: response};
 				callback(data);
 			} else {
@@ -130,11 +120,13 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'CookieService', functio
 	}
 
 	function logout() {
-		CookieService.removeRememberMeCookie();
 		$http.post(REST.USERS + '/logout' + REST.JSON_EXT, {});
 	}
 
 	function checkLogin(login, callback) {
+		if (!ValidatorService.allNotEmpty(callback, login)) {
+			return;
+		}
 		$http.post(REST.USERS + '/check_login/' + login + REST.JSON_EXT)
 		.success(function(response) {
 			if (response) {

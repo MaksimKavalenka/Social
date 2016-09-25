@@ -1,10 +1,8 @@
 'use strict';
-app.factory('TopicFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE, REST) {
+app.factory('TopicFactory', ['$http', 'MESSAGE', 'REST', 'ValidatorService', function($http, MESSAGE, REST, ValidatorService) {
 
 	function createTopic(name, path, description, access, callback) {
-		if (!name || !description || !access) {
-			var response = {success: false, message: MESSAGE.FORM_ERROR};
-			callback(response);
+		if (!ValidatorService.allNotEmpty(callback, name, path, description, access)) {
 			return;
 		}
 		$http.post(REST.TOPICS + '/create/' + name + '/' + path + '/' + description + '/' + access + REST.JSON_EXT)
@@ -19,9 +17,7 @@ app.factory('TopicFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE
 	}
 
 	function updateTopic(id, name, path, description, access, callback) {
-		if (!id || !name || !description || !access) {
-			var response = {success: false, message: MESSAGE.FORM_ERROR};
-			callback(response);
+		if (!ValidatorService.allNotEmpty(callback, id, name, path, description, access)) {
 			return;
 		}
 		$http.post(REST.TOPICS + '/update/' + id + '/' + name + '/' + path + '/' + description + '/' + access + REST.JSON_EXT)
@@ -36,6 +32,9 @@ app.factory('TopicFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE
 	}
 
 	function getTopicByPath(path, callback) {
+		if (!ValidatorService.allNotEmpty(callback, path)) {
+			return;
+		}
 		$http.get(REST.TOPICS + '/' + path + REST.JSON_EXT)
 		.success(function(response) {
 			var data = {success: true, data: response};
@@ -48,6 +47,9 @@ app.factory('TopicFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE
 	}
 
 	function getUserTopics(page, callback) {
+		if (!ValidatorService.allNotEmpty(callback, page)) {
+			return;
+		}
 		$http.get(REST.TOPICS + '/user/' + page + REST.JSON_EXT)
 		.success(function(response) {
 			var data = {success: true, data: response};
@@ -60,6 +62,9 @@ app.factory('TopicFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE
 	}
 
 	function getTopicsByValue(value, page, callback) {
+		if (!ValidatorService.allNotEmpty(callback, page)) {
+			return;
+		}
 		$http.get(REST.TOPICS + '/search/' + value + '/' + page + REST.JSON_EXT)
 		.success(function(response) {
 			var data = {success: true, data: response};
@@ -108,6 +113,9 @@ app.factory('TopicFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE
 	}
 
 	function joinTopic(path, callback) {
+		if (!ValidatorService.allNotEmpty(callback, path)) {
+			return;
+		}
 		$http.post(REST.TOPICS + '/join/' + path + REST.JSON_EXT)
 		.success(function(response) {
 			response = {success: true};
@@ -120,6 +128,9 @@ app.factory('TopicFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE
 	}
 
 	function leaveTopic(path, callback) {
+		if (!ValidatorService.allNotEmpty(callback, path)) {
+			return;
+		}
 		$http.post(REST.TOPICS + '/leave/' + path + REST.JSON_EXT)
 		.success(function(response) {
 			response = {success: true};
@@ -132,6 +143,9 @@ app.factory('TopicFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE
 	}
 
 	function checkPath(path, callback) {
+		if (!ValidatorService.allNotEmpty(callback, path)) {
+			return;
+		}
 		$http.post(REST.TOPICS + '/check_path/' + path + REST.JSON_EXT)
 		.success(function(response) {
 			if (response) {
@@ -148,6 +162,9 @@ app.factory('TopicFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE
 	}
 
 	function checkMember(path, callback) {
+		if (!ValidatorService.allNotEmpty(callback, path)) {
+			return;
+		}
 		$http.post(REST.TOPICS + '/check_member/' + path + REST.JSON_EXT)
 		.success(function(response) {
 			var data = {success: true, data: response};

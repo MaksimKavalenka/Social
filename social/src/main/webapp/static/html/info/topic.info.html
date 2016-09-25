@@ -32,7 +32,7 @@
 			<div class="action action-save" ng-click="postCtrl.createPost('0')" ng-disabled="form.$invalid || postCtrl.dataLoading"></div>
 			<div class="action action-cancel" ng-click="postCtrl.hideForm()"></div>
 		</div>
-		<textarea class="area-post" id="text" name="text" ng-model="postCtrl.post.text" required></textarea>
+		<textarea class="msd-elastic" id="text" name="text" ng-model="postCtrl.post.text" placeholder="Leave a post" required></textarea>
 	</form>
 </div>
 <modal handler="invite" modal-body="body" modal-footer="footer" modal-header="header" data-ng-click-right-button="myRightButton()"></modal>

@@ -1,10 +1,8 @@
 'use strict';
-app.factory('PostFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE, REST) {
+app.factory('PostFactory', ['$http', 'MESSAGE', 'REST', 'ValidatorService', function($http, MESSAGE, REST, ValidatorService) {
 
 	function createPost(text, topicPath, parentPostId, callback) {
-		if (!text || !parentPostId) {
-			var response = {success: false, message: MESSAGE.FORM_ERROR};
-			callback(response);
+		if (!ValidatorService.allNotEmpty(callback, text, topicPath, parentPostId)) {
 			return;
 		}
 		$http.post(REST.POSTS + '/create/' + text + '/' + topicPath + '/' + parentPostId + REST.JSON_EXT)
@@ -19,9 +17,7 @@ app.factory('PostFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE,
 	}
 
 	function updatePost(id, text, callback) {
-		if (!id || !text) {
-			var response = {success: false, message: MESSAGE.FORM_ERROR};
-			callback(response);
+		if (!ValidatorService.allNotEmpty(callback, id, text)) {
 			return;
 		}
 		$http.post(REST.POSTS + '/update/' + id + '/' + text + REST.JSON_EXT)
@@ -36,9 +32,7 @@ app.factory('PostFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE,
 	}
 
 	function deletePost(id, path, callback) {
-		if (!id) {
-			var response = {success: false, message: MESSAGE.FORM_ERROR};
-			callback(response);
+		if (!ValidatorService.allNotEmpty(callback, id, path)) {
 			return;
 		}
 		$http.post(REST.POSTS + '/delete/' + id + '/' + path + REST.JSON_EXT)
@@ -53,6 +47,9 @@ app.factory('PostFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE,
 	}
 
 	function getPostById(path, id, callback) {
+		if (!ValidatorService.allNotEmpty(callback, path, id)) {
+			return;
+		}
 		$http.get(REST.POSTS + '/' + path + '/' + id + REST.JSON_EXT)
 		.success(function(response) {
 			var data = {success: true, data: response};
@@ -65,6 +62,9 @@ app.factory('PostFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE,
 	}
 
 	function getTopicPosts(path, page, callback) {
+		if (!ValidatorService.allNotEmpty(callback, path, page)) {
+			return;
+		}
 		$http.get(REST.POSTS + '/topic/' + path + '/' + page + REST.JSON_EXT)
 		.success(function(response) {
 			var data = {success: true, data: response};
@@ -77,6 +77,9 @@ app.factory('PostFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE,
 	}
 
 	function getFeedPosts(page, callback) {
+		if (!ValidatorService.allNotEmpty(callback, page)) {
+			return;
+		}
 		$http.get(REST.POSTS + '/feed/' + page + REST.JSON_EXT)
 		.success(function(response) {
 			var data = {success: true, data: response};
@@ -89,6 +92,9 @@ app.factory('PostFactory', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE,
 	}
 
 	function getTopicPostsPageCount(path, callback) {
+		if (!ValidatorService.allNotEmpty(callback, path)) {
+			return;
+		}
 		$http.get(REST.POSTS + '/topic/' + path + '/page_count' + REST.JSON_EXT)
 		.success(function(response) {
 			var data = {success: true, data: response};

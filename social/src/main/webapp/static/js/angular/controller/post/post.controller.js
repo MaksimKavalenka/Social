@@ -16,6 +16,7 @@ app.controller('PostController', ['$state', 'STATE', 'PostFactory', 'TopicFactor
 			case STATE.TOPIC:
 				var page = $state.params.page;
 				var path = $state.params.path;
+				checkMember(path);
 				getTopicPosts(path, page);
 				break;
 			case STATE.POST:

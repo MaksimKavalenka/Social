@@ -24,4 +24,6 @@ public interface PostDAO {
 
     long getFeedPostsPageCount(long userId);
 
+    long getPostLevel(long id);
+
 }
