@@ -8,6 +8,8 @@ import static by.training.constants.UrlConstants.ID_KEY;
 import static by.training.constants.UrlConstants.PAGE_KEY;
 import static by.training.constants.UrlConstants.PATH_KEY;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import by.training.bean.ErrorMessage;
+import by.training.bean.PostWithCommentsCount;
 import by.training.database.dao.PostDAO;
 import by.training.database.dao.TopicDAO;
 import by.training.exception.ValidationException;
@@ -127,16 +130,53 @@ public class PostRestController extends by.training.controller.rest.RestControll
 
     @RequestMapping(value = "/topic" + PATH_KEY + "/" + PAGE_KEY
             + JSON_EXT, method = RequestMethod.GET)
-    public ResponseEntity<List<PostModel>> getTopicPosts(@PathVariable("path") final String path,
-            @PathVariable("page") final int page) {
+    public ResponseEntity<List<PostWithCommentsCount>> getTopicPosts(
+            @PathVariable("path") final String path, @PathVariable("page") final int page) {
         List<PostModel> posts = postDAO.getTopicPosts(path, page);
-        return checkEntity(posts);
+
+        if (posts == null) {
+            return new ResponseEntity<List<PostWithCommentsCount>>(HttpStatus.NO_CONTENT);
+        }
+
+        List<PostWithCommentsCount> postWithCommentsCounts = new ArrayList<>(posts.size());
+        for (PostModel post : posts) {
+            long id = post.getId();
+            String text = post.getText();
+            Date date = post.getDate();
+            UserModel creator = post.getCreator();
+            TopicModel topic = post.getTopic();
+            long commentsCount = postDAO.getPostCommentsCount(id);
+
+            postWithCommentsCounts
+                    .add(new PostWithCommentsCount(id, text, date, creator, topic, commentsCount));
+        }
+        return new ResponseEntity<List<PostWithCommentsCount>>(postWithCommentsCounts,
+                HttpStatus.OK);
     }
 
     @RequestMapping(value = "/feed" + PAGE_KEY + JSON_EXT, method = RequestMethod.GET)
-    public ResponseEntity<List<PostModel>> getFeedPosts(@PathVariable("page") final int page) {
+    public ResponseEntity<List<PostWithCommentsCount>> getFeedPosts(
+            @PathVariable("page") final int page) {
         List<PostModel> posts = postDAO.getFeedPosts(getLoggedUser().getId(), page);
-        return checkEntity(posts);
+
+        if (posts == null) {
+            return new ResponseEntity<List<PostWithCommentsCount>>(HttpStatus.NO_CONTENT);
+        }
+
+        List<PostWithCommentsCount> postWithCommentsCounts = new ArrayList<>(posts.size());
+        for (PostModel post : posts) {
+            long id = post.getId();
+            String text = post.getText();
+            Date date = post.getDate();
+            UserModel creator = post.getCreator();
+            TopicModel topic = post.getTopic();
+            long commentsCount = postDAO.getPostCommentsCount(id);
+
+            postWithCommentsCounts
+                    .add(new PostWithCommentsCount(id, text, date, creator, topic, commentsCount));
+        }
+        return new ResponseEntity<List<PostWithCommentsCount>>(postWithCommentsCounts,
+                HttpStatus.OK);
     }
 
     @RequestMapping(value = "/topic" + PATH_KEY + "/page_count"

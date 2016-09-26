@@ -36,3 +36,17 @@
 	overflow: auto;
 	text-align: justify;
 }
+.model-info > * {
+	display: inline-block;
+	vertical-align: bottom;
+}
+.model-info .name {
+	font-weight: 600;
+}
+.model-info .date {
+	font-family: monospace;
+}
+.model-info .comments-count {
+	font-family: monospace;
+	font-style: italic;
+}

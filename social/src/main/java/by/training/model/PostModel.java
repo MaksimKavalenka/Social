@@ -108,7 +108,7 @@ public class PostModel extends Model {
     @Override
     public String toString() {
         return "Post [id=" + super.getId() + ", text=" + text + ", created=" + date + ", creator="
-                + creator + ", parentPost=" + parentPost + "]";
+                + creator + "]";
     }
 
 }

@@ -79,6 +79,18 @@ public class PostDatabaseEditor extends DatabaseEditor implements PostDAO {
                 : null;
     }
 
+    /* Only first-level comments */
+    @Override
+    @Transactional
+    public long getPostCommentsCount(final long id) {
+        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(clazz);
+
+        criteria.createAlias(PostFields.PARENT_POST, "alias");
+        criteria.add(Restrictions.eq("alias." + TopicFields.ID, id));
+
+        return (long) criteria.setProjection(Projections.rowCount()).uniqueResult();
+    }
+
     @Override
     @Transactional
     public long getTopicPostsPageCount(final String topicPath) {
@@ -101,7 +113,6 @@ public class PostDatabaseEditor extends DatabaseEditor implements PostDAO {
     @Transactional
     public long getPostLevel(final long id) {
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(clazz);
-
         criteria.add(Restrictions.idEq(id));
 
         ProjectionList projList = Projections.projectionList();
@@ -134,9 +145,10 @@ public class PostDatabaseEditor extends DatabaseEditor implements PostDAO {
         projList.add(Projections.property(PostFields.DATE), PostFields.DATE);
         projList.add(Projections.property(PostFields.CREATOR), PostFields.CREATOR);
         projList.add(Projections.property(PostFields.TOPIC), PostFields.TOPIC);
-        criteria.setProjection(projList);
 
+        criteria.setProjection(projList);
         criteria.setResultTransformer(Transformers.aliasToBean(clazz));
+
         return criteria;
     }
 
@@ -164,9 +176,10 @@ public class PostDatabaseEditor extends DatabaseEditor implements PostDAO {
         projList.add(Projections.property(PostFields.DATE), PostFields.DATE);
         projList.add(Projections.property(PostFields.CREATOR), PostFields.CREATOR);
         projList.add(Projections.property(PostFields.TOPIC), PostFields.TOPIC);
-        postCriteria.setProjection(projList);
 
+        postCriteria.setProjection(projList);
         postCriteria.setResultTransformer(Transformers.aliasToBean(clazz));
+
         return postCriteria;
     }
 

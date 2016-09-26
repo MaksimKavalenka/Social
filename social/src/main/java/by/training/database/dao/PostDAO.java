@@ -20,6 +20,8 @@ public interface PostDAO {
 
     List<PostModel> getFeedPosts(long userId, int page);
 
+    long getPostCommentsCount(long id);
+
     long getTopicPostsPageCount(String topicPath);
 
     long getFeedPostsPageCount(long userId);

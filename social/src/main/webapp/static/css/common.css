@@ -41,16 +41,6 @@ hr.hr-header-user {
 	margin: 0 auto;
 	width: 1000px;
 }
-.creator > * {
-	display: inline-block;
-	vertical-align: bottom;
-}
-.creator .name {
-	font-weight: 600;
-}
-.creator .date {
-	font-family: monospace;
-}
 .flex {
 	flex: 1;
 }
