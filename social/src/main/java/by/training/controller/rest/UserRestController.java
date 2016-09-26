@@ -1,6 +1,7 @@
 package by.training.controller.rest;
 
 import static by.training.constants.MessageConstants.PASSWORD_ERROR;
+import static by.training.constants.MessageConstants.VALIDATION_ERROR;
 import static by.training.constants.MessageConstants.PASSWORDS_ERROR;
 import static by.training.constants.UrlConstants.PATH_KEY;
 
@@ -51,7 +52,10 @@ public class UserRestController extends by.training.controller.rest.RestControll
             @PathVariable("password") final String password,
             @PathVariable("confirmPassword") final String confirmPassword) {
         try {
-            Validator.allNotNull(login, password, confirmPassword);
+            if (!Validator.allNotNull(login, password, confirmPassword)) {
+                return new ResponseEntity<Object>(new ErrorMessage(VALIDATION_ERROR),
+                        HttpStatus.CONFLICT);
+            }
 
             if (!password.equals(confirmPassword)) {
                 return new ResponseEntity<Object>(new ErrorMessage(PASSWORDS_ERROR),
@@ -76,7 +80,10 @@ public class UserRestController extends by.training.controller.rest.RestControll
             @PathVariable("password") final String password,
             @PathVariable("confirmPassword") final String confirmPassword) {
         try {
-            Validator.allNotNull(login, currentPassword, password, confirmPassword);
+            if (!Validator.allNotNull(login, currentPassword, password, confirmPassword)) {
+                return new ResponseEntity<Object>(new ErrorMessage(VALIDATION_ERROR),
+                        HttpStatus.CONFLICT);
+            }
 
             if (!SecureData.secureBySha(currentPassword, login)
                     .equals(getLoggedUser().getPassword())) {
@@ -103,7 +110,10 @@ public class UserRestController extends by.training.controller.rest.RestControll
     public ResponseEntity<Object> updateUserLogin(@PathVariable("login") final String login,
             @PathVariable("currentPassword") final String currentPassword) {
         try {
-            Validator.allNotNull(login, currentPassword);
+            if (!Validator.allNotNull(login, currentPassword)) {
+                return new ResponseEntity<Object>(new ErrorMessage(VALIDATION_ERROR),
+                        HttpStatus.CONFLICT);
+            }
 
             if (!SecureData.secureBySha(currentPassword, getLoggedUser().getLogin())
                     .equals(getLoggedUser().getPassword())) {
@@ -123,16 +133,13 @@ public class UserRestController extends by.training.controller.rest.RestControll
 
     @RequestMapping(value = "/update/{photo}" + JSON_EXT, method = RequestMethod.POST)
     public ResponseEntity<Object> updateUserPhoto(@PathVariable("photo") final String photo) {
-        try {
-            Validator.allNotNull(photo);
-
-            userDAO.updateUserPhoto(getLoggedUser().getId(), photo);
-            return new ResponseEntity<Object>(HttpStatus.CREATED);
-
-        } catch (ValidationException e) {
-            return new ResponseEntity<Object>(new ErrorMessage(e.getMessage()),
+        if (!Validator.allNotNull(photo)) {
+            return new ResponseEntity<Object>(new ErrorMessage(VALIDATION_ERROR),
                     HttpStatus.CONFLICT);
         }
+
+        userDAO.updateUserPhoto(getLoggedUser().getId(), photo);
+        return new ResponseEntity<Object>(HttpStatus.CREATED);
     }
 
     @RequestMapping(value = PATH_KEY + "/for_invitation" + JSON_EXT, method = RequestMethod.POST)

@@ -1,5 +1,6 @@
 package by.training.controller.rest;
 
+import static by.training.constants.MessageConstants.VALIDATION_ERROR;
 import static by.training.constants.UrlConstants.PAGE_KEY;
 import static by.training.constants.UrlConstants.PATH_KEY;
 
@@ -16,7 +17,6 @@ import by.training.bean.ErrorMessage;
 import by.training.database.dao.NotificationDAO;
 import by.training.database.dao.TopicDAO;
 import by.training.database.dao.UserDAO;
-import by.training.exception.ValidationException;
 import by.training.model.NotificationModel;
 import by.training.model.TopicModel;
 import by.training.model.UserModel;
@@ -40,36 +40,30 @@ public class NotificationRestController extends by.training.controller.rest.Rest
     @RequestMapping(value = "/create/{usersId}" + PATH_KEY + JSON_EXT, method = RequestMethod.POST)
     public ResponseEntity<Object> createNotification(@PathVariable("usersId") final String usersId,
             @PathVariable("path") final String path) {
-        try {
-            Validator.allNotNull(usersId);
-
-            TopicModel topic = topicDAO.getTopicByPath(path);
-            for (long userId : getIdList(usersId)) {
-                UserModel user = userDAO.getUserById(userId);
-                if (!notificationDAO.isInvited(topic, user) && !topic.getUsers().contains(user)) {
-                    notificationDAO.createNotification(user, getLoggedUser(), topic);
-                }
-            }
-            return new ResponseEntity<Object>(HttpStatus.CREATED);
-
-        } catch (ValidationException e) {
-            return new ResponseEntity<Object>(new ErrorMessage(e.getMessage()),
+        if (!Validator.allNotNull(usersId)) {
+            return new ResponseEntity<Object>(new ErrorMessage(VALIDATION_ERROR),
                     HttpStatus.CONFLICT);
         }
+
+        TopicModel topic = topicDAO.getTopicByPath(path);
+        for (long userId : getIdList(usersId)) {
+            UserModel user = userDAO.getUserById(userId);
+            if (!notificationDAO.isInvited(topic, user) && !topic.getUsers().contains(user)) {
+                notificationDAO.createNotification(user, getLoggedUser(), topic);
+            }
+        }
+        return new ResponseEntity<Object>(HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/delete/{id}" + JSON_EXT, method = RequestMethod.POST)
     public ResponseEntity<Object> deleteNotification(@PathVariable("id") final long id) {
-        try {
-            Validator.allNotNull(id);
-
-            notificationDAO.deleteNotification(id);
-            return new ResponseEntity<Object>(HttpStatus.OK);
-
-        } catch (ValidationException e) {
-            return new ResponseEntity<Object>(new ErrorMessage(e.getMessage()),
+        if (!Validator.allNotNull(id)) {
+            return new ResponseEntity<Object>(new ErrorMessage(VALIDATION_ERROR),
                     HttpStatus.CONFLICT);
         }
+
+        notificationDAO.deleteNotification(id);
+        return new ResponseEntity<Object>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/user" + PAGE_KEY + JSON_EXT, method = RequestMethod.GET)

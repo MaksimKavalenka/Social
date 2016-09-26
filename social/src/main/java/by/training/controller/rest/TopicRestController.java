@@ -1,6 +1,7 @@
 package by.training.controller.rest;
 
 import static by.training.constants.MessageConstants.OPERATION_PERMISSIONS_ERROR;
+import static by.training.constants.MessageConstants.VALIDATION_ERROR;
 import static by.training.constants.UrlConstants.PAGE_KEY;
 import static by.training.constants.UrlConstants.PATH_KEY;
 import static by.training.constants.UrlConstants.VALUE_KEY;
@@ -41,7 +42,10 @@ public class TopicRestController extends by.training.controller.rest.RestControl
             @PathVariable("description") final String description,
             @PathVariable("access") final boolean access) {
         try {
-            Validator.allNotNull(name, description, access);
+            if (!Validator.allNotNull(name, description, access)) {
+                return new ResponseEntity<Object>(new ErrorMessage(VALIDATION_ERROR),
+                        HttpStatus.CONFLICT);
+            }
 
             UserModel creator = getLoggedUser();
             TopicModel topic = topicDAO.createTopic(name, path, description, access, creator);
@@ -60,7 +64,10 @@ public class TopicRestController extends by.training.controller.rest.RestControl
             @PathVariable("description") final String description,
             @PathVariable("access") final boolean access) {
         try {
-            Validator.allNotNull(id, name, description, access);
+            if (!Validator.allNotNull(id, name, description, access)) {
+                return new ResponseEntity<Object>(new ErrorMessage(VALIDATION_ERROR),
+                        HttpStatus.CONFLICT);
+            }
 
             if (topicDAO.getTopicById(id).getCreator().getId() != getLoggedUser().getId()) {
                 return new ResponseEntity<Object>(new ErrorMessage(OPERATION_PERMISSIONS_ERROR),

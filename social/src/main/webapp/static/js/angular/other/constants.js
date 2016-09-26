@@ -16,7 +16,6 @@ app.constant('MESSAGE', (function() {
 	var gettingError = 'Error while getting ';
 	return {
 		AUTHENTICATION_ERROR: 'Login or password is wrong',
-		FORM_ERROR: 'Required fields must be filled',
 		DELETING_NOTIFICATION_ERROR: deletingError + 'notification',
 		DELETING_POST_ERROR: deletingError + 'post',
 		GETTING_NOTIFICATION_ERROR: gettingError + 'notification',
@@ -26,7 +25,8 @@ app.constant('MESSAGE', (function() {
 		PASSWORDS_ERROR: 'Passwords do not match',
 		SAVING_FILE_ERROR: 'Error while saving file',
 		TAKEN_LOGIN_ERROR: 'This login is already taken',
-		TAKEN_PATH_ERROR: 'This path is already taken'
+		TAKEN_PATH_ERROR: 'This path is already taken',
+		VALIDATION_ERROR: 'All required attributes must be filled'
 	}
 })());
 
