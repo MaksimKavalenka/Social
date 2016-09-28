@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import by.training.database.dao.UserDAO;
 import by.training.model.UserModel;
 
-@Service
+@Service("userDetailsServiceSecurity")
 public class UserDetailsServiceSecurity implements UserDetailsService {
 
     private UserDAO userDAO;

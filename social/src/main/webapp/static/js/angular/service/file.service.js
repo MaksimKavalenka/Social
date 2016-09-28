@@ -13,7 +13,7 @@ app.service('FileService', ['$http', 'MESSAGE', 'REST', function($http, MESSAGE,
 			callback(response);
 		})
 		.error(function(response) {
-			response = {success: false, message: MESSAGE.SAVING_FILE_ERROR};
+			response = {success: false, message: response.message};
 			callback(response);
 		});
 	}

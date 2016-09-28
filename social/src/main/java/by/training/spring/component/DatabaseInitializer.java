@@ -25,8 +25,8 @@ public class DatabaseInitializer implements ApplicationListener<ContextRefreshed
     @Transactional
     private void roleInit() {
         for (RoleConstants role : RoleConstants.values()) {
-            if (roleDAO.getRoleByName(role.toString()) == null) {
-                roleDAO.createRole(role.toString());
+            if (roleDAO.getRoleByName(role.name()) == null) {
+                roleDAO.createRole(role.name());
             }
         }
     }

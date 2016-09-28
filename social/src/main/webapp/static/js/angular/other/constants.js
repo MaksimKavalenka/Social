@@ -23,7 +23,6 @@ app.constant('MESSAGE', (function() {
 		GETTING_TOPIC_ERROR: gettingError + 'topic',
 		GETTING_USER_ERROR: gettingError + 'user',
 		PASSWORDS_ERROR: 'Passwords do not match',
-		SAVING_FILE_ERROR: 'Error while saving file',
 		TAKEN_LOGIN_ERROR: 'This login is already taken',
 		TAKEN_PATH_ERROR: 'This path is already taken',
 		VALIDATION_ERROR: 'All required attributes must be filled'

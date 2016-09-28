@@ -16,19 +16,19 @@ public class PageController {
         return REDIRECT + FEED_URL + "?" + DEFAULT_PAGE;
     }
 
-    @RequestMapping(value = {TOPIC_URL, POST_URL}, method = RequestMethod.GET)
+    @RequestMapping(value = SEARCH_URL, method = RequestMethod.GET)
+    public String defaultSearchPage() {
+        return REDIRECT + SEARCH_URL + "?" + DEFAULT_VALUE + "&" + DEFAULT_PAGE;
+    }
+
+    @RequestMapping(value = {TOPIC_FULL_URL}, method = RequestMethod.GET)
     public String defaultTopicPage(@PathVariable("path") final String path) {
-        return REDIRECT + TOPIC_PATH + "/" + path + "?" + DEFAULT_PAGE;
+        return REDIRECT + TOPIC_URL + "/" + path + "?" + DEFAULT_PAGE;
     }
 
     @RequestMapping(value = TOPICS_URL, method = RequestMethod.GET)
     public String defaultTopicsPage() {
         return REDIRECT + TOPICS_URL + "?" + DEFAULT_PAGE;
-    }
-
-    @RequestMapping(value = SEARCH_URL, method = RequestMethod.GET)
-    public String defaultSearchPage() {
-        return REDIRECT + SEARCH_URL + "?" + DEFAULT_VALUE + "&" + DEFAULT_PAGE;
     }
 
     @RequestMapping(value = {LOGIN_URL, REGISTRATION_URL, PROFILE_URL, PROFILE_PHOTO_URL,
@@ -37,19 +37,19 @@ public class PageController {
         return DEFAULT_PATH;
     }
 
-    @RequestMapping(value = {FEED_URL, TOPIC_URL,
+    @RequestMapping(value = {FEED_URL, TOPIC_FULL_URL,
             TOPICS_URL}, params = "page", method = RequestMethod.GET)
     public String mainPages() {
         return DEFAULT_PATH;
     }
 
-    @RequestMapping(value = POST_URL, params = "id", method = RequestMethod.GET)
-    public String postPage() {
+    @RequestMapping(value = NOTIFICATIONS_URL, method = RequestMethod.GET)
+    public String notificationsPage() {
         return DEFAULT_PATH;
     }
 
-    @RequestMapping(value = NOTIFICATIONS_URL, method = RequestMethod.GET)
-    public String notificationsPage() {
+    @RequestMapping(value = POST_FULL_URL, params = "id", method = RequestMethod.GET)
+    public String postPage() {
         return DEFAULT_PATH;
     }
 

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import by.training.bean.ErrorMessage;
 import by.training.exception.ValidationException;
 
 @Controller
@@ -29,14 +30,15 @@ import by.training.exception.ValidationException;
 public class UploadRestController extends by.training.controller.rest.RestController {
 
     @RequestMapping(value = "/photo" + JSON_EXT, method = RequestMethod.POST)
-    public @ResponseBody ResponseEntity<Void> uploadFile(
+    public @ResponseBody ResponseEntity<Object> uploadFile(
             @RequestParam(value = "file") final MultipartFile file) {
         try {
             String path = PHOTO_UPLOAD_PATH + "/" + file.getOriginalFilename();
             upload(file, path);
-            return new ResponseEntity<Void>(HttpStatus.OK);
+            return new ResponseEntity<Object>(HttpStatus.OK);
         } catch (ValidationException e) {
-            return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+            return new ResponseEntity<Object>(new ErrorMessage(e.getMessage()),
+                    HttpStatus.CONFLICT);
         }
     }
 
