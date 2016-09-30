@@ -5,23 +5,23 @@ import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 
+import by.training.entity.UserEntity;
 import by.training.exception.ValidationException;
-import by.training.model.UserModel;
 
 public interface UserDAO {
 
-    UserModel createUser(String login, String password, Set<GrantedAuthority> roles)
+    UserEntity createUser(String login, String password, Set<GrantedAuthority> roles)
             throws ValidationException;
 
-    UserModel updateUser(long id, String login, String password) throws ValidationException;
+    UserEntity updateUser(long id, String login, String password) throws ValidationException;
 
-    UserModel updateUserPhoto(long id, String photo);
+    UserEntity updateUserPhoto(long id, String photo);
 
-    UserModel getUserById(long id);
+    UserEntity getUserById(long id);
 
-    UserModel getUserByLogin(String login);
+    UserEntity getUserByLogin(String login);
 
-    List<UserModel> getUsersForInvitation(String topicPath);
+    List<UserEntity> getUsersForInvitation(String topicPath);
 
     boolean checkLogin(String login);
 

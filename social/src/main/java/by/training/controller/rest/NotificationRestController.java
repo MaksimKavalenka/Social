@@ -1,11 +1,14 @@
 package by.training.controller.rest;
 
+import static by.training.constants.EntityConstants.ElementsCount;
+import static by.training.constants.EntityConstants.Sort;
 import static by.training.constants.MessageConstants.VALIDATION_ERROR;
 import static by.training.constants.UrlConstants.PAGE_KEY;
 import static by.training.constants.UrlConstants.PATH_KEY;
 
 import java.util.List;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,25 +17,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import by.training.bean.ErrorMessage;
-import by.training.database.dao.NotificationDAO;
 import by.training.database.dao.TopicDAO;
 import by.training.database.dao.UserDAO;
-import by.training.model.NotificationModel;
-import by.training.model.TopicModel;
-import by.training.model.UserModel;
+import by.training.entity.NotificationEntity;
+import by.training.entity.TopicEntity;
+import by.training.entity.UserEntity;
+import by.training.repository.NotificationRepository;
 import by.training.utility.Validator;
 
 @RestController
 @RequestMapping("/notifications")
 public class NotificationRestController extends by.training.controller.rest.RestController {
 
-    private NotificationDAO notificationDAO;
-    private TopicDAO        topicDAO;
-    private UserDAO         userDAO;
+    private NotificationRepository notificationRepository;
+    private TopicDAO               topicDAO;
+    private UserDAO                userDAO;
 
-    public NotificationRestController(final NotificationDAO notificationDAO,
-            final TopicDAO topicDAO, final UserDAO userDAO) {
-        this.notificationDAO = notificationDAO;
+    public NotificationRestController(final TopicDAO topicDAO, final UserDAO userDAO) {
         this.topicDAO = topicDAO;
         this.userDAO = userDAO;
     }
@@ -45,11 +46,12 @@ public class NotificationRestController extends by.training.controller.rest.Rest
                     HttpStatus.CONFLICT);
         }
 
-        TopicModel topic = topicDAO.getTopicByPath(path);
+        TopicEntity topic = topicDAO.getTopicByPath(path);
         for (long userId : getIdList(usersId)) {
-            UserModel user = userDAO.getUserById(userId);
-            if (!notificationDAO.isInvited(topic, user) && !topic.getUsers().contains(user)) {
-                notificationDAO.createNotification(user, getLoggedUser(), topic);
+            UserEntity user = userDAO.getUserById(userId);
+            if (!notificationRepository.existsByTopic_PathAndUser_Id(path, userId)
+                    && !topic.getUsers().contains(user)) {
+                notificationRepository.save(new NotificationEntity(user, getLoggedUser(), topic));
             }
         }
         return new ResponseEntity<Object>(HttpStatus.CREATED);
@@ -62,21 +64,22 @@ public class NotificationRestController extends by.training.controller.rest.Rest
                     HttpStatus.CONFLICT);
         }
 
-        notificationDAO.deleteNotification(id);
+        notificationRepository.delete(id);
         return new ResponseEntity<Object>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/user" + PAGE_KEY + JSON_EXT, method = RequestMethod.GET)
-    public ResponseEntity<List<NotificationModel>> getUserNotifications(
+    public ResponseEntity<List<NotificationEntity>> getUserNotifications(
             @PathVariable("page") final int page) {
-        List<NotificationModel> notifications = notificationDAO
-                .getUserNotifications(getLoggedUser().getId(), page);
+        List<NotificationEntity> notifications = notificationRepository.findByUser_Id(
+                getLoggedUser().getId(),
+                new PageRequest(page, ElementsCount.NOTIFICATION, Sort.NOTIFICATION));
         return checkEntity(notifications);
     }
 
     @RequestMapping(value = "/user/page_count" + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<Long> getUserNotificationsPageCount() {
-        long pageCount = notificationDAO.getUserNotificationsPageCount(getLoggedUser().getId());
+        long pageCount = notificationRepository.countByUser_Id(getLoggedUser().getId());
         return new ResponseEntity<Long>(pageCount, HttpStatus.OK);
     }
 

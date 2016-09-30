@@ -14,17 +14,15 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.transaction.annotation.Transactional;
 
-import by.training.constants.ModelStructureConstants.RelationFields;
-import by.training.constants.ModelStructureConstants.TopicFields;
-import by.training.constants.ModelStructureConstants.UserFields;
+import by.training.constants.EntityConstants.Structure;
 import by.training.database.dao.TopicDAO;
+import by.training.entity.TopicEntity;
+import by.training.entity.UserEntity;
 import by.training.exception.ValidationException;
-import by.training.model.TopicModel;
-import by.training.model.UserModel;
 
 public class TopicDatabaseEditor extends DatabaseEditor implements TopicDAO {
 
-    private static final Class<TopicModel> clazz = TopicModel.class;
+    private static final Class<TopicEntity> clazz = TopicEntity.class;
 
     public TopicDatabaseEditor(final SessionFactory sessionFactory) {
         super(sessionFactory);
@@ -32,10 +30,10 @@ public class TopicDatabaseEditor extends DatabaseEditor implements TopicDAO {
 
     @Override
     @Transactional(rollbackFor = ValidationException.class)
-    public TopicModel createTopic(final String name, final String path, final String description,
-            final boolean access, final UserModel creator) throws ValidationException {
+    public TopicEntity createTopic(final String name, final String path, final String description,
+            final boolean access, final UserEntity creator) throws ValidationException {
         if (!checkPath(path)) {
-            TopicModel topic = new TopicModel(name, path, description, access, creator);
+            TopicEntity topic = new TopicEntity(name, path, description, access, creator);
             if (path == null) {
                 topic.setPath(String.valueOf(topic.getId()));
             }
@@ -48,9 +46,9 @@ public class TopicDatabaseEditor extends DatabaseEditor implements TopicDAO {
 
     @Override
     @Transactional(rollbackFor = ValidationException.class)
-    public TopicModel updateTopic(final long id, final String name, final String path,
+    public TopicEntity updateTopic(final long id, final String name, final String path,
             final String description, final boolean access) throws ValidationException {
-        TopicModel topic = getTopicById(id);
+        TopicEntity topic = getTopicById(id);
         if (!checkPath(path) || topic.getPath().equals(path)) {
             topic.setName(name);
             topic.setPath(path);
@@ -68,19 +66,19 @@ public class TopicDatabaseEditor extends DatabaseEditor implements TopicDAO {
 
     @Override
     @Transactional
-    public TopicModel getTopicById(final long id) {
-        return (TopicModel) getSessionFactory().getCurrentSession().get(clazz, id);
+    public TopicEntity getTopicById(final long id) {
+        return getSessionFactory().getCurrentSession().get(clazz, id);
     }
 
     @Override
     @Transactional
-    public TopicModel getTopicByPath(final String path) {
-        return getUniqueResultByCriteria(clazz, Restrictions.eq(TopicFields.PATH, path));
+    public TopicEntity getTopicByPath(final String path) {
+        return getUniqueResultByCriteria(clazz, Restrictions.eq(Structure.TopicFields.PATH, path));
     }
 
     @Override
     @Transactional
-    public List<TopicModel> getTopicsByValue(final String value, final long userId,
+    public List<TopicEntity> getTopicsByValue(final String value, final long userId,
             final int page) {
         Criteria criteria = getTopicsByValueCriteria(value, userId);
         return getElements(criteria, clazz, getSortField(clazz), getSortOrder(clazz), page);
@@ -88,7 +86,7 @@ public class TopicDatabaseEditor extends DatabaseEditor implements TopicDAO {
 
     @Override
     @Transactional
-    public List<TopicModel> getUserTopics(final long userId, final int page) {
+    public List<TopicEntity> getUserTopics(final long userId, final int page) {
         Criteria criteria = getUserTopicsCriteria(userId);
         return getElements(criteria, clazz, getSortField(clazz), getSortOrder(clazz), page);
     }
@@ -118,14 +116,14 @@ public class TopicDatabaseEditor extends DatabaseEditor implements TopicDAO {
 
     @Override
     @Transactional
-    public void joinTopic(final TopicModel topic, final UserModel user) {
+    public void joinTopic(final TopicEntity topic, final UserEntity user) {
         topic.getUsers().add(user);
         getSessionFactory().getCurrentSession().update(topic);
     }
 
     @Override
     @Transactional
-    public void leaveTopic(final TopicModel topic, final UserModel user) {
+    public void leaveTopic(final TopicEntity topic, final UserEntity user) {
         topic.getUsers().remove(user);
         getSessionFactory().getCurrentSession().update(topic);
     }
@@ -133,24 +131,25 @@ public class TopicDatabaseEditor extends DatabaseEditor implements TopicDAO {
     @Override
     @Transactional
     public boolean checkPath(final String path) {
-        return getUniqueResultByCriteria(clazz, Restrictions.eq(TopicFields.PATH, path)) != null;
+        return getUniqueResultByCriteria(clazz,
+                Restrictions.eq(Structure.TopicFields.PATH, path)) != null;
     }
 
     private Criteria getTopicsByValueCriteria(final String value, final long userId) {
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(clazz)
                 .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-        criteria.createAlias(RelationFields.USERS, "alias");
-        criteria.add(Restrictions.or(Restrictions.eq("alias." + UserFields.ID, userId),
-                Restrictions.eq(TopicFields.ACCESS, true)));
-        criteria.add(Restrictions.ilike(TopicFields.NAME, "%" + value + "%"));
+        criteria.createAlias(Structure.RelationFields.USERS, "alias");
+        criteria.add(Restrictions.or(Restrictions.eq("alias." + Structure.UserFields.ID, userId),
+                Restrictions.eq(Structure.TopicFields.ACCESS, true)));
+        criteria.add(Restrictions.ilike(Structure.TopicFields.NAME, "%" + value + "%"));
         return criteria;
     }
 
     private Criteria getUserTopicsCriteria(final long userId) {
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(clazz)
                 .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-        criteria.createAlias(RelationFields.USERS, "alias");
-        criteria.add(Restrictions.eq("alias." + UserFields.ID, userId));
+        criteria.createAlias(Structure.RelationFields.USERS, "alias");
+        criteria.add(Restrictions.eq("alias." + Structure.UserFields.ID, userId));
         return criteria;
     }
 

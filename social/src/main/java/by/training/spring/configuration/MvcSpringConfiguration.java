@@ -8,9 +8,10 @@ import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.orm.hibernate4.HibernateTransactionManager;
-import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -18,19 +19,18 @@ import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import by.training.database.dao.NotificationDAO;
 import by.training.database.dao.PostDAO;
 import by.training.database.dao.RoleDAO;
 import by.training.database.dao.TopicDAO;
 import by.training.database.dao.UserDAO;
-import by.training.database.editor.NotificationDatabaseEditor;
 import by.training.database.editor.PostDatabaseEditor;
 import by.training.database.editor.RoleDatabaseEditor;
 import by.training.database.editor.TopicDatabaseEditor;
 import by.training.database.editor.UserDatabaseEditor;
 
 @Configuration
-@ComponentScan("by.training")
+@ComponentScan("by.training.spring.component")
+@EnableJpaRepositories
 @EnableTransactionManagement
 public class MvcSpringConfiguration extends WebMvcConfigurationSupport {
 
@@ -52,7 +52,7 @@ public class MvcSpringConfiguration extends WebMvcConfigurationSupport {
     @Bean
     public SessionFactory sessionFactory(final DataSource dataSource) {
         LocalSessionFactoryBuilder sessionBuilder = new LocalSessionFactoryBuilder(dataSource);
-        sessionBuilder.scanPackages("by.training.model");
+        sessionBuilder.scanPackages("by.training.entity");
         sessionBuilder.addProperties(getHibernateProperties());
         return sessionBuilder.buildSessionFactory();
     }
@@ -62,11 +62,6 @@ public class MvcSpringConfiguration extends WebMvcConfigurationSupport {
         HibernateTransactionManager transactionManager = new HibernateTransactionManager(
                 sessionFactory);
         return transactionManager;
-    }
-
-    @Bean
-    public NotificationDAO notificationDao(final SessionFactory sessionFactory) {
-        return new NotificationDatabaseEditor(sessionFactory);
     }
 
     @Bean

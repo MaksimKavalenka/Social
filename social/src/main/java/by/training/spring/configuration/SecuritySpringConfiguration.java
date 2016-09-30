@@ -14,7 +14,6 @@ import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,7 +25,6 @@ import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import by.training.spring.component.CsrfHeaderFilter;
 
 @Configuration
-@EnableWebSecurity
 public class SecuritySpringConfiguration extends WebSecurityConfigurerAdapter {
 
     private static final String ANY = "/**";

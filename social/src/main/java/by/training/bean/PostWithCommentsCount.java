@@ -3,8 +3,8 @@ package by.training.bean;
 import java.io.Serializable;
 import java.util.Date;
 
-import by.training.model.TopicModel;
-import by.training.model.UserModel;
+import by.training.entity.TopicEntity;
+import by.training.entity.UserEntity;
 
 public class PostWithCommentsCount implements Serializable {
 
@@ -13,15 +13,15 @@ public class PostWithCommentsCount implements Serializable {
     private long              id;
     private String            text;
     private Date              date;
-    private UserModel         creator;
-    private TopicModel        topic;
+    private UserEntity        creator;
+    private TopicEntity       topic;
     private long              commentsCount;
 
     public PostWithCommentsCount() {
     }
 
     public PostWithCommentsCount(final long id, final String text, final Date date,
-            final UserModel creator, final TopicModel topic, final long commentsCount) {
+            final UserEntity creator, final TopicEntity topic, final long commentsCount) {
         this.id = id;
         this.text = text;
         this.date = date;
@@ -54,19 +54,19 @@ public class PostWithCommentsCount implements Serializable {
         this.date = date;
     }
 
-    public UserModel getCreator() {
+    public UserEntity getCreator() {
         return creator;
     }
 
-    public void setCreator(final UserModel creator) {
+    public void setCreator(final UserEntity creator) {
         this.creator = creator;
     }
 
-    public TopicModel getTopic() {
+    public TopicEntity getTopic() {
         return topic;
     }
 
-    public void setTopic(final TopicModel topic) {
+    public void setTopic(final TopicEntity topic) {
         this.topic = topic;
     }
 

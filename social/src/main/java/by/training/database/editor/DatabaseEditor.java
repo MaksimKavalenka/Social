@@ -9,7 +9,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 
-import by.training.model.Model;
+import by.training.entity.AbstractEntity;
 
 public abstract class DatabaseEditor {
 
@@ -24,7 +24,7 @@ public abstract class DatabaseEditor {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends Model> T getUniqueResultByCriteria(final Class<T> clazz,
+    public <T extends AbstractEntity> T getUniqueResultByCriteria(final Class<T> clazz,
             final Criterion... criterions) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(clazz);
         for (Criterion criterion : criterions) {
@@ -34,7 +34,7 @@ public abstract class DatabaseEditor {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends Model> List<T> getElements(final Criteria criteria, final Class<T> clazz,
+    public <T extends AbstractEntity> List<T> getElements(final Criteria criteria, final Class<T> clazz,
             final String property, final boolean order, final int page) {
         int count = getCountElements(clazz);
         int fromIndex = count * page - count;

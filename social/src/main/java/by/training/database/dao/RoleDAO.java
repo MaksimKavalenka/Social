@@ -1,13 +1,13 @@
 package by.training.database.dao;
 
-import by.training.model.RoleModel;
+import by.training.entity.RoleEntity;
 
 public interface RoleDAO {
 
-    RoleModel createRole(String name);
+    RoleEntity createRole(String name);
 
-    RoleModel getRoleById(long id);
+    RoleEntity getRoleById(long id);
 
-    RoleModel getRoleByName(String name);
+    RoleEntity getRoleByName(String name);
 
 }

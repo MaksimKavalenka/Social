@@ -2,23 +2,23 @@ package by.training.database.dao;
 
 import java.util.List;
 
-import by.training.model.PostModel;
-import by.training.model.TopicModel;
-import by.training.model.UserModel;
+import by.training.entity.PostEntity;
+import by.training.entity.TopicEntity;
+import by.training.entity.UserEntity;
 
 public interface PostDAO {
 
-    PostModel createPost(String text, UserModel creator, TopicModel topic, PostModel parentPost);
+    PostEntity createPost(String text, UserEntity creator, TopicEntity topic, PostEntity parentPost);
 
-    PostModel updatePost(long id, String text);
+    PostEntity updatePost(long id, String text);
 
     void deletePost(long id);
 
-    PostModel getPostById(long id);
+    PostEntity getPostById(long id);
 
-    List<PostModel> getTopicPosts(String topicPath, int page);
+    List<PostEntity> getTopicPosts(String topicPath, int page);
 
-    List<PostModel> getFeedPosts(long userId, int page);
+    List<PostEntity> getFeedPosts(long userId, int page);
 
     long getPostCommentsCount(long id);
 

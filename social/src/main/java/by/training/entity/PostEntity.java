@@ -1,4 +1,4 @@
-package by.training.model;
+package by.training.entity;
 
 import java.util.Date;
 import java.util.Set;
@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "post")
-public class PostModel extends Model {
+public class PostEntity extends AbstractEntity {
 
     private static final long serialVersionUID = 7372820574885171442L;
 
@@ -28,27 +28,27 @@ public class PostModel extends Model {
     @Temporal(TemporalType.TIMESTAMP)
     private Date              date;
 
-    @ManyToOne(targetEntity = UserModel.class, cascade = {CascadeType.DETACH}, optional = false)
-    private UserModel         creator;
+    @ManyToOne(targetEntity = UserEntity.class, cascade = {CascadeType.DETACH}, optional = false)
+    private UserEntity        creator;
 
-    @ManyToOne(targetEntity = TopicModel.class, cascade = {CascadeType.DETACH}, optional = false)
-    private TopicModel        topic;
+    @ManyToOne(targetEntity = TopicEntity.class, cascade = {CascadeType.DETACH}, optional = false)
+    private TopicEntity       topic;
 
     @JsonIgnore
-    @ManyToOne(targetEntity = PostModel.class, cascade = {
+    @ManyToOne(targetEntity = PostEntity.class, cascade = {
             CascadeType.DETACH}, fetch = FetchType.LAZY)
-    private PostModel         parentPost;
+    private PostEntity        parentPost;
 
     @OneToMany(cascade = {CascadeType.REMOVE,
             CascadeType.DETACH}, fetch = FetchType.EAGER, mappedBy = "parentPost")
-    private Set<PostModel>    posts;
+    private Set<PostEntity>   posts;
 
-    public PostModel() {
+    public PostEntity() {
         super();
     }
 
-    public PostModel(final String text, final UserModel creator, final TopicModel topic,
-            final PostModel parentPost) {
+    public PostEntity(final String text, final UserEntity creator, final TopicEntity topic,
+            final PostEntity parentPost) {
         super();
         date = new Date();
         this.text = text;
@@ -73,42 +73,42 @@ public class PostModel extends Model {
         this.date = date;
     }
 
-    public UserModel getCreator() {
+    public UserEntity getCreator() {
         return creator;
     }
 
-    public void setCreator(final UserModel creator) {
+    public void setCreator(final UserEntity creator) {
         this.creator = creator;
     }
 
-    public TopicModel getTopic() {
+    public TopicEntity getTopic() {
         return topic;
     }
 
-    public void setTopic(final TopicModel topic) {
+    public void setTopic(final TopicEntity topic) {
         this.topic = topic;
     }
 
-    public PostModel getParentPost() {
+    public PostEntity getParentPost() {
         return parentPost;
     }
 
-    public void setParentPost(final PostModel parentPost) {
+    public void setParentPost(final PostEntity parentPost) {
         this.parentPost = parentPost;
     }
 
-    public Set<PostModel> getPosts() {
+    public Set<PostEntity> getPosts() {
         return posts;
     }
 
-    public void setPosts(final Set<PostModel> posts) {
+    public void setPosts(final Set<PostEntity> posts) {
         this.posts = posts;
     }
 
     @Override
     public String toString() {
-        return "Post [id=" + super.getId() + ", text=" + text + ", created=" + date + ", creator="
-                + creator + "]";
+        return "PostEntity [id=" + super.getId() + ", text=" + text + ", created=" + date
+                + ", creator=" + creator + "]";
     }
 
 }

@@ -1,4 +1,4 @@
-package by.training.model;
+package by.training.entity;
 
 import java.util.Date;
 
@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "notification")
-public class NotificationModel extends Model {
+public class NotificationEntity extends AbstractEntity {
 
     private static final long serialVersionUID = -8131266384051642285L;
 
@@ -24,22 +24,22 @@ public class NotificationModel extends Model {
     private Date              date;
 
     @JsonIgnore
-    @ManyToOne(targetEntity = UserModel.class, cascade = {
+    @ManyToOne(targetEntity = UserEntity.class, cascade = {
             CascadeType.DETACH}, fetch = FetchType.LAZY, optional = false)
-    private UserModel         user;
+    private UserEntity        user;
 
-    @ManyToOne(targetEntity = UserModel.class, cascade = {CascadeType.DETACH}, optional = false)
-    private UserModel         inviter;
+    @ManyToOne(targetEntity = UserEntity.class, cascade = {CascadeType.DETACH}, optional = false)
+    private UserEntity        inviter;
 
-    @ManyToOne(targetEntity = TopicModel.class, cascade = {CascadeType.DETACH}, optional = false)
-    private TopicModel        topic;
+    @ManyToOne(targetEntity = TopicEntity.class, cascade = {CascadeType.DETACH}, optional = false)
+    private TopicEntity       topic;
 
-    public NotificationModel() {
+    public NotificationEntity() {
         super();
     }
 
-    public NotificationModel(final UserModel user, final UserModel inviter,
-            final TopicModel topic) {
+    public NotificationEntity(final UserEntity user, final UserEntity inviter,
+            final TopicEntity topic) {
         super();
         date = new Date();
         this.user = user;
@@ -55,33 +55,33 @@ public class NotificationModel extends Model {
         this.date = date;
     }
 
-    public UserModel getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
-    public void setUser(final UserModel user) {
+    public void setUser(final UserEntity user) {
         this.user = user;
     }
 
-    public UserModel getInviter() {
+    public UserEntity getInviter() {
         return inviter;
     }
 
-    public void setInviter(final UserModel inviter) {
+    public void setInviter(final UserEntity inviter) {
         this.inviter = inviter;
     }
 
-    public TopicModel getTopic() {
+    public TopicEntity getTopic() {
         return topic;
     }
 
-    public void setTopic(final TopicModel topic) {
+    public void setTopic(final TopicEntity topic) {
         this.topic = topic;
     }
 
     @Override
     public String toString() {
-        return "Notification [id=" + super.getId() + ", date=" + date + ", inviter=" + inviter
+        return "NotificationEntity [id=" + super.getId() + ", date=" + date + ", inviter=" + inviter
                 + ", topic=" + topic + "]";
     }
 

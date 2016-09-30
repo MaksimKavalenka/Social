@@ -10,18 +10,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import by.training.constants.ModelStructureConstants.ModelFields;
-import by.training.model.Model;
-import by.training.model.UserModel;
+import by.training.constants.EntityConstants.Structure;
+import by.training.entity.AbstractEntity;
+import by.training.entity.UserEntity;
 
 public class RestController {
 
     public static final String JSON_EXT = ".json";
 
-    public UserModel getLoggedUser() {
+    public UserEntity getLoggedUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Object user = auth.getPrincipal();
-        return (UserModel) user;
+        return (UserEntity) user;
     }
 
     public List<Long> getIdList(final String json) {
@@ -29,20 +29,20 @@ public class RestController {
         JSONArray jsonArray = new JSONArray(json);
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
-            long id = jsonObject.getLong(ModelFields.ID);
+            long id = jsonObject.getLong(Structure.AbstractFields.ID);
             ids.add(id);
         }
         return ids;
     }
 
-    public <T extends Model> ResponseEntity<Object> checkEntity(final T entity) {
+    public <T extends AbstractEntity> ResponseEntity<Object> checkEntity(final T entity) {
         if (entity == null) {
             return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<Object>(entity, HttpStatus.OK);
     }
 
-    public <T extends Model> ResponseEntity<List<T>> checkEntity(final List<T> entity) {
+    public <T extends AbstractEntity> ResponseEntity<List<T>> checkEntity(final List<T> entity) {
         if (entity == null) {
             return new ResponseEntity<List<T>>(HttpStatus.NO_CONTENT);
         }

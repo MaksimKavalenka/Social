@@ -1,4 +1,4 @@
-package by.training.model;
+package by.training.entity;
 
 import java.util.Set;
 
@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "role")
-public class RoleModel extends Model implements GrantedAuthority {
+public class RoleEntity extends AbstractEntity implements GrantedAuthority {
 
     private static final long serialVersionUID = -2838272686668080339L;
 
@@ -24,15 +24,15 @@ public class RoleModel extends Model implements GrantedAuthority {
     private String            name;
 
     @JsonIgnore
-    @ManyToMany(targetEntity = UserModel.class, cascade = {CascadeType.DETACH})
+    @ManyToMany(targetEntity = UserEntity.class, cascade = {CascadeType.DETACH})
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "role_id", nullable = false, updatable = false), inverseJoinColumns = @JoinColumn(name = "user_id", nullable = false, updatable = false))
-    private Set<UserModel>    users;
+    private Set<UserEntity>   users;
 
-    public RoleModel() {
+    public RoleEntity() {
         super();
     }
 
-    public RoleModel(final String name) {
+    public RoleEntity(final String name) {
         super();
         this.name = name;
     }
@@ -45,11 +45,11 @@ public class RoleModel extends Model implements GrantedAuthority {
         this.name = name;
     }
 
-    public Set<UserModel> getUsers() {
+    public Set<UserEntity> getUsers() {
         return users;
     }
 
-    public void setUsers(final Set<UserModel> users) {
+    public void setUsers(final Set<UserEntity> users) {
         this.users = users;
     }
 
@@ -60,7 +60,7 @@ public class RoleModel extends Model implements GrantedAuthority {
 
     @Override
     public String toString() {
-        return "Role [id=" + super.getId() + ", name=" + name + "]";
+        return "RoleEntity [id=" + super.getId() + ", name=" + name + "]";
     }
 
 }

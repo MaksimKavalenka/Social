@@ -1,4 +1,4 @@
-package by.training.model;
+package by.training.entity;
 
 import java.io.Serializable;
 
@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public abstract class Model implements Serializable {
+public abstract class AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 702208025730502671L;
 
@@ -18,7 +18,7 @@ public abstract class Model implements Serializable {
     @Column(name = "id", unique = true, nullable = false)
     private long              id;
 
-    public Model() {
+    public AbstractEntity() {
     }
 
     public long getId() {
@@ -48,7 +48,7 @@ public abstract class Model implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Model other = (Model) obj;
+        AbstractEntity other = (AbstractEntity) obj;
         if (id != other.id) {
             return false;
         }
@@ -56,8 +56,6 @@ public abstract class Model implements Serializable {
     }
 
     @Override
-    public String toString() {
-        return "Model [id=" + id + "]";
-    }
+    public abstract String toString();
 
 }

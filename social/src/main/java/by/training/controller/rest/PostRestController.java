@@ -24,9 +24,9 @@ import by.training.bean.ErrorMessage;
 import by.training.bean.PostWithCommentsCount;
 import by.training.database.dao.PostDAO;
 import by.training.database.dao.TopicDAO;
-import by.training.model.PostModel;
-import by.training.model.TopicModel;
-import by.training.model.UserModel;
+import by.training.entity.PostEntity;
+import by.training.entity.TopicEntity;
+import by.training.entity.UserEntity;
 import by.training.utility.Validator;
 
 @RestController
@@ -51,8 +51,8 @@ public class PostRestController extends by.training.controller.rest.RestControll
                     HttpStatus.CONFLICT);
         }
 
-        TopicModel topic = topicDAO.getTopicByPath(path);
-        UserModel user = getLoggedUser();
+        TopicEntity topic = topicDAO.getTopicByPath(path);
+        UserEntity user = getLoggedUser();
 
         if (!topic.getUsers().contains(user)) {
             return new ResponseEntity<Object>(new ErrorMessage(OPERATION_PERMISSIONS_ERROR),
@@ -63,11 +63,11 @@ public class PostRestController extends by.training.controller.rest.RestControll
             return new ResponseEntity<Object>(new ErrorMessage(LEVEL_ERROR), HttpStatus.CONFLICT);
         }
 
-        PostModel parentPost = null;
+        PostEntity parentPost = null;
         if (parentPostId > 0) {
             parentPost = postDAO.getPostById(parentPostId);
         }
-        PostModel post = postDAO.createPost(text, user, topic, parentPost);
+        PostEntity post = postDAO.createPost(text, user, topic, parentPost);
         return new ResponseEntity<Object>(post, HttpStatus.CREATED);
     }
 
@@ -84,7 +84,7 @@ public class PostRestController extends by.training.controller.rest.RestControll
                     HttpStatus.CONFLICT);
         }
 
-        PostModel post = postDAO.updatePost(id, text);
+        PostEntity post = postDAO.updatePost(id, text);
         return new ResponseEntity<Object>(post, HttpStatus.CREATED);
     }
 
@@ -108,13 +108,13 @@ public class PostRestController extends by.training.controller.rest.RestControll
     @RequestMapping(value = PATH_KEY + ID_KEY + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<Object> getPostById(@PathVariable("path") final String path,
             @PathVariable("id") final long id) {
-        TopicModel topic = topicDAO.getTopicByPath(path);
+        TopicEntity topic = topicDAO.getTopicByPath(path);
         if (!topic.isAccess() && !topic.getUsers().contains(getLoggedUser())) {
             return new ResponseEntity<Object>(new ErrorMessage(PAGE_PERMISSIONS_ERROR),
                     HttpStatus.CONFLICT);
         }
 
-        PostModel post = postDAO.getPostById(id);
+        PostEntity post = postDAO.getPostById(id);
         return checkEntity(post);
     }
 
@@ -122,19 +122,19 @@ public class PostRestController extends by.training.controller.rest.RestControll
             + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<List<PostWithCommentsCount>> getTopicPosts(
             @PathVariable("path") final String path, @PathVariable("page") final int page) {
-        List<PostModel> posts = postDAO.getTopicPosts(path, page);
+        List<PostEntity> posts = postDAO.getTopicPosts(path, page);
 
         if (posts == null) {
             return new ResponseEntity<List<PostWithCommentsCount>>(HttpStatus.NO_CONTENT);
         }
 
         List<PostWithCommentsCount> postWithCommentsCounts = new ArrayList<>(posts.size());
-        for (PostModel post : posts) {
+        for (PostEntity post : posts) {
             long id = post.getId();
             String text = post.getText();
             Date date = post.getDate();
-            UserModel creator = post.getCreator();
-            TopicModel topic = post.getTopic();
+            UserEntity creator = post.getCreator();
+            TopicEntity topic = post.getTopic();
             long commentsCount = postDAO.getPostCommentsCount(id);
 
             postWithCommentsCounts
@@ -147,19 +147,19 @@ public class PostRestController extends by.training.controller.rest.RestControll
     @RequestMapping(value = "/feed" + PAGE_KEY + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<List<PostWithCommentsCount>> getFeedPosts(
             @PathVariable("page") final int page) {
-        List<PostModel> posts = postDAO.getFeedPosts(getLoggedUser().getId(), page);
+        List<PostEntity> posts = postDAO.getFeedPosts(getLoggedUser().getId(), page);
 
         if (posts == null) {
             return new ResponseEntity<List<PostWithCommentsCount>>(HttpStatus.NO_CONTENT);
         }
 
         List<PostWithCommentsCount> postWithCommentsCounts = new ArrayList<>(posts.size());
-        for (PostModel post : posts) {
+        for (PostEntity post : posts) {
             long id = post.getId();
             String text = post.getText();
             Date date = post.getDate();
-            UserModel creator = post.getCreator();
-            TopicModel topic = post.getTopic();
+            UserEntity creator = post.getCreator();
+            TopicEntity topic = post.getTopic();
             long commentsCount = postDAO.getPostCommentsCount(id);
 
             postWithCommentsCounts

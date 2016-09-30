@@ -1,4 +1,4 @@
-package by.training.model;
+package by.training.entity;
 
 import java.util.Collection;
 import java.util.Set;
@@ -20,64 +20,66 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "user")
-public class UserModel extends Model implements UserDetails {
+public class UserEntity extends AbstractEntity implements UserDetails {
 
-    private static final long      serialVersionUID = 7372820574885171442L;
-
-    @JsonIgnore
-    private boolean                accountNonExpired;
+    private static final long       serialVersionUID = 7372820574885171442L;
 
     @JsonIgnore
-    private boolean                accountNonLocked;
+    private boolean                 accountNonExpired;
 
     @JsonIgnore
-    private boolean                credentialsNonExpired;
+    private boolean                 accountNonLocked;
 
     @JsonIgnore
-    private boolean                enabled;
+    private boolean                 credentialsNonExpired;
+
+    @JsonIgnore
+    private boolean                 enabled;
 
     @Column(name = "login", unique = true, nullable = false, length = 255)
-    private String                 login;
+    private String                  login;
 
     @JsonIgnore
     @Column(name = "password", nullable = false, length = 255)
-    private String                 password;
+    private String                  password;
 
     @Column(name = "photo", length = 255)
-    private String                 photo;
+    private String                  photo;
 
     @JsonIgnore
-    @ManyToMany(targetEntity = RoleModel.class, cascade = {
+    @ManyToMany(targetEntity = RoleEntity.class, cascade = {
             CascadeType.DETACH}, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", nullable = false, updatable = false), inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false, updatable = false))
-    private Set<GrantedAuthority>  roles;
+    private Set<GrantedAuthority>   roles;
 
     @JsonIgnore
     @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.DETACH}, mappedBy = "user")
-    private Set<NotificationModel> notifications;
+    private Set<NotificationEntity> notifications;
 
     @JsonIgnore
     @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.DETACH}, mappedBy = "inviter")
-    private Set<NotificationModel> sentNotifications;
+    private Set<NotificationEntity> sentNotifications;
 
     @JsonIgnore
     @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.DETACH}, mappedBy = "creator")
-    private Set<PostModel>         posts;
+    private Set<PostEntity>         posts;
 
     @JsonIgnore
-    @ManyToMany(targetEntity = TopicModel.class, cascade = {CascadeType.REMOVE, CascadeType.DETACH})
+    @ManyToMany(targetEntity = TopicEntity.class, cascade = {CascadeType.REMOVE,
+            CascadeType.DETACH})
     @JoinTable(name = "topic_user", joinColumns = @JoinColumn(name = "user_id", nullable = false, updatable = false), inverseJoinColumns = @JoinColumn(name = "topic_id", nullable = false, updatable = false))
-    private Set<TopicModel>        topics;
+    private Set<TopicEntity>        topics;
 
-    public UserModel() {
+    public UserEntity() {
         super();
     }
 
-    public UserModel(final String login, final String password, final Set<GrantedAuthority> roles) {
+    public UserEntity(final String login, final String password,
+            final Set<GrantedAuthority> roles) {
         this(true, true, true, true, login, password, null, roles);
     }
 
-    public UserModel(final boolean accountNonExpired, final boolean accountNonLocked,
+    public UserEntity(final boolean accountNonExpired, final boolean accountNonLocked,
             final boolean credentialsNonExpired, final boolean enabled, final String login,
             final String password, final String photo, final Set<GrantedAuthority> roles) {
         super();
@@ -156,41 +158,41 @@ public class UserModel extends Model implements UserDetails {
         this.roles = roles;
     }
 
-    public Set<NotificationModel> getNotifications() {
+    public Set<NotificationEntity> getNotifications() {
         return notifications;
     }
 
-    public void setNotifications(final Set<NotificationModel> notifications) {
+    public void setNotifications(final Set<NotificationEntity> notifications) {
         this.notifications = notifications;
     }
 
-    public Set<NotificationModel> getSentNotifications() {
+    public Set<NotificationEntity> getSentNotifications() {
         return sentNotifications;
     }
 
-    public void setSentNotifications(final Set<NotificationModel> sentNotifications) {
+    public void setSentNotifications(final Set<NotificationEntity> sentNotifications) {
         this.sentNotifications = sentNotifications;
     }
 
-    public Set<PostModel> getPosts() {
+    public Set<PostEntity> getPosts() {
         return posts;
     }
 
-    public void setPosts(final Set<PostModel> posts) {
+    public void setPosts(final Set<PostEntity> posts) {
         this.posts = posts;
     }
 
-    public Set<TopicModel> getTopics() {
+    public Set<TopicEntity> getTopics() {
         return topics;
     }
 
-    public void setTopics(final Set<TopicModel> topics) {
+    public void setTopics(final Set<TopicEntity> topics) {
         this.topics = topics;
     }
 
     @Override
     public String toString() {
-        return "User [id=" + super.getId() + ", login=" + login + "]";
+        return "UserEntity [id=" + super.getId() + ", login=" + login + "]";
     }
 
 }

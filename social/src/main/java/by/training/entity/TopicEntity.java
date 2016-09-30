@@ -1,4 +1,4 @@
-package by.training.model;
+package by.training.entity;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,44 +18,44 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "topic")
-public class TopicModel extends Model {
+public class TopicEntity extends AbstractEntity {
 
-    private static final long      serialVersionUID = 8849827068678797244L;
+    private static final long       serialVersionUID = 8849827068678797244L;
 
     @Column(name = "name", nullable = false, length = 255)
-    private String                 name;
+    private String                  name;
 
     @Column(name = "path", unique = true, nullable = false, length = 255)
-    private String                 path;
+    private String                  path;
 
     @Column(name = "description", nullable = false, length = 255)
-    private String                 description;
+    private String                  description;
 
     @Column(name = "access", nullable = false)
-    private boolean                access;
+    private boolean                 access;
 
-    @ManyToOne(targetEntity = UserModel.class, cascade = {CascadeType.DETACH}, optional = false)
-    private UserModel              creator;
-
-    @JsonIgnore
-    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.DETACH}, mappedBy = "topic")
-    private Set<NotificationModel> notifications;
+    @ManyToOne(targetEntity = UserEntity.class, cascade = {CascadeType.DETACH}, optional = false)
+    private UserEntity              creator;
 
     @JsonIgnore
     @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.DETACH}, mappedBy = "topic")
-    private Set<PostModel>         posts;
+    private Set<NotificationEntity> notifications;
 
     @JsonIgnore
-    @ManyToMany(targetEntity = UserModel.class, fetch = FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.DETACH}, mappedBy = "topic")
+    private Set<PostEntity>         posts;
+
+    @JsonIgnore
+    @ManyToMany(targetEntity = UserEntity.class, fetch = FetchType.EAGER)
     @JoinTable(name = "topic_user", joinColumns = @JoinColumn(name = "topic_id", nullable = false, updatable = false), inverseJoinColumns = @JoinColumn(name = "user_id", nullable = false, updatable = false))
-    private Set<UserModel>         users;
+    private Set<UserEntity>         users;
 
-    public TopicModel() {
+    public TopicEntity() {
         super();
     }
 
-    public TopicModel(final String name, final String path, final String description,
-            final boolean access, final UserModel creator) {
+    public TopicEntity(final String name, final String path, final String description,
+            final boolean access, final UserEntity creator) {
         super();
         this.name = name;
         this.path = path;
@@ -98,42 +98,43 @@ public class TopicModel extends Model {
         this.access = access;
     }
 
-    public UserModel getCreator() {
+    public UserEntity getCreator() {
         return creator;
     }
 
-    public void setCreator(final UserModel creator) {
+    public void setCreator(final UserEntity creator) {
         this.creator = creator;
     }
 
-    public Set<NotificationModel> getNotifications() {
+    public Set<NotificationEntity> getNotifications() {
         return notifications;
     }
 
-    public void setNotifications(final Set<NotificationModel> notifications) {
+    public void setNotifications(final Set<NotificationEntity> notifications) {
         this.notifications = notifications;
     }
 
-    public Set<PostModel> getPosts() {
+    public Set<PostEntity> getPosts() {
         return posts;
     }
 
-    public void setPosts(final Set<PostModel> posts) {
+    public void setPosts(final Set<PostEntity> posts) {
         this.posts = posts;
     }
 
-    public Set<UserModel> getUsers() {
+    public Set<UserEntity> getUsers() {
         return users;
     }
 
-    public void setUsers(final Set<UserModel> users) {
+    public void setUsers(final Set<UserEntity> users) {
         this.users = users;
     }
 
     @Override
     public String toString() {
-        return "Topic [id=" + super.getId() + ", name=" + name + ", path=" + path + ", description="
-                + description + ", access=" + access + ", creator=" + creator + "]";
+        return "TopicEntity [id=" + super.getId() + ", name=" + name + ", path=" + path
+                + ", description=" + description + ", access=" + access + ", creator=" + creator
+                + "]";
     }
 
 }

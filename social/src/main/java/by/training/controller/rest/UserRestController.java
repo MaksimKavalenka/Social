@@ -29,8 +29,8 @@ import by.training.bean.ErrorMessage;
 import by.training.constants.RoleConstants;
 import by.training.database.dao.RoleDAO;
 import by.training.database.dao.UserDAO;
+import by.training.entity.UserEntity;
 import by.training.exception.ValidationException;
-import by.training.model.UserModel;
 import by.training.utility.SecureData;
 import by.training.utility.Validator;
 
@@ -143,23 +143,23 @@ public class UserRestController extends by.training.controller.rest.RestControll
     }
 
     @RequestMapping(value = PATH_KEY + "/for_invitation" + JSON_EXT, method = RequestMethod.POST)
-    public ResponseEntity<List<UserModel>> getUsersForInvitation(
+    public ResponseEntity<List<UserEntity>> getUsersForInvitation(
             @PathVariable("path") final String path) {
-        List<UserModel> users = userDAO.getUsersForInvitation(path);
+        List<UserEntity> users = userDAO.getUsersForInvitation(path);
         return checkEntity(users);
     }
 
     @RequestMapping(value = "/auth"
             + JSON_EXT, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserModel> authentication(final Principal principal) {
+    public ResponseEntity<UserEntity> authentication(final Principal principal) {
         if (principal != null) {
             if (principal instanceof AbstractAuthenticationToken) {
-                UserModel user = (UserModel) ((AbstractAuthenticationToken) principal)
+                UserEntity user = (UserEntity) ((AbstractAuthenticationToken) principal)
                         .getPrincipal();
-                return new ResponseEntity<UserModel>(user, HttpStatus.OK);
+                return new ResponseEntity<UserEntity>(user, HttpStatus.OK);
             }
         }
-        return new ResponseEntity<UserModel>(HttpStatus.FORBIDDEN);
+        return new ResponseEntity<UserEntity>(HttpStatus.FORBIDDEN);
     }
 
     @RequestMapping(value = "/logout" + JSON_EXT, method = RequestMethod.POST)

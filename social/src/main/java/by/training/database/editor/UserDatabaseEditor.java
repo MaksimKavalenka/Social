@@ -15,16 +15,14 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.transaction.annotation.Transactional;
 
-import by.training.constants.ModelStructureConstants.RelationFields;
-import by.training.constants.ModelStructureConstants.TopicFields;
-import by.training.constants.ModelStructureConstants.UserFields;
+import by.training.constants.EntityConstants.Structure;
 import by.training.database.dao.UserDAO;
+import by.training.entity.UserEntity;
 import by.training.exception.ValidationException;
-import by.training.model.UserModel;
 
 public class UserDatabaseEditor extends DatabaseEditor implements UserDAO {
 
-    private static final Class<UserModel> clazz = UserModel.class;
+    private static final Class<UserEntity> clazz = UserEntity.class;
 
     public UserDatabaseEditor(final SessionFactory sessionFactory) {
         super(sessionFactory);
@@ -32,10 +30,10 @@ public class UserDatabaseEditor extends DatabaseEditor implements UserDAO {
 
     @Override
     @Transactional(rollbackFor = ValidationException.class)
-    public UserModel createUser(final String login, final String password,
+    public UserEntity createUser(final String login, final String password,
             final Set<GrantedAuthority> roles) throws ValidationException {
         if (!checkLogin(login)) {
-            UserModel user = new UserModel(login, password, roles);
+            UserEntity user = new UserEntity(login, password, roles);
             getSessionFactory().getCurrentSession().save(user);
             return user;
         } else {
@@ -45,9 +43,9 @@ public class UserDatabaseEditor extends DatabaseEditor implements UserDAO {
 
     @Override
     @Transactional(rollbackFor = ValidationException.class)
-    public UserModel updateUser(final long id, final String login, final String password)
+    public UserEntity updateUser(final long id, final String login, final String password)
             throws ValidationException {
-        UserModel user = getUserById(id);
+        UserEntity user = getUserById(id);
         if (!checkLogin(login) || user.getLogin().equals(login)) {
             user.setLogin(login);
             user.setPassword(password);
@@ -60,8 +58,8 @@ public class UserDatabaseEditor extends DatabaseEditor implements UserDAO {
 
     @Override
     @Transactional
-    public UserModel updateUserPhoto(final long id, final String photo) {
-        UserModel user = getUserById(id);
+    public UserEntity updateUserPhoto(final long id, final String photo) {
+        UserEntity user = getUserById(id);
         user.setPhoto(photo);
         getSessionFactory().getCurrentSession().update(user);
         return user;
@@ -69,39 +67,41 @@ public class UserDatabaseEditor extends DatabaseEditor implements UserDAO {
 
     @Override
     @Transactional
-    public UserModel getUserById(final long id) {
-        return (UserModel) getSessionFactory().getCurrentSession().get(clazz, id);
+    public UserEntity getUserById(final long id) {
+        return getSessionFactory().getCurrentSession().get(clazz, id);
     }
 
     @Override
     @Transactional
-    public UserModel getUserByLogin(final String login) {
-        return getUniqueResultByCriteria(clazz, Restrictions.eq(UserFields.LOGIN, login));
+    public UserEntity getUserByLogin(final String login) {
+        return getUniqueResultByCriteria(clazz, Restrictions.eq(Structure.UserFields.LOGIN, login));
     }
 
     @Override
     @Transactional
     @SuppressWarnings("unchecked")
-    public List<UserModel> getUsersForInvitation(final String topicPath) {
+    public List<UserEntity> getUsersForInvitation(final String topicPath) {
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(clazz)
                 .setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
-        criteria.createAlias(RelationFields.TOPICS, "alias");
-        criteria.add(Restrictions.eq("alias." + TopicFields.PATH, topicPath));
+        criteria.createAlias(Structure.RelationFields.TOPICS, "alias");
+        criteria.add(Restrictions.eq("alias." + Structure.TopicFields.PATH, topicPath));
 
         ProjectionList projList = Projections.projectionList();
-        projList.add(Projections.property(UserFields.ID), UserFields.ID);
+        projList.add(Projections.property(Structure.UserFields.ID), Structure.UserFields.ID);
         criteria.setProjection(projList);
 
         Criteria negativeCriteria = getSessionFactory().getCurrentSession().createCriteria(clazz);
-        negativeCriteria.add(Restrictions.not(Restrictions.in(UserFields.ID, criteria.list())));
-        negativeCriteria.addOrder(Order.asc(UserFields.LOGIN));
+        negativeCriteria
+                .add(Restrictions.not(Restrictions.in(Structure.UserFields.ID, criteria.list())));
+        negativeCriteria.addOrder(Order.asc(Structure.UserFields.LOGIN));
         return negativeCriteria.list();
     }
 
     @Override
     @Transactional
     public boolean checkLogin(final String login) {
-        return getUniqueResultByCriteria(clazz, Restrictions.eq(UserFields.LOGIN, login)) != null;
+        return getUniqueResultByCriteria(clazz,
+                Restrictions.eq(Structure.UserFields.LOGIN, login)) != null;
     }
 
 }
