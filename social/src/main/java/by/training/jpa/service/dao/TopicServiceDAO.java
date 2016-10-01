@@ -1,4 +1,4 @@
-package by.training.database.dao;
+package by.training.jpa.service.dao;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import by.training.entity.TopicEntity;
 import by.training.entity.UserEntity;
 import by.training.exception.ValidationException;
 
-public interface TopicDAO {
+public interface TopicServiceDAO {
 
     TopicEntity createTopic(String name, String path, String description, boolean access,
             UserEntity creator) throws ValidationException;

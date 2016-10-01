@@ -5,6 +5,7 @@ import static by.training.constants.MessageConstants.VALIDATION_ERROR;
 import static by.training.constants.UrlConstants.PAGE_KEY;
 import static by.training.constants.UrlConstants.PATH_KEY;
 import static by.training.constants.UrlConstants.VALUE_KEY;
+import static by.training.constants.UrlConstants.Rest.TOPICS_URL;
 
 import java.util.List;
 
@@ -16,22 +17,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import by.training.bean.ErrorMessage;
-import by.training.database.dao.TopicDAO;
 import by.training.entity.TopicEntity;
 import by.training.entity.UserEntity;
 import by.training.exception.ValidationException;
-import by.training.repository.NotificationRepository;
+import by.training.jpa.service.dao.NotificationServiceDAO;
+import by.training.jpa.service.dao.TopicServiceDAO;
 import by.training.utility.Validator;
 
 @RestController
-@RequestMapping("/topics")
+@RequestMapping(TOPICS_URL)
 public class TopicRestController extends by.training.controller.rest.RestController {
 
-    private NotificationRepository notificationRepository;
-    private TopicDAO               topicDAO;
+    private NotificationServiceDAO notificationService;
+    private TopicServiceDAO        topicService;
 
-    public TopicRestController(final TopicDAO topicDAO) {
-        this.topicDAO = topicDAO;
+    public TopicRestController(final NotificationServiceDAO notificationService,
+            final TopicServiceDAO topicService) {
+        this.notificationService = notificationService;
+        this.topicService = topicService;
     }
 
     @RequestMapping(value = "/create/{name}" + PATH_KEY + "/{description}/{access}"
@@ -47,7 +50,7 @@ public class TopicRestController extends by.training.controller.rest.RestControl
             }
 
             UserEntity creator = getLoggedUser();
-            TopicEntity topic = topicDAO.createTopic(name, path, description, access, creator);
+            TopicEntity topic = topicService.createTopic(name, path, description, access, creator);
             return new ResponseEntity<Object>(topic, HttpStatus.CREATED);
 
         } catch (ValidationException e) {
@@ -68,12 +71,12 @@ public class TopicRestController extends by.training.controller.rest.RestControl
                         HttpStatus.CONFLICT);
             }
 
-            if (topicDAO.getTopicById(id).getCreator().getId() != getLoggedUser().getId()) {
+            if (topicService.getTopicById(id).getCreator().getId() != getLoggedUser().getId()) {
                 return new ResponseEntity<Object>(new ErrorMessage(OPERATION_PERMISSIONS_ERROR),
                         HttpStatus.CONFLICT);
             }
 
-            TopicEntity topic = topicDAO.updateTopic(id, name, path, description, access);
+            TopicEntity topic = topicService.updateTopic(id, name, path, description, access);
             return new ResponseEntity<Object>(topic, HttpStatus.CREATED);
 
         } catch (ValidationException e) {
@@ -84,32 +87,33 @@ public class TopicRestController extends by.training.controller.rest.RestControl
 
     @RequestMapping(value = PATH_KEY + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<Object> getTopicByPath(@PathVariable("path") final String path) {
-        TopicEntity topic = topicDAO.getTopicByPath(path);
+        TopicEntity topic = topicService.getTopicByPath(path);
         return checkEntity(topic);
     }
 
     @RequestMapping(value = "/user" + PAGE_KEY + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<List<TopicEntity>> getUserTopics(@PathVariable("page") final int page) {
-        List<TopicEntity> topics = topicDAO.getUserTopics(getLoggedUser().getId(), page);
+        List<TopicEntity> topics = topicService.getUserTopics(getLoggedUser().getId(), page);
         return checkEntity(topics);
     }
 
     @RequestMapping(value = "/search" + VALUE_KEY + PAGE_KEY + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<List<TopicEntity>> getTopicsByValue(
             @PathVariable("value") final String value, @PathVariable("page") final int page) {
-        List<TopicEntity> topics = topicDAO.getTopicsByValue(value, getLoggedUser().getId(), page);
+        List<TopicEntity> topics = topicService.getTopicsByValue(value, getLoggedUser().getId(),
+                page);
         return checkEntity(topics);
     }
 
     @RequestMapping(value = "/user/count" + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<Long> getUserTopicsCount() {
-        long pageCount = topicDAO.getUserTopicsCount(getLoggedUser().getId());
+        long pageCount = topicService.getUserTopicsCount(getLoggedUser().getId());
         return new ResponseEntity<Long>(pageCount, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/user/page_count" + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<Long> getUserTopicsPageCount() {
-        long pageCount = topicDAO.getUserTopicsPageCount(getLoggedUser().getId());
+        long pageCount = topicService.getUserTopicsPageCount(getLoggedUser().getId());
         return new ResponseEntity<Long>(pageCount, HttpStatus.OK);
     }
 
@@ -117,37 +121,36 @@ public class TopicRestController extends by.training.controller.rest.RestControl
             + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<Long> getTopicsByValuePageCount(
             @PathVariable("value") final String value) {
-        long pageCount = topicDAO.getTopicsByValuePageCount(value, getLoggedUser().getId());
+        long pageCount = topicService.getTopicsByValuePageCount(value, getLoggedUser().getId());
         return new ResponseEntity<Long>(pageCount, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/join" + PATH_KEY + JSON_EXT, method = RequestMethod.POST)
     public ResponseEntity<Void> joinTopic(@PathVariable("path") final String path) {
-        TopicEntity topic = topicDAO.getTopicByPath(path);
+        TopicEntity topic = topicService.getTopicByPath(path);
         UserEntity user = getLoggedUser();
-        if (topic.isAccess() || notificationRepository.existsByTopic_PathAndUser_Id(path,
-                getLoggedUser().getId())) {
-            topicDAO.joinTopic(topic, user);
+        if (topic.isAccess() || notificationService.isInvited(path, getLoggedUser().getId())) {
+            topicService.joinTopic(topic, user);
         }
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/leave" + PATH_KEY + JSON_EXT, method = RequestMethod.POST)
     public ResponseEntity<Void> leaveTopic(@PathVariable("path") final String path) {
-        TopicEntity topic = topicDAO.getTopicByPath(path);
-        topicDAO.leaveTopic(topic, getLoggedUser());
+        TopicEntity topic = topicService.getTopicByPath(path);
+        topicService.leaveTopic(topic, getLoggedUser());
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/check_path" + PATH_KEY + JSON_EXT, method = RequestMethod.POST)
     public ResponseEntity<Boolean> checkPath(@PathVariable("path") final String path) {
-        boolean exists = topicDAO.checkPath(path);
+        boolean exists = topicService.checkPath(path);
         return new ResponseEntity<Boolean>(exists, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/check_member" + PATH_KEY + JSON_EXT, method = RequestMethod.POST)
     public ResponseEntity<Boolean> checkMember(@PathVariable("path") final String path) {
-        TopicEntity topic = topicDAO.getTopicByPath(path);
+        TopicEntity topic = topicService.getTopicByPath(path);
         boolean exists = topic.getUsers().contains(getLoggedUser());
         return new ResponseEntity<Boolean>(exists, HttpStatus.OK);
     }

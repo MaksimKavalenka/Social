@@ -1,4 +1,4 @@
-package by.training.database.dao;
+package by.training.jpa.service.dao;
 
 import java.util.List;
 
@@ -6,9 +6,10 @@ import by.training.entity.PostEntity;
 import by.training.entity.TopicEntity;
 import by.training.entity.UserEntity;
 
-public interface PostDAO {
+public interface PostServiceDAO {
 
-    PostEntity createPost(String text, UserEntity creator, TopicEntity topic, PostEntity parentPost);
+    PostEntity createPost(String text, UserEntity creator, TopicEntity topic,
+            PostEntity parentPost);
 
     PostEntity updatePost(long id, String text);
 

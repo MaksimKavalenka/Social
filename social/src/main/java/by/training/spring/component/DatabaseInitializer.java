@@ -6,15 +6,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import by.training.constants.RoleConstants;
-import by.training.database.dao.RoleDAO;
+import by.training.jpa.service.dao.RoleServiceDAO;
 
 @Component
 public class DatabaseInitializer implements ApplicationListener<ContextRefreshedEvent> {
 
-    private RoleDAO roleDAO;
+    private RoleServiceDAO roleService;
 
-    public DatabaseInitializer(final RoleDAO roleDAO) {
-        this.roleDAO = roleDAO;
+    public DatabaseInitializer(final RoleServiceDAO roleService) {
+        this.roleService = roleService;
     }
 
     @Override
@@ -25,8 +25,8 @@ public class DatabaseInitializer implements ApplicationListener<ContextRefreshed
     @Transactional
     private void roleInit() {
         for (RoleConstants role : RoleConstants.values()) {
-            if (roleDAO.getRoleByName(role.name()) == null) {
-                roleDAO.createRole(role.name());
+            if (roleService.getRoleByName(role.name()) == null) {
+                roleService.createRole(role.name());
             }
         }
     }

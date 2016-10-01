@@ -1,7 +1,6 @@
 package by.training.spring.configuration;
 
 import static by.training.constants.RoleConstants.*;
-import static by.training.constants.UrlConstants.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,6 +21,8 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
+import by.training.constants.UrlConstants.Page;
+import by.training.constants.UrlConstants.Rest;
 import by.training.spring.component.CsrfHeaderFilter;
 
 @Configuration
@@ -82,17 +83,23 @@ public class SecuritySpringConfiguration extends WebSecurityConfigurerAdapter {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry urlRegistry = http
                 .authorizeRequests();
 
-        urlRegistry.antMatchers(FEED_URL).hasRole(ROLE_USER.toString());
-        urlRegistry.antMatchers(NOTIFICATIONS_URL).hasRole(ROLE_USER.toString());
-        urlRegistry.antMatchers(POST_URL + ANY).hasRole(ROLE_USER.toString());
-        urlRegistry.antMatchers(PROFILE_URL + ANY).hasRole(ROLE_USER.toString());
-        urlRegistry.antMatchers(REGISTRATION_URL).permitAll();
-        urlRegistry.antMatchers(SEARCH_URL).hasRole(ROLE_USER.toString());
-        urlRegistry.antMatchers(TOPIC_URL + ANY).hasRole(ROLE_USER.toString());
-        urlRegistry.antMatchers(TOPICS_URL).hasRole(ROLE_USER.toString());
+        urlRegistry.antMatchers(Page.FEED_URL).hasRole(ROLE_USER.toString());
+        urlRegistry.antMatchers(Page.NOTIFICATIONS_URL).hasRole(ROLE_USER.toString());
+        urlRegistry.antMatchers(Page.POST_URL + ANY).hasRole(ROLE_USER.toString());
+        urlRegistry.antMatchers(Page.PROFILE_URL + ANY).hasRole(ROLE_USER.toString());
+        urlRegistry.antMatchers(Page.REGISTRATION_URL).permitAll();
+        urlRegistry.antMatchers(Page.SEARCH_URL).hasRole(ROLE_USER.toString());
+        urlRegistry.antMatchers(Page.TOPIC_URL + ANY).hasRole(ROLE_USER.toString());
+        urlRegistry.antMatchers(Page.TOPICS_URL).hasRole(ROLE_USER.toString());
+
+        urlRegistry.antMatchers(Rest.NOTIFICATIONS_URL + ANY).hasRole(ROLE_USER.toString());
+        urlRegistry.antMatchers(Rest.POSTS_URL + ANY).hasRole(ROLE_USER.toString());
+        urlRegistry.antMatchers(Rest.TOPICS_URL + ANY).hasRole(ROLE_USER.toString());
+        urlRegistry.antMatchers(Rest.UPLOAD_URL + ANY).hasRole(ROLE_USER.toString());
+        urlRegistry.antMatchers(Rest.USERS_URL + ANY).permitAll();
 
         urlRegistry.anyRequest().authenticated();
-        urlRegistry.and().formLogin().loginPage(LOGIN_URL).permitAll();
+        urlRegistry.and().formLogin().loginPage(Page.LOGIN_URL).permitAll();
 
         urlRegistry.and().httpBasic().authenticationEntryPoint(http403ForbiddenEntryPoint());
         urlRegistry.and().csrf().csrfTokenRepository(csrfTokenRepository());

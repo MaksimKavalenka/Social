@@ -4,14 +4,14 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import org.hibernate.SessionFactory;
+import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -19,18 +19,20 @@ import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import by.training.database.dao.PostDAO;
-import by.training.database.dao.RoleDAO;
-import by.training.database.dao.TopicDAO;
-import by.training.database.dao.UserDAO;
-import by.training.database.editor.PostDatabaseEditor;
-import by.training.database.editor.RoleDatabaseEditor;
-import by.training.database.editor.TopicDatabaseEditor;
-import by.training.database.editor.UserDatabaseEditor;
+import by.training.jpa.service.dao.NotificationServiceDAO;
+import by.training.jpa.service.dao.PostServiceDAO;
+import by.training.jpa.service.dao.RoleServiceDAO;
+import by.training.jpa.service.dao.TopicServiceDAO;
+import by.training.jpa.service.dao.UserServiceDAO;
+import by.training.jpa.service.implementation.NotificationService;
+import by.training.jpa.service.implementation.PostService;
+import by.training.jpa.service.implementation.RoleService;
+import by.training.jpa.service.implementation.TopicService;
+import by.training.jpa.service.implementation.UserService;
 
 @Configuration
 @ComponentScan("by.training.spring.component")
-@EnableJpaRepositories
+@EnableJpaRepositories(basePackages = "by.training.jpa.repository")
 @EnableTransactionManagement
 public class MvcSpringConfiguration extends WebMvcConfigurationSupport {
 
@@ -50,38 +52,45 @@ public class MvcSpringConfiguration extends WebMvcConfigurationSupport {
     }
 
     @Bean
-    public SessionFactory sessionFactory(final DataSource dataSource) {
-        LocalSessionFactoryBuilder sessionBuilder = new LocalSessionFactoryBuilder(dataSource);
-        sessionBuilder.scanPackages("by.training.entity");
-        sessionBuilder.addProperties(getHibernateProperties());
-        return sessionBuilder.buildSessionFactory();
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
+        entityManagerFactoryBean.setDataSource(dataSource());
+        entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
+        entityManagerFactoryBean.setPackagesToScan("by.training.entity");
+        entityManagerFactoryBean.setJpaProperties(getHibernateProperties());
+        return entityManagerFactoryBean;
     }
 
     @Bean
-    public HibernateTransactionManager transactionManager(final SessionFactory sessionFactory) {
-        HibernateTransactionManager transactionManager = new HibernateTransactionManager(
-                sessionFactory);
+    public JpaTransactionManager transactionManager() {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return transactionManager;
     }
 
     @Bean
-    public PostDAO postDao(final SessionFactory sessionFactory) {
-        return new PostDatabaseEditor(sessionFactory);
+    public NotificationServiceDAO notificationService() {
+        return new NotificationService();
     }
 
     @Bean
-    public RoleDAO roleDao(final SessionFactory sessionFactory) {
-        return new RoleDatabaseEditor(sessionFactory);
+    public PostServiceDAO postService() {
+        return new PostService();
     }
 
     @Bean
-    public TopicDAO topicDao(final SessionFactory sessionFactory) {
-        return new TopicDatabaseEditor(sessionFactory);
+    public RoleServiceDAO roleService() {
+        return new RoleService();
     }
 
     @Bean
-    public UserDAO userDao(final SessionFactory sessionFactory) {
-        return new UserDatabaseEditor(sessionFactory);
+    public TopicServiceDAO topicService() {
+        return new TopicService();
+    }
+
+    @Bean
+    public UserServiceDAO userService() {
+        return new UserService();
     }
 
     @Override
@@ -104,6 +113,7 @@ public class MvcSpringConfiguration extends WebMvcConfigurationSupport {
         properties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
         properties.put("hibernate.show_sql", "true");
         properties.put("hibernate.hbm2ddl.auto", "update");
+        properties.put("hibernate.id.new_generator_mappings", "false");
         return properties;
     }
 

@@ -8,6 +8,7 @@ import static by.training.constants.MessageConstants.VALIDATION_ERROR;
 import static by.training.constants.UrlConstants.ID_KEY;
 import static by.training.constants.UrlConstants.PAGE_KEY;
 import static by.training.constants.UrlConstants.PATH_KEY;
+import static by.training.constants.UrlConstants.Rest.POSTS_URL;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,23 +23,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import by.training.bean.ErrorMessage;
 import by.training.bean.PostWithCommentsCount;
-import by.training.database.dao.PostDAO;
-import by.training.database.dao.TopicDAO;
 import by.training.entity.PostEntity;
 import by.training.entity.TopicEntity;
 import by.training.entity.UserEntity;
+import by.training.jpa.service.dao.PostServiceDAO;
+import by.training.jpa.service.dao.TopicServiceDAO;
 import by.training.utility.Validator;
 
 @RestController
-@RequestMapping("/posts")
+@RequestMapping(POSTS_URL)
 public class PostRestController extends by.training.controller.rest.RestController {
 
-    private PostDAO  postDAO;
-    private TopicDAO topicDAO;
+    private PostServiceDAO  postService;
+    private TopicServiceDAO topicService;
 
-    public PostRestController(final PostDAO postDAO, final TopicDAO topicDAO) {
-        this.postDAO = postDAO;
-        this.topicDAO = topicDAO;
+    public PostRestController(final PostServiceDAO postService,
+            final TopicServiceDAO topicService) {
+        this.postService = postService;
+        this.topicService = topicService;
     }
 
     @RequestMapping(value = "/create/{text}" + PATH_KEY + "/{parentPostId}"
@@ -51,7 +53,7 @@ public class PostRestController extends by.training.controller.rest.RestControll
                     HttpStatus.CONFLICT);
         }
 
-        TopicEntity topic = topicDAO.getTopicByPath(path);
+        TopicEntity topic = topicService.getTopicByPath(path);
         UserEntity user = getLoggedUser();
 
         if (!topic.getUsers().contains(user)) {
@@ -59,15 +61,16 @@ public class PostRestController extends by.training.controller.rest.RestControll
                     HttpStatus.CONFLICT);
         }
 
-        if ((parentPostId > 0) && (postDAO.getPostLevel(parentPostId) >= MAX_POST_LEVEL)) {
+        if ((parentPostId > 0) && (postService.getPostLevel(parentPostId) >= MAX_POST_LEVEL)) {
             return new ResponseEntity<Object>(new ErrorMessage(LEVEL_ERROR), HttpStatus.CONFLICT);
         }
 
         PostEntity parentPost = null;
         if (parentPostId > 0) {
-            parentPost = postDAO.getPostById(parentPostId);
+            parentPost = postService.getPostById(parentPostId);
         }
-        PostEntity post = postDAO.createPost(text, user, topic, parentPost);
+
+        PostEntity post = postService.createPost(text, getLoggedUser(), topic, parentPost);
         return new ResponseEntity<Object>(post, HttpStatus.CREATED);
     }
 
@@ -79,12 +82,12 @@ public class PostRestController extends by.training.controller.rest.RestControll
                     HttpStatus.CONFLICT);
         }
 
-        if (postDAO.getPostById(id).getCreator().getId() != getLoggedUser().getId()) {
+        if (postService.getPostById(id).getCreator().getId() != getLoggedUser().getId()) {
             return new ResponseEntity<Object>(new ErrorMessage(OPERATION_PERMISSIONS_ERROR),
                     HttpStatus.CONFLICT);
         }
 
-        PostEntity post = postDAO.updatePost(id, text);
+        PostEntity post = postService.updatePost(id, text);
         return new ResponseEntity<Object>(post, HttpStatus.CREATED);
     }
 
@@ -96,33 +99,32 @@ public class PostRestController extends by.training.controller.rest.RestControll
                     HttpStatus.CONFLICT);
         }
 
-        if (topicDAO.getTopicByPath(path).getCreator().getId() != getLoggedUser().getId()) {
+        if (topicService.getTopicByPath(path).getCreator().getId() != getLoggedUser().getId()) {
             return new ResponseEntity<Object>(new ErrorMessage(OPERATION_PERMISSIONS_ERROR),
                     HttpStatus.CONFLICT);
         }
 
-        postDAO.deletePost(id);
+        postService.deletePost(id);
         return new ResponseEntity<Object>(HttpStatus.OK);
     }
 
     @RequestMapping(value = PATH_KEY + ID_KEY + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<Object> getPostById(@PathVariable("path") final String path,
             @PathVariable("id") final long id) {
-        TopicEntity topic = topicDAO.getTopicByPath(path);
+        TopicEntity topic = topicService.getTopicByPath(path);
         if (!topic.isAccess() && !topic.getUsers().contains(getLoggedUser())) {
             return new ResponseEntity<Object>(new ErrorMessage(PAGE_PERMISSIONS_ERROR),
                     HttpStatus.CONFLICT);
         }
 
-        PostEntity post = postDAO.getPostById(id);
+        PostEntity post = postService.getPostById(id);
         return checkEntity(post);
     }
 
-    @RequestMapping(value = "/topic" + PATH_KEY + "/" + PAGE_KEY
-            + JSON_EXT, method = RequestMethod.GET)
+    @RequestMapping(value = "/topic" + PATH_KEY + PAGE_KEY + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<List<PostWithCommentsCount>> getTopicPosts(
             @PathVariable("path") final String path, @PathVariable("page") final int page) {
-        List<PostEntity> posts = postDAO.getTopicPosts(path, page);
+        List<PostEntity> posts = postService.getTopicPosts(path, page);
 
         if (posts == null) {
             return new ResponseEntity<List<PostWithCommentsCount>>(HttpStatus.NO_CONTENT);
@@ -135,7 +137,7 @@ public class PostRestController extends by.training.controller.rest.RestControll
             Date date = post.getDate();
             UserEntity creator = post.getCreator();
             TopicEntity topic = post.getTopic();
-            long commentsCount = postDAO.getPostCommentsCount(id);
+            long commentsCount = postService.getPostCommentsCount(id);
 
             postWithCommentsCounts
                     .add(new PostWithCommentsCount(id, text, date, creator, topic, commentsCount));
@@ -147,7 +149,7 @@ public class PostRestController extends by.training.controller.rest.RestControll
     @RequestMapping(value = "/feed" + PAGE_KEY + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<List<PostWithCommentsCount>> getFeedPosts(
             @PathVariable("page") final int page) {
-        List<PostEntity> posts = postDAO.getFeedPosts(getLoggedUser().getId(), page);
+        List<PostEntity> posts = postService.getFeedPosts(getLoggedUser().getId(), page);
 
         if (posts == null) {
             return new ResponseEntity<List<PostWithCommentsCount>>(HttpStatus.NO_CONTENT);
@@ -160,7 +162,7 @@ public class PostRestController extends by.training.controller.rest.RestControll
             Date date = post.getDate();
             UserEntity creator = post.getCreator();
             TopicEntity topic = post.getTopic();
-            long commentsCount = postDAO.getPostCommentsCount(id);
+            long commentsCount = postService.getPostCommentsCount(id);
 
             postWithCommentsCounts
                     .add(new PostWithCommentsCount(id, text, date, creator, topic, commentsCount));
@@ -172,13 +174,13 @@ public class PostRestController extends by.training.controller.rest.RestControll
     @RequestMapping(value = "/topic" + PATH_KEY + "/page_count"
             + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<Long> getTopicPostsPageCount(@PathVariable("path") final String path) {
-        long pageCount = postDAO.getTopicPostsPageCount(path);
+        long pageCount = postService.getTopicPostsPageCount(path);
         return new ResponseEntity<Long>(pageCount, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/feed/page_count" + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<Long> getFeedPostsPageCount() {
-        long pageCount = postDAO.getFeedPostsPageCount(getLoggedUser().getId());
+        long pageCount = postService.getFeedPostsPageCount(getLoggedUser().getId());
         return new ResponseEntity<Long>(pageCount, HttpStatus.OK);
     }
 

@@ -4,6 +4,7 @@ import static by.training.constants.MessageConstants.PASSWORD_ERROR;
 import static by.training.constants.MessageConstants.VALIDATION_ERROR;
 import static by.training.constants.MessageConstants.PASSWORDS_ERROR;
 import static by.training.constants.UrlConstants.PATH_KEY;
+import static by.training.constants.UrlConstants.Rest.USERS_URL;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
@@ -27,23 +28,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import by.training.bean.ErrorMessage;
 import by.training.constants.RoleConstants;
-import by.training.database.dao.RoleDAO;
-import by.training.database.dao.UserDAO;
 import by.training.entity.UserEntity;
 import by.training.exception.ValidationException;
+import by.training.jpa.service.dao.RoleServiceDAO;
+import by.training.jpa.service.dao.UserServiceDAO;
 import by.training.utility.SecureData;
 import by.training.utility.Validator;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping(USERS_URL)
 public class UserRestController extends by.training.controller.rest.RestController {
 
-    private RoleDAO roleDAO;
-    private UserDAO userDAO;
+    private RoleServiceDAO roleService;
+    private UserServiceDAO userService;
 
-    public UserRestController(final RoleDAO roleDAO, final UserDAO userDAO) {
-        this.roleDAO = roleDAO;
-        this.userDAO = userDAO;
+    public UserRestController(final RoleServiceDAO roleService, final UserServiceDAO userService) {
+        this.roleService = roleService;
+        this.userService = userService;
     }
 
     @RequestMapping(value = "/create/{login}/{password}/{confirmPassword}"
@@ -63,8 +64,8 @@ public class UserRestController extends by.training.controller.rest.RestControll
             }
 
             Set<GrantedAuthority> roles = new HashSet<>();
-            roles.add(roleDAO.getRoleByName(RoleConstants.ROLE_USER.toString()));
-            userDAO.createUser(login, SecureData.secureBySha(password, login), roles);
+            roles.add(roleService.getRoleByName(RoleConstants.ROLE_USER.name()));
+            userService.createUser(login, SecureData.secureBySha(password, login), roles);
             return new ResponseEntity<Object>(HttpStatus.CREATED);
 
         } catch (ValidationException | NoSuchAlgorithmException e) {
@@ -95,7 +96,7 @@ public class UserRestController extends by.training.controller.rest.RestControll
                         HttpStatus.CONFLICT);
             }
 
-            userDAO.updateUser(getLoggedUser().getId(), login,
+            userService.updateUser(getLoggedUser().getId(), login,
                     SecureData.secureBySha(password, login));
             return new ResponseEntity<Object>(HttpStatus.CREATED);
 
@@ -121,7 +122,7 @@ public class UserRestController extends by.training.controller.rest.RestControll
                         HttpStatus.CONFLICT);
             }
 
-            userDAO.updateUser(getLoggedUser().getId(), login,
+            userService.updateUser(getLoggedUser().getId(), login,
                     SecureData.secureBySha(currentPassword, login));
             return new ResponseEntity<Object>(HttpStatus.CREATED);
 
@@ -138,14 +139,14 @@ public class UserRestController extends by.training.controller.rest.RestControll
                     HttpStatus.CONFLICT);
         }
 
-        userDAO.updateUserPhoto(getLoggedUser().getId(), photo);
+        userService.updateUserPhoto(getLoggedUser().getId(), photo);
         return new ResponseEntity<Object>(HttpStatus.CREATED);
     }
 
     @RequestMapping(value = PATH_KEY + "/for_invitation" + JSON_EXT, method = RequestMethod.POST)
     public ResponseEntity<List<UserEntity>> getUsersForInvitation(
             @PathVariable("path") final String path) {
-        List<UserEntity> users = userDAO.getUsersForInvitation(path);
+        List<UserEntity> users = userService.getUsersForInvitation(path);
         return checkEntity(users);
     }
 
@@ -170,7 +171,7 @@ public class UserRestController extends by.training.controller.rest.RestControll
 
     @RequestMapping(value = "/check_login/{login}" + JSON_EXT, method = RequestMethod.POST)
     public ResponseEntity<Boolean> checkLogin(@PathVariable("login") final String login) {
-        boolean exists = userDAO.checkLogin(login);
+        boolean exists = userService.checkLogin(login);
         return new ResponseEntity<Boolean>(exists, HttpStatus.OK);
     }
 

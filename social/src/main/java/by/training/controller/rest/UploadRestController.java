@@ -2,6 +2,7 @@ package by.training.controller.rest;
 
 import static by.training.constants.UploadConstants.PHOTO_UPLOAD_PATH;
 import static by.training.constants.MessageConstants.UPLOAD_FILE_ERROR;
+import static by.training.constants.UrlConstants.Rest.UPLOAD_URL;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,7 +27,7 @@ import by.training.exception.ValidationException;
 
 @Controller
 @MultipartConfig
-@RequestMapping("/upload")
+@RequestMapping(UPLOAD_URL)
 public class UploadRestController extends by.training.controller.rest.RestController {
 
     @RequestMapping(value = "/photo" + JSON_EXT, method = RequestMethod.POST)

@@ -4,21 +4,21 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import by.training.database.dao.UserDAO;
 import by.training.entity.UserEntity;
+import by.training.jpa.service.dao.UserServiceDAO;
 
 @Service("userDetailsServiceSecurity")
 public class UserDetailsServiceSecurity implements UserDetailsService {
 
-    private UserDAO userDAO;
+    private UserServiceDAO userService;
 
-    public UserDetailsServiceSecurity(final UserDAO userDAO) {
-        this.userDAO = userDAO;
+    public UserDetailsServiceSecurity(final UserServiceDAO userService) {
+        this.userService = userService;
     }
 
     @Override
     public UserEntity loadUserByUsername(final String username) throws UsernameNotFoundException {
-        return userDAO.getUserByLogin(username);
+        return userService.getUserByLogin(username);
     }
 
 }

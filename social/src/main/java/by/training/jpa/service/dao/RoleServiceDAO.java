@@ -1,8 +1,8 @@
-package by.training.database.dao;
+package by.training.jpa.service.dao;
 
 import by.training.entity.RoleEntity;
 
-public interface RoleDAO {
+public interface RoleServiceDAO {
 
     RoleEntity createRole(String name);
 

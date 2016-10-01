@@ -16,6 +16,12 @@ public abstract class EntityConstants {
                 org.springframework.data.domain.Sort.Direction.DESC,
                 Structure.NotificationFields.DATE);
 
+        public static final org.springframework.data.domain.Sort POST         = new org.springframework.data.domain.Sort(
+                org.springframework.data.domain.Sort.Direction.DESC, Structure.PostFields.DATE);
+
+        public static final org.springframework.data.domain.Sort TOPIC        = new org.springframework.data.domain.Sort(
+                org.springframework.data.domain.Sort.Direction.ASC, Structure.TopicFields.NAME);
+
     }
 
     public static abstract class Structure {
