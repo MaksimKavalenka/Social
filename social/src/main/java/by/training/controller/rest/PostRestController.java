@@ -11,7 +11,7 @@ import static by.training.constants.UrlConstants.PATH_KEY;
 import static by.training.constants.UrlConstants.Rest.POSTS_URL;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -22,12 +22,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import by.training.bean.ErrorMessage;
+import by.training.bean.PostWithComments;
 import by.training.bean.PostWithCommentsCount;
 import by.training.entity.PostEntity;
 import by.training.entity.TopicEntity;
-import by.training.entity.UserEntity;
 import by.training.jpa.service.dao.PostServiceDAO;
 import by.training.jpa.service.dao.TopicServiceDAO;
+import by.training.utility.PostParser;
 import by.training.utility.Validator;
 
 @RestController
@@ -54,9 +55,8 @@ public class PostRestController extends by.training.controller.rest.RestControll
         }
 
         TopicEntity topic = topicService.getTopicByPath(path);
-        UserEntity user = getLoggedUser();
 
-        if (!topic.getUsers().contains(user)) {
+        if (!topicService.isMember(path, getLoggedUser().getId())) {
             return new ResponseEntity<Object>(new ErrorMessage(OPERATION_PERMISSIONS_ERROR),
                     HttpStatus.CONFLICT);
         }
@@ -111,14 +111,17 @@ public class PostRestController extends by.training.controller.rest.RestControll
     @RequestMapping(value = PATH_KEY + ID_KEY + JSON_EXT, method = RequestMethod.GET)
     public ResponseEntity<Object> getPostById(@PathVariable("path") final String path,
             @PathVariable("id") final long id) {
-        TopicEntity topic = topicService.getTopicByPath(path);
-        if (!topic.isAccess() && !topic.getUsers().contains(getLoggedUser())) {
+        if (!topicService.isPublic(path) && !topicService.isMember(path, getLoggedUser().getId())) {
             return new ResponseEntity<Object>(new ErrorMessage(PAGE_PERMISSIONS_ERROR),
                     HttpStatus.CONFLICT);
         }
 
         PostEntity post = postService.getPostById(id);
-        return checkEntity(post);
+        post.setPosts(new HashSet<>(postService.getPostComments(id)));
+
+        PostWithComments postWithComments = new PostWithComments(post,
+                PostParser.parseListPostsToListPostsWithComments(post.getPosts()));
+        return checkEntity(postWithComments);
     }
 
     @RequestMapping(value = "/topic" + PATH_KEY + PAGE_KEY + JSON_EXT, method = RequestMethod.GET)
@@ -132,15 +135,8 @@ public class PostRestController extends by.training.controller.rest.RestControll
 
         List<PostWithCommentsCount> postWithCommentsCounts = new ArrayList<>(posts.size());
         for (PostEntity post : posts) {
-            long id = post.getId();
-            String text = post.getText();
-            Date date = post.getDate();
-            UserEntity creator = post.getCreator();
-            TopicEntity topic = post.getTopic();
-            long commentsCount = postService.getPostCommentsCount(id);
-
-            postWithCommentsCounts
-                    .add(new PostWithCommentsCount(id, text, date, creator, topic, commentsCount));
+            long commentsCount = postService.getPostCommentsCount(post.getId());
+            postWithCommentsCounts.add(new PostWithCommentsCount(post, commentsCount));
         }
         return new ResponseEntity<List<PostWithCommentsCount>>(postWithCommentsCounts,
                 HttpStatus.OK);
@@ -157,15 +153,8 @@ public class PostRestController extends by.training.controller.rest.RestControll
 
         List<PostWithCommentsCount> postWithCommentsCounts = new ArrayList<>(posts.size());
         for (PostEntity post : posts) {
-            long id = post.getId();
-            String text = post.getText();
-            Date date = post.getDate();
-            UserEntity creator = post.getCreator();
-            TopicEntity topic = post.getTopic();
-            long commentsCount = postService.getPostCommentsCount(id);
-
-            postWithCommentsCounts
-                    .add(new PostWithCommentsCount(id, text, date, creator, topic, commentsCount));
+            long commentsCount = postService.getPostCommentsCount(post.getId());
+            postWithCommentsCounts.add(new PostWithCommentsCount(post, commentsCount));
         }
         return new ResponseEntity<List<PostWithCommentsCount>>(postWithCommentsCounts,
                 HttpStatus.OK);

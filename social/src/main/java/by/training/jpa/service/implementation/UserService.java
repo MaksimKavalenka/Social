@@ -1,5 +1,7 @@
 package by.training.jpa.service.implementation;
 
+import static by.training.constants.MessageConstants.TAKEN_LOGIN_ERROR;
+
 import java.util.List;
 import java.util.Set;
 
@@ -20,7 +22,13 @@ public class UserService implements UserServiceDAO {
     public UserEntity createUser(final String login, final String password,
             final Set<GrantedAuthority> roles) throws ValidationException {
         UserEntity user = new UserEntity(login, password, roles);
-        return repository.save(user);
+        synchronized (UserService.class) {
+            if (!checkLogin(login)) {
+                return repository.save(user);
+            } else {
+                throw new ValidationException(TAKEN_LOGIN_ERROR);
+            }
+        }
     }
 
     @Override
@@ -29,7 +37,14 @@ public class UserService implements UserServiceDAO {
         UserEntity user = getUserById(id);
         user.setLogin(login);
         user.setPassword(password);
-        return repository.save(user);
+        synchronized (UserService.class) {
+            if (!checkLogin(login) || user.getLogin().equals(login)) {
+                return repository.save(user);
+            } else {
+                throw new ValidationException(TAKEN_LOGIN_ERROR);
+            }
+        }
+
     }
 
     @Override

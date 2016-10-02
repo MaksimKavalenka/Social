@@ -39,8 +39,8 @@ public class PostEntity extends AbstractEntity {
             CascadeType.DETACH}, fetch = FetchType.LAZY)
     private PostEntity        parentPost;
 
-    @OneToMany(cascade = {CascadeType.REMOVE,
-            CascadeType.DETACH}, fetch = FetchType.EAGER, mappedBy = "parentPost")
+    @JsonIgnore
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.DETACH}, mappedBy = "parentPost")
     private Set<PostEntity>   posts;
 
     public PostEntity() {

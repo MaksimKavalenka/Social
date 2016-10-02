@@ -32,6 +32,7 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'ValidatorService', func
 		}
 		$http.post(REST.USERS + '/update/' + login + '/' + currentPassword + '/' + password + '/' + confirmPassword + REST.JSON_EXT)
 		.success(function(response) {
+			authentication(login, currentPassword, callback);
 			var data = {success: true, data: response};
 			callback(data);
 		})
@@ -47,6 +48,7 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'ValidatorService', func
 		}
 		$http.post(REST.USERS + '/update/' + login + '/' + currentPassword + REST.JSON_EXT)
 		.success(function(response) {
+			authentication(login, currentPassword, callback);
 			var data = {success: true, data: response};
 			callback(data);
 		})
@@ -62,6 +64,7 @@ app.factory('UserFactory', ['$http', 'MESSAGE', 'REST', 'ValidatorService', func
 		}
 		$http.post(REST.USERS + '/update/' + photo + REST.JSON_EXT)
 		.success(function(response) {
+			authentication(login, currentPassword, callback);
 			var data = {success: true, data: response};
 			callback(data);
 		})

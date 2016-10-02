@@ -5,7 +5,7 @@
   <groupId>by.training</groupId>
   <artifactId>social</artifactId>
   <packaging>war</packaging>
-  <version>0.15.2</version>
+  <version>0.15.3</version>
 
   <name>Social</name>
 

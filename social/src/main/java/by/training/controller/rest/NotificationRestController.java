@@ -49,7 +49,8 @@ public class NotificationRestController extends by.training.controller.rest.Rest
         TopicEntity topic = topicService.getTopicByPath(path);
         for (long userId : getIdList(usersId)) {
             UserEntity user = userService.getUserById(userId);
-            if (!notificationService.isInvited(path, userId) && !topic.getUsers().contains(user)) {
+            if (!notificationService.isInvited(path, userId)
+                    && !topicService.isMember(path, userId)) {
                 notificationService.createNotification(user, getLoggedUser(), topic);
             }
         }

@@ -1,5 +1,6 @@
 package by.training.jpa.service.implementation;
 
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,15 @@ public class PostService implements PostServiceDAO {
     }
 
     @Override
+    public List<PostEntity> getPostComments(final long id) {
+        List<PostEntity> posts = repository.getPostComments(id);
+        for (PostEntity post : posts) {
+            post.setPosts(new HashSet<>(getPostComments(post.getId())));
+        }
+        return posts;
+    }
+
+    @Override
     public List<PostEntity> getTopicPosts(final String topicPath, final int page) {
         return repository.findByTopicPath(topicPath,
                 new PageRequest(page - 1, ElementsCount.POST, Sort.POST));
@@ -50,7 +60,7 @@ public class PostService implements PostServiceDAO {
 
     @Override
     public List<PostEntity> getFeedPosts(final long userId, final int page) {
-        return repository.findByTopicUsersId(userId,
+        return repository.getFeedPosts(userId,
                 new PageRequest(page - 1, ElementsCount.POST, Sort.POST));
     }
 
@@ -67,13 +77,18 @@ public class PostService implements PostServiceDAO {
 
     @Override
     public long getFeedPostsPageCount(final long userId) {
-        return (long) Math
-                .ceil(repository.countByTopicUsersId(userId) / (double) ElementsCount.POST);
+        return (long) Math.ceil(repository.getFeedPostsCount(userId) / (double) ElementsCount.POST);
     }
 
     @Override
     public long getPostLevel(final long id) {
-        return 0;
+        Long currentId = repository.getParentPostId(id);
+        long level = 0;
+        while (currentId != null) {
+            ++level;
+            currentId = repository.getParentPostId(currentId);
+        }
+        return level;
     }
 
 }

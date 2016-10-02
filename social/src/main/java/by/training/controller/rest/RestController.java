@@ -11,7 +11,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import by.training.constants.EntityConstants.Structure;
-import by.training.entity.AbstractEntity;
 import by.training.entity.UserEntity;
 
 public class RestController {
@@ -35,14 +34,14 @@ public class RestController {
         return ids;
     }
 
-    public <T extends AbstractEntity> ResponseEntity<Object> checkEntity(final T entity) {
+    public <T extends Object> ResponseEntity<T> checkEntity(final T entity) {
         if (entity == null) {
-            return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<T>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<Object>(entity, HttpStatus.OK);
+        return new ResponseEntity<T>(entity, HttpStatus.OK);
     }
 
-    public <T extends AbstractEntity> ResponseEntity<List<T>> checkEntity(final List<T> entity) {
+    public <T extends Object> ResponseEntity<List<T>> checkEntity(final List<T> entity) {
         if (entity == null) {
             return new ResponseEntity<List<T>>(HttpStatus.NO_CONTENT);
         }

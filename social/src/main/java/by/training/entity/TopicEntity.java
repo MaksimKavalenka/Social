@@ -6,7 +6,6 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -46,7 +45,7 @@ public class TopicEntity extends AbstractEntity {
     private Set<PostEntity>         posts;
 
     @JsonIgnore
-    @ManyToMany(targetEntity = UserEntity.class, fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = UserEntity.class)
     @JoinTable(name = "topic_user", joinColumns = @JoinColumn(name = "topic_id", nullable = false, updatable = false), inverseJoinColumns = @JoinColumn(name = "user_id", nullable = false, updatable = false))
     private Set<UserEntity>         users;
 

@@ -17,6 +17,8 @@ public interface PostServiceDAO {
 
     PostEntity getPostById(long id);
 
+    List<PostEntity> getPostComments(long id);
+
     List<PostEntity> getTopicPosts(String topicPath, int page);
 
     List<PostEntity> getFeedPosts(long userId, int page);

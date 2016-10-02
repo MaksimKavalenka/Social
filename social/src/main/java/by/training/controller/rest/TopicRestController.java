@@ -127,18 +127,17 @@ public class TopicRestController extends by.training.controller.rest.RestControl
 
     @RequestMapping(value = "/join" + PATH_KEY + JSON_EXT, method = RequestMethod.POST)
     public ResponseEntity<Void> joinTopic(@PathVariable("path") final String path) {
-        TopicEntity topic = topicService.getTopicByPath(path);
         UserEntity user = getLoggedUser();
-        if (topic.isAccess() || notificationService.isInvited(path, getLoggedUser().getId())) {
-            topicService.joinTopic(topic, user);
+        if (topicService.isPublic(path)
+                || notificationService.isInvited(path, getLoggedUser().getId())) {
+            topicService.joinTopic(path, user);
         }
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/leave" + PATH_KEY + JSON_EXT, method = RequestMethod.POST)
     public ResponseEntity<Void> leaveTopic(@PathVariable("path") final String path) {
-        TopicEntity topic = topicService.getTopicByPath(path);
-        topicService.leaveTopic(topic, getLoggedUser());
+        topicService.leaveTopic(path, getLoggedUser());
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
@@ -150,8 +149,7 @@ public class TopicRestController extends by.training.controller.rest.RestControl
 
     @RequestMapping(value = "/check_member" + PATH_KEY + JSON_EXT, method = RequestMethod.POST)
     public ResponseEntity<Boolean> checkMember(@PathVariable("path") final String path) {
-        TopicEntity topic = topicService.getTopicByPath(path);
-        boolean exists = topic.getUsers().contains(getLoggedUser());
+        boolean exists = topicService.isMember(path, getLoggedUser().getId());
         return new ResponseEntity<Boolean>(exists, HttpStatus.OK);
     }
 
