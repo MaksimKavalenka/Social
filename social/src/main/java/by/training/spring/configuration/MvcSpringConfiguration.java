@@ -38,12 +38,11 @@ public class MvcSpringConfiguration extends WebMvcConfigurationSupport {
 
     @Bean
     public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost/social");
-        dataSource.setUsername("maks");
-        dataSource.setPassword("111");
-        return dataSource;
+        DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
+        driverManagerDataSource.setDriverClassName("org.h2.Driver");
+        driverManagerDataSource.setUrl(
+                "jdbc:h2:mem:mylivedata;IGNORECASE=TRUE;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1");
+        return driverManagerDataSource;
     }
 
     @Bean
@@ -110,7 +109,7 @@ public class MvcSpringConfiguration extends WebMvcConfigurationSupport {
 
     private Properties getHibernateProperties() {
         Properties properties = new Properties();
-        properties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
+        properties.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
         properties.put("hibernate.show_sql", "true");
         properties.put("hibernate.hbm2ddl.auto", "update");
         properties.put("hibernate.id.new_generator_mappings", "false");
