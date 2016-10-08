@@ -28,13 +28,13 @@ public interface TopicServiceDAO {
 
     long getUserTopicsPageCount(long userId);
 
-    void joinTopic(String path, UserEntity user);
+    void joinTopic(String topicPath, long userId);
 
-    void leaveTopic(String path, UserEntity user);
+    void leaveTopic(String topicPath, long userId);
 
     boolean isPublic(String path);
 
-    boolean isMember(String path, long userId);
+    boolean isMember(String topicPath, long userId);
 
     boolean checkPath(String path);
 

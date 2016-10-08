@@ -127,17 +127,16 @@ public class TopicRestController extends by.training.controller.rest.RestControl
 
     @RequestMapping(value = "/join" + PATH_KEY + JSON_EXT, method = RequestMethod.POST)
     public ResponseEntity<Void> joinTopic(@PathVariable("path") final String path) {
-        UserEntity user = getLoggedUser();
-        if (topicService.isPublic(path)
-                || notificationService.isInvited(path, getLoggedUser().getId())) {
-            topicService.joinTopic(path, user);
+        long userId = getLoggedUser().getId();
+        if (topicService.isPublic(path) || notificationService.isInvited(path, userId)) {
+            topicService.joinTopic(path, userId);
         }
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/leave" + PATH_KEY + JSON_EXT, method = RequestMethod.POST)
     public ResponseEntity<Void> leaveTopic(@PathVariable("path") final String path) {
-        topicService.leaveTopic(path, getLoggedUser());
+        topicService.leaveTopic(path, getLoggedUser().getId());
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 

@@ -3,7 +3,6 @@ package by.training.spring.component;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import by.training.constants.RoleConstants;
 import by.training.jpa.service.dao.RoleServiceDAO;
@@ -22,7 +21,6 @@ public class DatabaseInitializer implements ApplicationListener<ContextRefreshed
         roleInit();
     }
 
-    @Transactional
     private void roleInit() {
         for (RoleConstants role : RoleConstants.values()) {
             if (roleService.getRoleByName(role.name()) == null) {

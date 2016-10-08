@@ -2,7 +2,6 @@ package by.training.jpa.service.implementation;
 
 import static by.training.constants.MessageConstants.TAKEN_PATH_ERROR;
 
-import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,24 +94,16 @@ public class TopicService implements TopicServiceDAO {
     }
 
     @Override
-    public void joinTopic(final String path, final UserEntity user) {
-        List<UserEntity> users = repository.getTopicUsers(path);
-        if (!users.contains(user)) {
-            TopicEntity topic = getTopicByPath(path);
-            users.add(user);
-            topic.setUsers(new HashSet<>(users));
-            repository.save(topic);
+    public void joinTopic(final String topicPath, final long userId) {
+        if (!repository.isMember(topicPath, userId)) {
+            repository.joinTpoic(topicPath, userId);
         }
     }
 
     @Override
-    public void leaveTopic(final String path, final UserEntity user) {
-        List<UserEntity> users = repository.getTopicUsers(path);
-        if (users.contains(user)) {
-            TopicEntity topic = getTopicByPath(path);
-            users.remove(user);
-            topic.setUsers(new HashSet<>(users));
-            repository.save(topic);
+    public void leaveTopic(final String topicPath, final long userId) {
+        if (repository.isMember(topicPath, userId)) {
+            repository.leaveTpoic(topicPath, userId);
         }
     }
 
